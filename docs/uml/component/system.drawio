@@ -1,0 +1,26 @@
+<mxfile host="drawio" agent="dsh diagram-builder" version="31.4.5">
+  <diagram id="Component-diagram" name="Component diagram">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="webapp" value="«component»&lt;br&gt;&lt;b&gt;WebApp&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="0" y="0" width="170" height="70" as="geometry"/></mxCell>
+        <mxCell id="filament" value="«component»&lt;br&gt;&lt;b&gt;FilamentAdminPanel&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="0" y="180" width="170" height="70" as="geometry"/></mxCell>
+        <mxCell id="finance" value="«component»&lt;br&gt;&lt;b&gt;FinanceServiceGroup&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="340" y="0" width="170" height="70" as="geometry"/></mxCell>
+        <mxCell id="attend" value="«component»&lt;br&gt;&lt;b&gt;AttendanceServiceGroup&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="340" y="180" width="170" height="70" as="geometry"/></mxCell>
+        <mxCell id="schedule" value="«component»&lt;br&gt;&lt;b&gt;ScheduleServiceGroup&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="680" y="0" width="170" height="70" as="geometry"/></mxCell>
+        <mxCell id="models" value="«component»&lt;br&gt;&lt;b&gt;EloquentModels&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="680" y="180" width="170" height="70" as="geometry"/></mxCell>
+        <mxCell id="dep0" value="renders" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;" edge="1" parent="1" source="webapp" target="filament"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="dep1" value="approves charge proposal" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;" edge="1" parent="1" source="filament" target="finance"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="dep2" value="collects payment" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;" edge="1" parent="1" source="webapp" target="finance"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="dep3" value="opens attendance sheet" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;" edge="1" parent="1" source="filament" target="attend"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="dep4" value="marks attendance" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;" edge="1" parent="1" source="webapp" target="attend"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="dep5" value="checks attendance" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;" edge="1" parent="1" source="schedule" target="attend"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="dep6" value="edits timetable" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;" edge="1" parent="1" source="filament" target="schedule"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="dep7" value="reads and writes" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;" edge="1" parent="1" source="finance" target="models"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="dep8" value="reads and writes" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;" edge="1" parent="1" source="attend" target="models"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="dep9" value="reads and writes" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;" edge="1" parent="1" source="schedule" target="models"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

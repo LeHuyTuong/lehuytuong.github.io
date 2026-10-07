@@ -1,0 +1,22 @@
+{
+  "components": [
+    { "id": "webapp",    "name": "WebApp",               "col": 0, "row": 0 },
+    { "id": "filament", "name": "FilamentAdminPanel",   "col": 0, "row": 1 },
+    { "id": "finance",  "name": "FinanceServiceGroup",  "col": 1, "row": 0 },
+    { "id": "attend",   "name": "AttendanceServiceGroup","col": 1, "row": 1 },
+    { "id": "schedule", "name": "ScheduleServiceGroup", "col": 2, "row": 0 },
+    { "id": "models",   "name": "EloquentModels",       "col": 2, "row": 1 }
+  ],
+  "dependencies": [
+    { "from": "webapp", "to": "filament", "label": "renders" },
+    { "from": "filament", "to": "finance", "label": "approves charge proposal" },
+    { "from": "webapp", "to": "finance",  "label": "collects payment" },
+    { "from": "filament", "to": "attend",  "label": "opens attendance sheet" },
+    { "from": "webapp", "to": "attend",   "label": "marks attendance" },
+    { "from": "schedule", "to": "attend", "label": "checks attendance" },
+    { "from": "filament", "to": "schedule","label": "edits timetable" },
+    { "from": "finance", "to": "models",  "label": "reads and writes" },
+    { "from": "attend",  "to": "models",  "label": "reads and writes" },
+    { "from": "schedule","to": "models",  "label": "reads and writes" }
+  ]
+}

@@ -1,0 +1,177 @@
+{
+ "title": "LMS ERP - Academic and Teaching",
+ "source": "code",
+ "core": "Class Sessions",
+ "entities": [
+  {
+   "name": "Attendance Records"
+  },
+  {
+   "name": "Class Room Notes"
+  },
+  {
+   "name": "Class Rooms"
+  },
+  {
+   "name": "Class Sessions"
+  },
+  {
+   "name": "Curriculums"
+  },
+  {
+   "name": "Holidays"
+  },
+  {
+   "name": "Journal Entries"
+  },
+  {
+   "name": "Price Packages"
+  },
+  {
+   "name": "Rooms"
+  },
+  {
+   "name": "Schedules"
+  },
+  {
+   "name": "Score Sheets"
+  },
+  {
+   "name": "Scores"
+  },
+  {
+   "name": "Session Journals"
+  },
+  {
+   "name": "Teaching Work Logs"
+  }
+ ],
+ "relationships": [
+  {
+   "from": "Attendance Records",
+   "to": "Class Sessions",
+   "verb": "meet in",
+   "card": "}o--o{",
+   "evidence": "app/Models/Attendance.php:49"
+  },
+  {
+   "from": "Class Rooms",
+   "to": "Class Room Notes",
+   "verb": "note",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassRoom.php:137"
+  },
+  {
+   "from": "Class Rooms",
+   "to": "Class Sessions",
+   "verb": "meet",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassRoom.php:190"
+  },
+  {
+   "from": "Class Rooms",
+   "to": "Curriculums",
+   "verb": "follow",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassRoom.php:120"
+  },
+  {
+   "from": "Class Rooms",
+   "to": "Price Packages",
+   "verb": "price",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassRoom.php:150"
+  },
+  {
+   "from": "Class Rooms",
+   "to": "Rooms",
+   "verb": "default to",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassRoom.php:60"
+  },
+  {
+   "from": "Class Rooms",
+   "to": "Schedules",
+   "verb": "schedule",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassRoom.php:185"
+  },
+  {
+   "from": "Score Sheets",
+   "to": "Class Rooms",
+   "verb": "meet in",
+   "card": "}o--o{",
+   "evidence": "app/Models/ScoreSheet.php:32"
+  },
+  {
+   "from": "Class Room Notes",
+   "to": "Class Sessions",
+   "verb": "meet in",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassRoomNote.php:197"
+  },
+  {
+   "from": "Class Sessions",
+   "to": "Holidays",
+   "verb": "fall on",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassSession.php:90"
+  },
+  {
+   "from": "Class Sessions",
+   "to": "Rooms",
+   "verb": "use",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassSession.php:61"
+  },
+  {
+   "from": "Class Sessions",
+   "to": "Schedules",
+   "verb": "schedule",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassSession.php:66"
+  },
+  {
+   "from": "Class Sessions",
+   "to": "Session Journals",
+   "verb": "journal",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassSession.php:84"
+  },
+  {
+   "from": "Teaching Work Logs",
+   "to": "Class Sessions",
+   "verb": "meet in",
+   "card": "}o--o{",
+   "evidence": "app/Models/TeachingWorkLog.php:72"
+  },
+  {
+   "from": "Journal Entries",
+   "to": "Session Journals",
+   "verb": "journal",
+   "card": "}o--o{",
+   "evidence": "app/Models/JournalEntry.php:98"
+  },
+  {
+   "from": "Rooms",
+   "to": "Schedules",
+   "verb": "schedule",
+   "card": "}o--o{",
+   "evidence": "app/Models/Room.php:79"
+  },
+  {
+   "from": "Scores",
+   "to": "Score Sheets",
+   "verb": "score",
+   "card": "}o--o{",
+   "evidence": "app/Models/Score.php:45"
+  },
+  {
+   "from": "Teaching Work Logs",
+   "to": "Session Journals",
+   "verb": "derive from",
+   "card": "}o--o{",
+   "evidence": "app/Models/TeachingWorkLog.php:87"
+  }
+ ]
+}

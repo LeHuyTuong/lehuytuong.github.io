@@ -1,0 +1,573 @@
+{
+  "disclaimer": "Rút bằng regex/heuristic từ inventory; mọi mục phải đối chiếu file:dòng thật. Tường xác nhận danh sách flow TRƯỚC khi vẽ use case.",
+  "repo": "/Volumes/SSD/Dev/active/LMSERP-OneWorld",
+  "generatedAt": "2026-10-05T01:35:57.914Z",
+  "config": {
+    "rename": {},
+    "guest": "Guest",
+    "overrides": [],
+    "system": []
+  },
+  "actors": [
+    {
+      "name": "Administrator",
+      "kind": "human",
+      "evidence": "app/Enums/Role.php:10 (admin)"
+    },
+    {
+      "name": "Manager",
+      "kind": "human",
+      "evidence": "app/Enums/Role.php:11 (manager)"
+    },
+    {
+      "name": "Teacher",
+      "kind": "human",
+      "evidence": "app/Enums/Role.php:12 (gv)"
+    },
+    {
+      "name": "Assistant",
+      "kind": "human",
+      "evidence": "app/Enums/Role.php:13 (tg)"
+    },
+    {
+      "name": "Accountant",
+      "kind": "human",
+      "evidence": "app/Enums/Role.php:14 (ketoan)"
+    }
+  ],
+  "hierarchy": [],
+  "shared": [],
+  "resources": [
+    {
+      "name": "Student",
+      "actors": [
+        "Administrator",
+        "Manager",
+        "Accountant"
+      ],
+      "evidence": "app/Policies/StudentPolicy.php"
+    },
+    {
+      "name": "Enrollment",
+      "actors": [
+        "Administrator",
+        "Manager",
+        "Accountant"
+      ],
+      "evidence": "app/Policies/EnrollmentPolicy.php"
+    },
+    {
+      "name": "Class Room",
+      "actors": [
+        "Administrator",
+        "Manager",
+        "Teacher",
+        "Assistant"
+      ],
+      "evidence": "app/Policies/ClassRoomPolicy.php"
+    },
+    {
+      "name": "Attendance",
+      "actors": [
+        "Administrator",
+        "Manager",
+        "Teacher",
+        "Assistant",
+        "Accountant"
+      ],
+      "evidence": "app/Policies/AttendancePolicy.php:25,40"
+    },
+    {
+      "name": "Charge",
+      "actors": [
+        "Administrator",
+        "Accountant"
+      ],
+      "evidence": "app/Policies/ChargePolicy.php"
+    },
+    {
+      "name": "Charge Proposal",
+      "actors": [
+        "Administrator",
+        "Manager"
+      ],
+      "evidence": "app/Policies/ChargeProposalPolicy.php"
+    },
+    {
+      "name": "Payment",
+      "actors": [
+        "Administrator",
+        "Accountant"
+      ],
+      "evidence": "app/Policies/PaymentPolicy.php"
+    },
+    {
+      "name": "Tax Invoice",
+      "actors": [
+        "Administrator",
+        "Accountant"
+      ],
+      "evidence": "app/Policies/TaxInvoicePolicy.php"
+    },
+    {
+      "name": "Session Journal",
+      "actors": [
+        "Administrator",
+        "Manager",
+        "Teacher"
+      ],
+      "evidence": "app/Policies/SessionJournalPolicy.php"
+    },
+    {
+      "name": "Teaching Work Log",
+      "actors": [
+        "Administrator",
+        "Teacher",
+        "Assistant"
+      ],
+      "evidence": "app/Policies/TeachingWorkLogPolicy.php"
+    },
+    {
+      "name": "Room",
+      "actors": [
+        "Administrator",
+        "Manager"
+      ],
+      "evidence": "app/Policies/RoomPolicy.php"
+    },
+    {
+      "name": "Holiday",
+      "actors": [
+        "Administrator",
+        "Manager"
+      ],
+      "evidence": "app/Policies/HolidayPolicy.php"
+    },
+    {
+      "name": "User",
+      "actors": [
+        "Administrator"
+      ],
+      "evidence": "app/Policies/UserPolicy.php; app/Policies/RolePolicy.php"
+    },
+    {
+      "name": "Activity Log",
+      "actors": [
+        "Administrator"
+      ],
+      "evidence": "app/Filament/Resources/ActivityLogResource.php"
+    }
+  ],
+  "states": [
+    {
+      "entity": "Attendance",
+      "enum": "AttendanceStatus",
+      "values": [
+        "PRESENT",
+        "ABSENT",
+        "LATE"
+      ],
+      "declared": "app/Enums/AttendanceStatus.php:12",
+      "entityAt": "app/Models/Attendance.php:18",
+      "changedBy": [],
+      "assignSites": []
+    },
+    {
+      "entity": "ChargeProposal",
+      "enum": "ChargeProposalStatus",
+      "values": [
+        "PENDING",
+        "APPROVED",
+        "DISMISSED"
+      ],
+      "declared": "app/Enums/ChargeProposalStatus.php:19",
+      "entityAt": "app/Models/ChargeProposal.php:21",
+      "changedBy": [],
+      "assignSites": []
+    },
+    {
+      "entity": "Charge",
+      "enum": "ChargeStatus",
+      "values": [
+        "PENDING",
+        "PARTIAL",
+        "PAID",
+        "VOIDED"
+      ],
+      "declared": "app/Enums/ChargeStatus.php:15",
+      "entityAt": "app/Models/Charge.php:23",
+      "changedBy": [],
+      "assignSites": []
+    },
+    {
+      "entity": "ClassRoom",
+      "enum": "ClassStatus",
+      "values": [
+        "DRAFT",
+        "ACTIVE",
+        "CLOSED"
+      ],
+      "declared": "app/Enums/ClassStatus.php:11",
+      "entityAt": "app/Models/ClassRoom.php:30",
+      "changedBy": [],
+      "assignSites": []
+    },
+    {
+      "entity": "Room",
+      "enum": "ClassStatus",
+      "values": [
+        "DRAFT",
+        "ACTIVE",
+        "CLOSED"
+      ],
+      "declared": "app/Enums/ClassStatus.php:11",
+      "entityAt": "app/Models/Room.php:20",
+      "changedBy": [],
+      "assignSites": []
+    },
+    {
+      "entity": "ClassRoom",
+      "enum": "EnrollmentStatus",
+      "values": [
+        "ACTIVE",
+        "PAUSED",
+        "ENDED"
+      ],
+      "declared": "app/Enums/EnrollmentStatus.php:15",
+      "entityAt": "app/Models/ClassRoom.php:30",
+      "changedBy": [],
+      "assignSites": []
+    },
+    {
+      "entity": "Enrollment",
+      "enum": "EnrollmentStatus",
+      "values": [
+        "ACTIVE",
+        "PAUSED",
+        "ENDED"
+      ],
+      "declared": "app/Enums/EnrollmentStatus.php:15",
+      "entityAt": "app/Models/Enrollment.php:21",
+      "changedBy": [],
+      "assignSites": []
+    },
+    {
+      "entity": "Student",
+      "enum": "EnrollmentStatus",
+      "values": [
+        "ACTIVE",
+        "PAUSED",
+        "ENDED"
+      ],
+      "declared": "app/Enums/EnrollmentStatus.php:15",
+      "entityAt": "app/Models/Student.php:34",
+      "changedBy": [],
+      "assignSites": []
+    },
+    {
+      "entity": "Charge",
+      "enum": "InvoiceStatus",
+      "values": [
+        "PENDING_ISSUE",
+        "DEFERRED",
+        "ISSUED",
+        "NO_ISSUE",
+        "VOIDED"
+      ],
+      "declared": "app/Enums/InvoiceStatus.php:21",
+      "entityAt": "app/Models/Charge.php:23",
+      "changedBy": [],
+      "assignSites": []
+    },
+    {
+      "entity": "TaxInvoice",
+      "enum": "InvoiceStatus",
+      "values": [
+        "PENDING_ISSUE",
+        "DEFERRED",
+        "ISSUED",
+        "NO_ISSUE",
+        "VOIDED"
+      ],
+      "declared": "app/Enums/InvoiceStatus.php:21",
+      "entityAt": "app/Models/TaxInvoice.php:26",
+      "changedBy": [],
+      "assignSites": []
+    },
+    {
+      "entity": "Room",
+      "enum": "RoomStatus",
+      "values": [
+        "ACTIVE",
+        "MAINTENANCE",
+        "RETIRED"
+      ],
+      "declared": "app/Enums/RoomStatus.php:11",
+      "entityAt": "app/Models/Room.php:20",
+      "changedBy": [],
+      "assignSites": []
+    },
+    {
+      "entity": "ClassRoom",
+      "enum": "SessionStatus",
+      "values": [
+        "SCHEDULED",
+        "COMPLETED",
+        "CANCELLED"
+      ],
+      "declared": "app/Enums/SessionStatus.php:14",
+      "entityAt": "app/Models/ClassRoom.php:30",
+      "changedBy": [],
+      "assignSites": []
+    },
+    {
+      "entity": "ClassSession",
+      "enum": "SessionStatus",
+      "values": [
+        "SCHEDULED",
+        "COMPLETED",
+        "CANCELLED"
+      ],
+      "declared": "app/Enums/SessionStatus.php:14",
+      "entityAt": "app/Models/ClassSession.php:20",
+      "changedBy": [],
+      "assignSites": []
+    },
+    {
+      "entity": "Student",
+      "enum": "StudentStatus",
+      "values": [
+        "ACTIVE",
+        "INACTIVE",
+        "ARCHIVED"
+      ],
+      "declared": "app/Enums/StudentStatus.php:14",
+      "entityAt": "app/Models/Student.php:34",
+      "changedBy": [],
+      "assignSites": []
+    },
+    {
+      "entity": "User",
+      "enum": "UserStatus",
+      "values": [
+        "PENDING",
+        "ACTIVE",
+        "LOCKED"
+      ],
+      "declared": "app/Enums/UserStatus.php:9",
+      "entityAt": "app/Features/System/Models/User.php:38",
+      "changedBy": [],
+      "assignSites": []
+    }
+  ],
+  "handovers": [
+    {
+      "from": "Teacher",
+      "to": "Accountant",
+      "artifact": "Attendance record",
+      "note": "gv/tg marks attendance; ketoan reads it when tallying charges",
+      "evidence": "app/Policies/AttendancePolicy.php:55,59"
+    },
+    {
+      "from": "Manager",
+      "to": "Accountant",
+      "artifact": "Charge Proposal",
+      "note": "manager approves proposal before it becomes a Charge",
+      "evidence": "app/Enums/ChargeProposalStatus.php:19"
+    },
+    {
+      "from": "System",
+      "to": "Administrator",
+      "artifact": "Upload to Drive",
+      "note": "background job uploads generated media; no actor triggers it directly",
+      "evidence": "app/Jobs/UploadToDriveJob.php"
+    }
+  ],
+  "orphans": {
+    "writeNoRead": [],
+    "readNoWrite": [],
+    "noActor": []
+  },
+  "journey": {
+    "steps": [],
+    "accountEntities": [
+      "User (app/Features/System/Models/User.php:38)",
+      "Student (app/Models/Student.php:34)"
+    ]
+  },
+  "variants": [
+    {
+      "name": "Charge cycle without manual proposal",
+      "note": "auto-approval path skips the proposal step",
+      "evidence": "app/Features/Finance/Services/ChargeAutoApproval.php"
+    },
+    {
+      "name": "Dry run charge cycle",
+      "note": "runs the real path inside one transaction then rolls back",
+      "evidence": "app/Features/Finance/Services/ChargeCycleRunner.php:68-91"
+    }
+  ],
+  "system": [
+    {
+      "name": "Charge Cycle Runner",
+      "evidence": "app/Features/Finance/Services/ChargeCycleRunner.php:68"
+    },
+    {
+      "name": "Charge Auto Approval",
+      "evidence": "app/Features/Finance/Services/ChargeAutoApproval.php"
+    },
+    {
+      "name": "Finance Alert Service",
+      "evidence": "app/Features/Finance/Alerts/FinanceAlertService.php"
+    },
+    {
+      "name": "Google Drive Upload Job",
+      "evidence": "app/Jobs/UploadToDriveJob.php"
+    }
+  ],
+  "optional": [],
+  "goals": [
+    {
+      "actor": "Teacher",
+      "goal": "Take attendance for a teaching session"
+    },
+    {
+      "actor": "Assistant",
+      "goal": "Mark attendance for an assisted session"
+    },
+    {
+      "actor": "Manager",
+      "goal": "Approve a charge proposal for a monthly cycle"
+    },
+    {
+      "actor": "Accountant",
+      "goal": "Record a payment and issue a receipt and tax invoice"
+    },
+    {
+      "actor": "Administrator",
+      "goal": "Manage users, roles, settings and audit logs"
+    }
+  ],
+  "routes": [],
+  "questions": [
+    {
+      "kind": "state-no-route",
+      "text": "Attendance.AttendanceStatus (PRESENT/ABSENT/LATE) không có route ghi nào đổi trạng thái: máy tự đặt hay import/seed?",
+      "evidence": [
+        "app/Enums/AttendanceStatus.php:12"
+      ]
+    },
+    {
+      "kind": "state-no-route",
+      "text": "ChargeProposal.ChargeProposalStatus (PENDING/APPROVED/DISMISSED) không có route ghi nào đổi trạng thái: máy tự đặt hay import/seed?",
+      "evidence": [
+        "app/Enums/ChargeProposalStatus.php:19"
+      ]
+    },
+    {
+      "kind": "state-no-route",
+      "text": "Charge.ChargeStatus (PENDING/PARTIAL/PAID/VOIDED) không có route ghi nào đổi trạng thái: máy tự đặt hay import/seed?",
+      "evidence": [
+        "app/Enums/ChargeStatus.php:15"
+      ]
+    },
+    {
+      "kind": "state-no-route",
+      "text": "ClassRoom.ClassStatus (DRAFT/ACTIVE/CLOSED) không có route ghi nào đổi trạng thái: máy tự đặt hay import/seed?",
+      "evidence": [
+        "app/Enums/ClassStatus.php:11"
+      ]
+    },
+    {
+      "kind": "state-no-route",
+      "text": "Room.ClassStatus (DRAFT/ACTIVE/CLOSED) không có route ghi nào đổi trạng thái: máy tự đặt hay import/seed?",
+      "evidence": [
+        "app/Enums/ClassStatus.php:11"
+      ]
+    },
+    {
+      "kind": "state-no-route",
+      "text": "ClassRoom.EnrollmentStatus (ACTIVE/PAUSED/ENDED) không có route ghi nào đổi trạng thái: máy tự đặt hay import/seed?",
+      "evidence": [
+        "app/Enums/EnrollmentStatus.php:15"
+      ]
+    },
+    {
+      "kind": "state-no-route",
+      "text": "Enrollment.EnrollmentStatus (ACTIVE/PAUSED/ENDED) không có route ghi nào đổi trạng thái: máy tự đặt hay import/seed?",
+      "evidence": [
+        "app/Enums/EnrollmentStatus.php:15"
+      ]
+    },
+    {
+      "kind": "state-no-route",
+      "text": "Student.EnrollmentStatus (ACTIVE/PAUSED/ENDED) không có route ghi nào đổi trạng thái: máy tự đặt hay import/seed?",
+      "evidence": [
+        "app/Enums/EnrollmentStatus.php:15"
+      ]
+    },
+    {
+      "kind": "state-no-route",
+      "text": "Charge.InvoiceStatus (PENDING_ISSUE/DEFERRED/ISSUED/NO_ISSUE/VOIDED) không có route ghi nào đổi trạng thái: máy tự đặt hay import/seed?",
+      "evidence": [
+        "app/Enums/InvoiceStatus.php:21"
+      ]
+    },
+    {
+      "kind": "state-no-route",
+      "text": "TaxInvoice.InvoiceStatus (PENDING_ISSUE/DEFERRED/ISSUED/NO_ISSUE/VOIDED) không có route ghi nào đổi trạng thái: máy tự đặt hay import/seed?",
+      "evidence": [
+        "app/Enums/InvoiceStatus.php:21"
+      ]
+    },
+    {
+      "kind": "state-no-route",
+      "text": "Room.RoomStatus (ACTIVE/MAINTENANCE/RETIRED) không có route ghi nào đổi trạng thái: máy tự đặt hay import/seed?",
+      "evidence": [
+        "app/Enums/RoomStatus.php:11"
+      ]
+    },
+    {
+      "kind": "state-no-route",
+      "text": "ClassRoom.SessionStatus (SCHEDULED/COMPLETED/CANCELLED) không có route ghi nào đổi trạng thái: máy tự đặt hay import/seed?",
+      "evidence": [
+        "app/Enums/SessionStatus.php:14"
+      ]
+    },
+    {
+      "kind": "state-no-route",
+      "text": "ClassSession.SessionStatus (SCHEDULED/COMPLETED/CANCELLED) không có route ghi nào đổi trạng thái: máy tự đặt hay import/seed?",
+      "evidence": [
+        "app/Enums/SessionStatus.php:14"
+      ]
+    },
+    {
+      "kind": "state-no-route",
+      "text": "Student.StudentStatus (ACTIVE/INACTIVE/ARCHIVED) không có route ghi nào đổi trạng thái: máy tự đặt hay import/seed?",
+      "evidence": [
+        "app/Enums/StudentStatus.php:14"
+      ]
+    },
+    {
+      "kind": "state-no-route",
+      "text": "User.UserStatus (PENDING/ACTIVE/LOCKED) không có route ghi nào đổi trạng thái: máy tự đặt hay import/seed?",
+      "evidence": [
+        "app/Enums/UserStatus.php:9"
+      ]
+    },
+    {
+      "kind": "account-no-route",
+      "text": "User: entity tài khoản không có route quản trị nào — tạo bằng seed/script ngoài?",
+      "evidence": [
+        "app/Features/System/Models/User.php:38"
+      ]
+    },
+    {
+      "kind": "account-no-route",
+      "text": "Student: entity tài khoản không có route quản trị nào — tạo bằng seed/script ngoài?",
+      "evidence": [
+        "app/Models/Student.php:34"
+      ]
+    }
+  ]
+}

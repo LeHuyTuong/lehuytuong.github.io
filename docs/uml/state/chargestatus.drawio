@@ -1,0 +1,23 @@
+<mxfile host="drawio" agent="dsh diagram-builder" version="31.4.5">
+  <diagram id="Charge-lifecycle" name="Charge lifecycle">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <object label="" dshActors="Scheduler,Accountant,Web App,Payment Service,Credit Pool" dshLevel="system" dshOwner="Charge" id="1"><mxCell parent="0"/></object>
+        <mxCell id="start" value="" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1"><mxGeometry x="588" y="32" width="30" height="30" as="geometry"/></mxCell>
+        <mxCell id="pending" value="Pending" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="523" y="161" width="160" height="50" as="geometry"/></mxCell>
+        <mxCell id="partial" value="Partial" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="496" y="320" width="160" height="50" as="geometry"/></mxCell>
+        <mxCell id="paid" value="Paid" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="523" y="479" width="160" height="50" as="geometry"/></mxCell>
+        <mxCell id="end" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1"><mxGeometry x="588" y="628" width="30" height="30" as="geometry"/></mxCell>
+        <mxCell id="e0" value="Scheduler creates the cycle charge" style="rounded=0;html=1;endArrow=classic;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="start" target="pending"><mxGeometry x="0" relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e1" value="[part payment] Accountant collects cash" style="rounded=0;html=1;endArrow=classic;exitX=0.33;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="pending" target="partial"><mxGeometry x="0.09" relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e2" value="[total is 0] Scheduler settles the cycle" style="rounded=0;html=1;endArrow=classic;exitX=0.66;exitY=1;exitDx=0;exitDy=0;entryX=0.66;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="pending" target="paid"><mxGeometry x="-0.2" relative="1" as="geometry"><Array as="points"><mxPoint x="629" y="236"/><mxPoint x="716" y="236"/><mxPoint x="716" y="454"/><mxPoint x="629" y="454"/></Array></mxGeometry></mxCell>
+        <mxCell id="e3" value="[part payment] Web App collects" style="rounded=0;html=1;endArrow=classic;exitX=0;exitY=0.4;exitDx=0;exitDy=0;entryX=0;entryY=0.6;entryDx=0;entryDy=0;" edge="1" parent="1" source="partial" target="partial"><mxGeometry x="0" relative="1" as="geometry"><Array as="points"><mxPoint x="486" y="340"/><mxPoint x="486" y="350"/></Array></mxGeometry></mxCell>
+        <mxCell id="e4" value="[paid in full] Web App collects the rest" style="rounded=0;html=1;endArrow=classic;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.33;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="partial" target="paid"><mxGeometry x="-0.09" relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e5" value="[credit used] Credit Pool applies" style="rounded=0;html=1;endArrow=classic;exitX=0;exitY=0.34;exitDx=0;exitDy=0;entryX=0;entryY=0.66;entryDx=0;entryDy=0;" edge="1" parent="1" source="pending" target="pending"><mxGeometry x="0" relative="1" as="geometry"><Array as="points"><mxPoint x="513" y="178"/><mxPoint x="513" y="194"/></Array></mxGeometry></mxCell>
+        <mxCell id="e6" value="[part payment] Web App collects" style="rounded=0;html=1;endArrow=classic;exitX=0;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.8;entryDx=0;entryDy=0;" edge="1" parent="1" source="partial" target="partial"><mxGeometry x="0" relative="1" as="geometry"><Array as="points"><mxPoint x="249" y="330"/><mxPoint x="249" y="360"/></Array></mxGeometry></mxCell>
+        <mxCell id="e7" value="Payment Service closes the charge" style="rounded=0;html=1;endArrow=classic;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="paid" target="end"><mxGeometry x="0" relative="1" as="geometry"></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,20 @@
+{
+  "profile": "spring",
+  "frame": "Backend",
+  "packages": [
+    { "id": "controller", "name": "Controller" },
+    { "id": "service", "name": "Service" },
+    { "id": "serviceImpl", "name": "ServiceImpl" },
+    { "id": "repository", "name": "Repository" },
+    { "id": "entity", "name": "Entity" },
+    { "id": "dto", "name": "DTO" }
+  ],
+  "dependencies": [
+    { "from": "controller", "to": "service", "label": "use" },
+    { "from": "controller", "to": "dto", "label": "import" },
+    { "from": "serviceImpl", "to": "service", "label": "import" },
+    { "from": "serviceImpl", "to": "repository", "label": "use" },
+    { "from": "service", "to": "dto", "label": "import" },
+    { "from": "repository", "to": "entity", "label": "import" }
+  ]
+}

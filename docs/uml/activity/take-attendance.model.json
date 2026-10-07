@@ -1,0 +1,237 @@
+{
+  "title": "Take Attendance",
+  "level": "subsystem",
+  "lanes": [
+    "Teacher",
+    "Web App",
+    "Permission Service",
+    "Attendance Service"
+  ],
+  "nodes": [
+    {
+      "id": "start",
+      "kind": "start",
+      "lane": "Teacher"
+    },
+    {
+      "id": "openSheet",
+      "kind": "action",
+      "lane": "Teacher",
+      "text": "Open session attendance sheet"
+    },
+    {
+      "id": "listStudents",
+      "kind": "action",
+      "lane": "Attendance Service",
+      "text": "List enrolled students"
+    },
+    {
+      "id": "loadRules",
+      "kind": "action",
+      "lane": "Permission Service",
+      "text": "Load permission rules for current user"
+    },
+    {
+      "id": "dClosed",
+      "kind": "decision",
+      "lane": "Permission Service",
+      "text": "Session cancelled?"
+    },
+    {
+      "id": "dFuture",
+      "kind": "decision",
+      "lane": "Permission Service",
+      "text": "Session in future?"
+    },
+    {
+      "id": "dRoleRO",
+      "kind": "decision",
+      "lane": "Permission Service",
+      "text": "Role is read-only?"
+    },
+    {
+      "id": "dAdmin",
+      "kind": "decision",
+      "lane": "Permission Service",
+      "text": "Admin?"
+    },
+    {
+      "id": "dStaff",
+      "kind": "decision",
+      "lane": "Permission Service",
+      "text": "Staffs, window?"
+    },
+    {
+      "id": "allowMark",
+      "kind": "action",
+      "lane": "Permission Service",
+      "text": "Allow marking"
+    },
+    {
+      "id": "showLocked",
+      "kind": "action",
+      "lane": "Web App",
+      "text": "Show locked attendance form"
+    },
+    {
+      "id": "ffLocked",
+      "kind": "flowfinal",
+      "lane": "Web App"
+    },
+    {
+      "id": "showEdit",
+      "kind": "action",
+      "lane": "Teacher",
+      "text": "Show editable attendance form"
+    },
+    {
+      "id": "markStatuses",
+      "kind": "action",
+      "lane": "Teacher",
+      "text": "Mark present, absent or late for each student"
+    },
+    {
+      "id": "saveRecords",
+      "kind": "action",
+      "lane": "Attendance Service",
+      "text": "Save attendance records"
+    },
+    {
+      "id": "refreshSummary",
+      "kind": "action",
+      "lane": "Attendance Service",
+      "text": "Refresh attendance summary"
+    },
+    {
+      "id": "viewSummary",
+      "kind": "action",
+      "lane": "Teacher",
+      "text": "View attendance summary"
+    },
+    {
+      "id": "stop",
+      "kind": "stop",
+      "lane": "Teacher"
+    },
+    {
+      "id": "mAllow",
+      "kind": "merge",
+      "lane": "Permission Service"
+    },
+    {
+      "id": "ffdFuture",
+      "kind": "flowfinal",
+      "lane": "Permission Service"
+    },
+    {
+      "id": "ffdRoleRO",
+      "kind": "flowfinal",
+      "lane": "Permission Service"
+    },
+    {
+      "id": "ffdStaff",
+      "kind": "flowfinal",
+      "lane": "Permission Service"
+    }
+  ],
+  "edges": [
+    {
+      "from": "start",
+      "to": "openSheet"
+    },
+    {
+      "from": "openSheet",
+      "to": "listStudents"
+    },
+    {
+      "from": "listStudents",
+      "to": "loadRules"
+    },
+    {
+      "from": "loadRules",
+      "to": "dClosed"
+    },
+    {
+      "from": "dClosed",
+      "to": "showLocked",
+      "label": "Yes"
+    },
+    {
+      "from": "dClosed",
+      "to": "dFuture",
+      "label": "No"
+    },
+    {
+      "from": "dFuture",
+      "to": "ffdFuture",
+      "label": "Yes"
+    },
+    {
+      "from": "dFuture",
+      "to": "dRoleRO",
+      "label": "No"
+    },
+    {
+      "from": "dRoleRO",
+      "to": "ffdRoleRO",
+      "label": "Yes"
+    },
+    {
+      "from": "dRoleRO",
+      "to": "dAdmin",
+      "label": "No"
+    },
+    {
+      "from": "dAdmin",
+      "to": "mAllow",
+      "label": "Yes"
+    },
+    {
+      "from": "dAdmin",
+      "to": "dStaff",
+      "label": "No"
+    },
+    {
+      "from": "dStaff",
+      "to": "mAllow",
+      "label": "Yes"
+    },
+    {
+      "from": "dStaff",
+      "to": "ffdStaff",
+      "label": "No"
+    },
+    {
+      "from": "allowMark",
+      "to": "showEdit"
+    },
+    {
+      "from": "showEdit",
+      "to": "markStatuses"
+    },
+    {
+      "from": "markStatuses",
+      "to": "saveRecords"
+    },
+    {
+      "from": "saveRecords",
+      "to": "refreshSummary"
+    },
+    {
+      "from": "refreshSummary",
+      "to": "viewSummary"
+    },
+    {
+      "from": "viewSummary",
+      "to": "stop"
+    },
+    {
+      "from": "mAllow",
+      "to": "allowMark"
+    },
+    {
+      "from": "showLocked",
+      "to": "ffLocked"
+    }
+  ]
+}

@@ -1,100 +1,2619 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi" class="scroll-smooth">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Veridraw — Turn your vibe-built codebase into verified SRS/UML</title>
-<style>
-:root{
-  --bg:#f7f7f5; --panel:#fff; --ink:#1c1c1e; --muted:#6b6b70;
-  --line:#e3e3df; --accent:#1f5fd0; --ok:#1a7f45;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;background:var(--bg);color:var(--ink);
-  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  -webkit-font-smoothing:antialiased;
-}
-.wrap{max-width:980px;margin:0 auto;padding:0 22px}
-header{padding:80px 0 54px;border-bottom:1px solid var(--line)}
-h1{font-size:42px;line-height:1.15;margin:0 0 14px;letter-spacing:-.02em}
-.lead{font-size:21px;color:#3a3a3d;margin:0 0 26px;font-weight:400}
-code{background:#f2f2ef;padding:1.5px 6px;border-radius:4px;font-size:13.5px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-ul{margin:0 0 6px;padding-left:22px}
-li{margin:6px 0}
-ul li code{background:#f2f2ef;padding:1px 5px;border-radius:3px;font-size:12.5px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:42px 0}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px}
-.card .k{font-size:12px;text-transform:uppercase;color:var(--muted);letter-spacing:.05em;font-weight:600}
-.card .v{font-size:28px;font-weight:650;margin:6px 0}
-.mt70{margin-top:70px}
-footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
-a{color:var(--accent);text-decoration:none}
-a:hover{text-decoration:underline}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VeriDraw (veridraw.me) — Dịch Vụ Thẩm Định &amp; Vẽ Sơ Đồ UML Chuẩn Ký Hiệu từ Code Thật cho SV FPT</title>
+  <meta name="description" content="VeriDraw (veridraw.me) — Dịch vụ thẩm định và vẽ sơ đồ UML, ERD, Sequence, Activity chuẩn ký hiệu OMG và template Draw.io từ chính source code repo của sinh viên Đại học FPT. Bàn giao file .drawio + PNG.">
+  <link rel="canonical" href="https://veridraw.me">
+  <meta property="og:title" content="VeriDraw (veridraw.me) — Thẩm Định &amp; Vẽ Sơ Đồ UML Chuẩn Ký Hiệu">
+  <meta property="og:description" content="VeriDraw — Dịch vụ thẩm định và vẽ sơ đồ UML chuẩn ký hiệu OMG và template Draw.io từ chính source code repo thật.">
+  <meta property="og:site_name" content="VeriDraw">
+  <meta property="og:url" content="https://veridraw.me">
+  <meta name="color-scheme" content="light dark">
+
+  <!-- FOUC Prevention Script -->
+  <script>
+    (function () {
+      try {
+        var theme = localStorage.getItem('theme');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (theme === 'dark' || (!theme && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- Google Fonts: Be Vietnam Pro & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN with Custom Theme -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Be Vietnam Pro"', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              300: '#93c5fd',
+              400: '#60a5fa',
+              500: '#3b82f6',
+              600: '#2563eb', // Pure high-trust tech sapphire (Strictly avoiding FPT orange)
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+              950: '#172554',
+            }
+          },
+          animation: {
+            'shimmer': 'shimmer 2.5s infinite',
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-glow': 'pulse-glow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'dash': 'dash 20s linear infinite',
+          },
+          keyframes: {
+            shimmer: {
+              '0%': { transform: 'translateX(-100%)' },
+              '100%': { transform: 'translateX(200%)' },
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-8px)' },
+            },
+            'pulse-glow': {
+              '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
+              '50%': { opacity: '0.8', transform: 'scale(1.05)' },
+            },
+            dash: {
+              to: { strokeDashoffset: '1000' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    ::selection {
+      background-color: #2563eb;
+      color: #ffffff;
+    }
+    /* Architectural Blueprint Grid Pattern */
+    .bg-grid-pattern {
+      background-size: 32px 32px;
+      background-image: 
+        linear-gradient(to right, rgba(37, 99, 235, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(37, 99, 235, 0.05) 1px, transparent 1px);
+    }
+    .dark .bg-grid-pattern {
+      background-image: 
+        linear-gradient(to right, rgba(96, 165, 250, 0.06) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(96, 165, 250, 0.06) 1px, transparent 1px);
+    }
+    /* Subtle Ambient Spotlight Glow */
+    .hero-spotlight {
+      background: radial-gradient(circle at 50% 15%, rgba(37, 99, 235, 0.15) 0%, rgba(37, 99, 235, 0) 65%);
+    }
+    .dark .hero-spotlight {
+      background: radial-gradient(circle at 50% 15%, rgba(37, 99, 235, 0.22) 0%, rgba(15, 23, 42, 0) 65%);
+    }
+    /* Scroll Reveal State */
+    .reveal-item {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .reveal-item.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Tab Transitions */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    /* Animated flow lines */
+    .flow-line {
+      stroke-dasharray: 6 6;
+      animation: dash-flow 1.5s linear infinite;
+    }
+    @keyframes dash-flow {
+      to { stroke-dashoffset: -12; }
+    }
+    /* Button Shimmer Overlay */
+    .shimmer-btn {
+      position: relative;
+      overflow: hidden;
+    }
+    .shimmer-btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.25), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+    .shimmer-btn:hover::after {
+      transform: translateX(100%);
+    }
+  </style>
 </head>
-<body>
-<div class="wrap">
 
-<header>
-  <h1>Veridraw</h1>
-  <p class="lead">We read your real vibe-built code <em>(Filament / Laravel / Next.js)</em> and draw
-  use case, activity, sequence, class, ERD and state diagrams that <strong>actually match what runs</strong> —
-  not what AI guesses.</p>
-  <p><a href="mailto:founder@veridraw.me">founder@veridraw.me</a> &middot;
-     POC repo: <code>LMSERP-OneWorld</code> (1.054 files · 153.417 LOC)</p>
-</header>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased min-h-screen flex flex-col transition-colors duration-300 relative selection:bg-brand-600 selection:text-white">
 
-<h2>Why us?</h2>
-<p>Your code exists, but nobody — not even you — remembers what it does.
-   You vibe-coded it fast to ship, now it needs documentation.
-   We don't invent a system that never existed. We read <strong>your</strong> code and draw
-   <strong>your</strong> system, dead accurate.</p>
+  <!-- ================= TOP READING PROGRESS BAR ================= -->
+  <div id="scroll-progress" class="fixed top-0 left-0 h-1 bg-gradient-to-r from-brand-600 via-indigo-500 to-sky-400 z-50 transition-all duration-75" style="width: 0%;"></div>
 
-<div class="cards">
-  <div class="card"><div class="k">Diagrams</div><div class="v">29+</div><div>verified on a real repo</div></div>
-  <div class="card"><div class="k">Machine time</div><div class="v">0.12%</div><div>rest is reading code + fixing layout</div></div>
-  <div class="card"><div class="k">Legal risk</div><div class="v">≈ 0</div><div>code is yours — you submit</div></div>
-</div>
+  <!-- ================= TOP ANNOUNCEMENT BANNER ================= -->
+  <div class="bg-gradient-to-r from-brand-700 via-brand-600 to-indigo-700 text-white text-xs sm:text-sm py-2.5 px-4 text-center font-medium shadow-inner relative z-40">
+    <div class="max-w-7xl mx-auto flex items-center justify-center gap-2 flex-wrap">
+      <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 text-white font-semibold text-[11px] backdrop-blur-xs">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping inline-block"></span>
+        <span data-i18n="top_bar_tag">Mùa Đồ Án K18-K20</span>
+      </span>
+      <span data-i18n="top_bar">Thẩm định &amp; vẽ sơ đồ UML chuẩn ký hiệu từ source code thực tế</span>
+      <span class="opacity-60 hidden md:inline">&bull;</span>
+      <span class="font-semibold underline decoration-white/40 underline-offset-4" data-i18n="top_bar_sub">Bàn giao file .drawio gốc + PNG sắc nét</span>
+    </div>
+  </div>
 
-<h2>What we deliver</h2>
-<ul>
-  <li><strong>Use case</strong> — actors from real enums (<code>app/Enums/Role.php:7</code>), not guessed</li>
-  <li><strong>Activity</strong> — swimlane flow with <em>[Yes]/[No]</em> decision diamonds</li>
-  <li><strong>Sequence + Class</strong> — controller→service→repository, correct UML</li>
-  <li><strong>Conceptual ERD</strong> — crow's foot, no dead attributes</li>
-  <li><strong>State machine</strong> — from real <code>enum</code> lifecycle in your code</li>
-  <li><strong>Context (DFD L0)</strong> — one circle for the system</li>
-</ul>
-<ul>
-  <li>All diagrams shipped as <strong>.drawio</strong> + <strong>PNG</strong> — editable by you</li>
-  <li>Verification gate: <code>gen → check → verify_geometry.py</code> independent checker</li>
-</ul>
+  <!-- ================= HEADER / NAVBAR ================= -->
+  <header class="sticky top-0 z-40 bg-white/85 dark:bg-slate-900/85 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800/80 transition-colors shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-700 to-brand-500 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-brand-500/25 group-hover:scale-105 transition-transform duration-300">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7c0-2-1-3-3-3H7C5 4 4 5 4 7z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 9h6m-6 4h4"></path>
+          </svg>
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-lg sm:text-xl tracking-tight text-slate-900 dark:text-white">
+              Veri<span class="text-brand-600 dark:text-brand-400">Draw</span>
+            </span>
+            <span class="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-full bg-brand-100 text-brand-700 dark:bg-brand-950 dark:text-brand-300 border border-brand-200/60 dark:border-brand-800 font-mono">
+              veridraw.me
+            </span>
+          </div>
+          <span class="text-[11px] text-slate-500 dark:text-slate-400 font-medium -mt-0.5" data-i18n="tagline_mini">
+            UML Diagram Review &amp; Drawing
+          </span>
+        </div>
+      </a>
 
-<h2>Process (manual, until we hit 2 paid customers)</h2>
-<ol>
-  <li>You share repo (GitHub link or <code>.zip</code>). We confirm ownership.</li>
-  <li>We scan → <code>inventory.json</code> + <code>flows.json</code>.</li>
-  <li>We draw 1 diagram set — you review in 10 min call.</li>
-  <li>Edits included. Final delivery in 3-4h wall-clock.</li>
-</ol>
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-600 dark:text-slate-300">
+        <a href="#packages" class="hover:text-brand-600 dark:hover:text-brand-400 transition" data-i18n="nav_packages">Gói đồ án</a>
+        <a href="#services" class="hover:text-brand-600 dark:hover:text-brand-400 transition" data-i18n="nav_pricing">Bảng giá lẻ</a>
+        <a href="#calculator" class="hover:text-brand-600 dark:hover:text-brand-400 transition flex items-center gap-1.5">
+          <span data-i18n="nav_calc">Tính giá</span>
+          <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+        </a>
+        <a href="#process" class="hover:text-brand-600 dark:hover:text-brand-400 transition" data-i18n="nav_process">Quy trình</a>
+        <a href="#before-after" class="hover:text-brand-600 dark:hover:text-brand-400 transition" data-i18n="nav_comparison">Chuẩn OMG UML</a>
+        <a href="#demo" class="hover:text-brand-600 dark:hover:text-brand-400 transition" data-i18n="nav_demo">Bộ mẫu (29 sơ đồ)</a>
+        <a href="#faq" class="hover:text-brand-600 dark:hover:text-brand-400 transition" data-i18n="nav_faq">FAQ</a>
+      </nav>
 
-<h2>Pricing pilot (test phase)</h2>
-<table>
-  <thead><tr><th>Scope</th><th>Price (VND)</th></tr></thead>
-  <tbody>
-    <tr><td>3 core use cases + activity + sequence</td><td>2,000,000₫</td></tr>
-    <tr><td>Full set (all 6 use cases + ERD + state)</td><td>5,000,000₫</td></tr>
-  </tbody>
-</table>
-<p class="mt70"><small>We don't auto-scale. We stop at 2 paid customers to validate fit first.</small></p>
+      <!-- Right Action Controls -->
+      <div class="flex items-center gap-2.5 sm:gap-3">
+        
+        <!-- Language Switcher Pill (EN/VI) -->
+        <div class="inline-flex items-center rounded-xl border border-slate-200 dark:border-slate-800 p-1 bg-slate-100/80 dark:bg-slate-800/80 text-xs font-bold shadow-2xs" role="group" aria-label="Language selection">
+          <button id="lang-vi-btn" onclick="setLanguage('vi')" class="px-2.5 py-1 rounded-lg transition-all duration-200 shadow-xs bg-white text-brand-600 dark:bg-slate-900 dark:text-brand-400" aria-pressed="true">
+            VI
+          </button>
+          <button id="lang-en-btn" onclick="setLanguage('en')" class="px-2.5 py-1 rounded-lg transition-all duration-200 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white" aria-pressed="false">
+            EN
+          </button>
+        </div>
 
-<footer>
-  <p>Business email: <a href="mailto:founder@veridraw.me">founder@veridraw.me</a> ·
-     Landing page is static HTML (no scripts, no forms, no tracker).
-     Built as a single static HTML file — no build step, no dependencies.</p>
-</footer>
+        <!-- Dark / Light Theme Toggle -->
+        <button id="theme-toggle-btn" onclick="toggleTheme()" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white shadow-xs transition hover:scale-105 active:scale-95" aria-label="Chuyển chế độ sáng/tối" title="Sáng / Tối">
+          <svg id="theme-icon-sun" class="w-4 h-4 hidden text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+          <svg id="theme-icon-moon" class="w-4 h-4 text-brand-600 dark:text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+          </svg>
+        </button>
 
-</div>
+        <!-- Header Zalo CTA Button (Desktop) -->
+        <a href="https://zalo.me/0901234567" target="_blank" rel="noopener noreferrer" class="zalo-link-btn hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-brand-600/30 hover:shadow-lg hover:shadow-brand-600/40 transition-all transform hover:-translate-y-0.5 active:translate-y-0 shimmer-btn">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.477 2 2 6.145 2 11.26c0 2.91 1.455 5.513 3.736 7.185L5 22l4.08-1.517c.928.245 1.906.377 2.92.377 5.523 0 10-4.145 10-9.26C22 6.145 17.523 2 12 2zm1 14h-2v-4h2v4zm0-6h-2V8h2v2z"/>
+          </svg>
+          <span data-i18n="cta_header">Nhắn tin qua Zalo</span>
+        </a>
+
+        <!-- Mobile Menu Hamburger -->
+        <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="p-2 lg:hidden rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300" aria-label="Mở menu điều hướng">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div id="mobile-nav" class="hidden lg:hidden border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl px-5 py-5 space-y-3.5 text-sm font-semibold">
+      <a href="#packages" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-brand-600" data-i18n="nav_packages">Gói giải pháp đồ án</a>
+      <a href="#services" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-brand-600" data-i18n="nav_pricing">Bảng giá lẻ từng hình</a>
+      <a href="#calculator" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-brand-600" data-i18n="nav_calc">Công cụ tính giá dự toán</a>
+      <a href="#process" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-brand-600" data-i18n="nav_process">Quy trình 4 bước</a>
+      <a href="#before-after" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-brand-600" data-i18n="nav_comparison">So sánh chuẩn OMG UML</a>
+      <a href="#demo" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-brand-600" data-i18n="nav_demo">Bộ sơ đồ mẫu (29 sơ đồ)</a>
+      <a href="#faq" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-brand-600" data-i18n="nav_faq">Câu hỏi thường gặp</a>
+      <div class="pt-2">
+        <a href="https://zalo.me/0901234567" target="_blank" rel="noopener noreferrer" class="zalo-link-btn w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-brand-600 text-white font-bold shadow-md shadow-brand-600/30">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.477 2 2 6.145 2 11.26c0 2.91 1.455 5.513 3.736 7.185L5 22l4.08-1.517c.928.245 1.906.377 2.92.377 5.523 0 10-4.145 10-9.26C22 6.145 17.523 2 12 2zm1 14h-2v-4h2v4zm0-6h-2V8h2v2z"/>
+          </svg>
+          <span data-i18n="cta_header">Nhắn tin qua Zalo</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HERO SECTION WITH ANIMATED STUDIO ================= -->
+  <section class="relative overflow-hidden bg-grid-pattern hero-spotlight border-b border-slate-200/80 dark:border-slate-800/80 py-16 sm:py-24 lg:py-28">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        
+        <!-- Left Hero Content -->
+        <div class="lg:col-span-7 space-y-6 text-center lg:text-left reveal-item">
+          
+          <!-- Trust Pill -->
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950/80 border border-brand-200 dark:border-brand-800 text-brand-700 dark:text-brand-300 text-xs sm:text-sm font-bold shadow-xs">
+            <span class="w-2 h-2 rounded-full bg-brand-600 animate-pulse"></span>
+            <span data-i18n="hero_badge">Chuẩn Ký Hiệu OMG UML &bull; Khớp 100% Code Repo &bull; Template Draw.io</span>
+          </div>
+
+          <!-- Headline -->
+          <h1 class="text-3xl sm:text-5xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
+            <span data-i18n="hero_title_1">Sơ đồ UML &amp; ERD chuẩn chỉ,</span><br>
+            <span class="bg-gradient-to-r from-brand-600 via-indigo-600 to-sky-600 dark:from-brand-400 dark:via-indigo-400 dark:to-sky-400 bg-clip-text text-transparent" data-i18n="hero_title_2">được vẽ trực tiếp từ code thật</span><br>
+            <span data-i18n="hero_title_3">của đồ án nhóm bạn.</span>
+          </h1>
+
+          <!-- Value Proposition -->
+          <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal" data-i18n="hero_desc">
+            Giảng viên bắt bẻ lỗi ký hiệu? Sơ đồ vẽ ẩu không khớp controllers, database và routes? Chúng tôi đọc trực tiếp mã nguồn của bạn, chuẩn hóa từng actor, mũi tên include/extend, lifeline và bàn giao trọn bộ file <strong class="text-slate-900 dark:text-white font-semibold">.drawio chỉnh sửa được + PNG sắc nét</strong>.
+          </p>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
+            <a href="https://zalo.me/0901234567" target="_blank" rel="noopener noreferrer" class="zalo-link-btn w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-base shadow-lg shadow-brand-600/30 hover:shadow-xl hover:shadow-brand-600/40 transition-all transform hover:-translate-y-0.5 active:translate-y-0 shimmer-btn">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.477 2 2 6.145 2 11.26c0 2.91 1.455 5.513 3.736 7.185L5 22l4.08-1.517c.928.245 1.906.377 2.92.377 5.523 0 10-4.145 10-9.26C22 6.145 17.523 2 12 2zm1 14h-2v-4h2v4zm0-6h-2V8h2v2z"/>
+              </svg>
+              <span data-i18n="hero_cta_primary">Nhắn tin qua Zalo báo giá ngay</span>
+            </a>
+            
+            <a href="#demo" class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-white/80 dark:bg-slate-900/80 hover:bg-white dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-base shadow-xs transition hover:border-slate-400">
+              <svg class="w-5 h-5 text-brand-600 dark:text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+              <span data-i18n="hero_cta_secondary">Xem 29 sơ đồ mẫu (Demo Gallery)</span>
+            </a>
+          </div>
+
+          <!-- Feature Bullets Strip -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-6 border-t border-slate-200/80 dark:border-slate-800 text-left">
+            <div class="p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/80 space-y-1 hover:border-brand-400 transition-colors">
+              <div class="text-brand-600 dark:text-brand-400 font-bold text-sm flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span data-i18n="pill_1_title">File .drawio gốc</span>
+              </div>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400" data-i18n="pill_1_desc">Tự mở &amp; sửa trên app.diagrams.net</p>
+            </div>
+
+            <div class="p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/80 space-y-1 hover:border-brand-400 transition-colors">
+              <div class="text-brand-600 dark:text-brand-400 font-bold text-sm flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span data-i18n="pill_2_title">Truy về dòng code</span>
+              </div>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400" data-i18n="pill_2_desc">Khớp models, routes, controllers</p>
+            </div>
+
+            <div class="p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/80 space-y-1 hover:border-brand-400 transition-colors">
+              <div class="text-brand-600 dark:text-brand-400 font-bold text-sm flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span data-i18n="pill_3_title">1 lần sửa miễn phí</span>
+              </div>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400" data-i18n="pill_3_desc">Bảo hành lỗi ký hiệu giảng viên bắt</p>
+            </div>
+
+            <div class="p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/80 space-y-1 hover:border-brand-400 transition-colors">
+              <div class="text-brand-600 dark:text-brand-400 font-bold text-sm flex items-center gap-1.5">
+                <svg class="w-4 h-4 text-emerald-500 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <span data-i18n="pill_4_title">Hỏa tốc 24 giờ</span>
+              </div>
+              <p class="text-[11px] text-slate-500 dark:text-slate-400" data-i18n="pill_4_desc">Cứu nguy sát hạn nộp đồ án</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Hero: Interactive Animated Draw.io Canvas Studio -->
+        <div class="lg:col-span-5 reveal-item" style="transition-delay: 150ms;">
+          <div class="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-6 shadow-2xl border border-slate-200/80 dark:border-slate-800 relative transition-all duration-300 hover:shadow-2xl hover:border-brand-500/40">
+            
+            <!-- Window Control Header -->
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-rose-500/90 inline-block"></span>
+                <span class="w-3 h-3 rounded-full bg-amber-500/90 inline-block"></span>
+                <span class="w-3 h-3 rounded-full bg-emerald-500/90 inline-block"></span>
+                <span class="text-xs font-mono text-slate-500 dark:text-slate-400 ml-2 font-medium">Draw.io Canvas &bull; Live Trace</span>
+              </div>
+              <div class="flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping inline-block"></span>
+                PASS 0 Error
+              </div>
+            </div>
+
+            <!-- Interactive Diagram Tab Switcher inside Canvas -->
+            <div class="pt-3 pb-2 flex items-center justify-between border-b border-slate-100 dark:border-slate-800 text-[11px] font-mono">
+              <div class="flex gap-1.5">
+                <button onclick="setStudioPreview('sequence')" id="studio-tab-seq" class="px-2.5 py-1 rounded-md bg-brand-100 text-brand-700 dark:bg-brand-950 dark:text-brand-300 font-bold transition">
+                  Sequence
+                </button>
+                <button onclick="setStudioPreview('usecase')" id="studio-tab-uc" class="px-2.5 py-1 rounded-md text-slate-500 hover:text-slate-900 dark:hover:text-white transition">
+                  Use Case
+                </button>
+                <button onclick="setStudioPreview('erd')" id="studio-tab-erd" class="px-2.5 py-1 rounded-md text-slate-500 hover:text-slate-900 dark:hover:text-white transition">
+                  ERD Crow's Foot
+                </button>
+              </div>
+              <span class="text-[10px] text-slate-400">100% Zoom</span>
+            </div>
+
+            <!-- Blueprint Body (Dynamic Animated Content) -->
+            <div class="py-4 space-y-4 text-xs">
+              
+              <!-- Real Code Snippet Box with AST Scanner Animation -->
+              <div class="p-3.5 bg-slate-900 text-slate-300 rounded-xl text-[11px] font-mono leading-relaxed shadow-inner border border-slate-800 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-b from-brand-500/10 to-transparent pointer-events-none animate-pulse"></div>
+                <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-800 text-[10px] text-slate-500">
+                  <span id="studio-code-file">app/Services/EnrollmentService.php:84</span>
+                  <span class="text-emerald-400 font-semibold flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Verified AST
+                  </span>
+                </div>
+                <div id="studio-code-content" class="text-slate-300">
+                  <span class="text-purple-400 font-semibold">public function</span> <span class="text-blue-400 font-semibold">verifyTuitionAndEnroll</span>(Student <span class="text-emerald-400">$s</span>) {<br>
+                  &nbsp;&nbsp;<span class="text-slate-400">$bal</span> = <span class="text-yellow-300">Wallet</span>::<span class="text-blue-400">getBalance</span>(<span class="text-emerald-400">$s</span>-&gt;id);<br>
+                  &nbsp;&nbsp;<span class="text-purple-400">if</span> (<span class="text-slate-400">$bal</span> &gt;= <span class="text-orange-400">5000000</span>) { <span class="text-emerald-400">$this</span>-&gt;confirm(); }<br>
+                  }
+                </div>
+              </div>
+
+              <!-- Animated Stream Mapping Indicator -->
+              <div class="flex items-center justify-center gap-2 text-slate-400 dark:text-slate-500 text-[11px]">
+                <span class="h-px bg-slate-200 dark:bg-slate-800 flex-1"></span>
+                <span class="px-2.5 py-0.5 rounded-full bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 font-bold font-mono text-[10px] border border-brand-200 dark:border-brand-900 flex items-center gap-1">
+                  <svg class="w-3 h-3 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                  Đọc Code &rarr; Trích Xuất File .drawio
+                </span>
+                <span class="h-px bg-slate-200 dark:bg-slate-800 flex-1"></span>
+              </div>
+
+              <!-- Rendered Visual Mini Diagram Canvas -->
+              <div id="studio-diagram-canvas" class="border border-brand-200 dark:border-brand-900/80 bg-brand-50/40 dark:bg-brand-950/20 rounded-2xl p-4 space-y-3 font-sans relative overflow-hidden min-h-[170px] flex flex-col justify-between">
+                
+                <!-- Diagram Header -->
+                <div class="flex items-center justify-between text-xs font-bold text-brand-950 dark:text-brand-200">
+                  <span class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-brand-600"></span>
+                    <span id="studio-diagram-title">Sequence Diagram &bull; Controller &rarr; Service &rarr; DB</span>
+                  </span>
+                  <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-brand-100 dark:bg-brand-900 text-brand-700 dark:text-brand-200">
+                    OMG UML 2.5
+                  </span>
+                </div>
+                
+                <!-- Dynamic Diagram Mockup Body -->
+                <div id="studio-diagram-body" class="space-y-2 pt-1 font-mono text-[11px]">
+                  <div class="grid grid-cols-3 text-center gap-2">
+                    <div class="p-1.5 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-lg font-bold text-slate-800 dark:text-slate-200 shadow-xs">
+                      :Student
+                    </div>
+                    <div class="p-1.5 border border-brand-400 dark:border-brand-700 bg-brand-50 dark:bg-slate-800 rounded-lg font-bold text-brand-700 dark:text-brand-300 shadow-xs">
+                      :EnrollController
+                    </div>
+                    <div class="p-1.5 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-lg font-bold text-slate-800 dark:text-slate-200 shadow-xs">
+                      :TuitionService
+                    </div>
+                  </div>
+
+                  <div class="space-y-1.5 text-[10px] text-slate-600 dark:text-slate-300 pt-1 font-mono">
+                    <div class="flex items-center justify-between border-b border-dashed border-slate-200 dark:border-slate-800 pb-1">
+                      <span class="text-brand-700 dark:text-brand-300 font-semibold">1: register() &rarr;</span>
+                      <span class="text-emerald-600 dark:text-emerald-400 font-semibold">sync call</span>
+                    </div>
+                    <div class="flex items-center justify-between border-b border-dashed border-slate-200 dark:border-slate-800 pb-1">
+                      <span>&nbsp;&nbsp;1.1: verifyBalance() &rarr;</span>
+                      <span class="text-slate-500 bg-slate-200/60 dark:bg-slate-800 px-1 rounded">alt [bal &ge; fee]</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span class="text-slate-500">&larr; 1.2: return receipt</span>
+                      <span class="text-slate-500">dashed reply</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="text-[10px] text-slate-400 flex items-center justify-between pt-1 border-t border-brand-100 dark:border-brand-900">
+                  <span>Ký hiệu OMG UML chuẩn 100%</span>
+                  <span class="font-bold text-brand-600 dark:text-brand-400">Editable XML Layer</span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Footer Note inside Card -->
+            <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 font-medium">
+              <span data-i18n="hero_card_note">Xuất chuẩn XML Draw.io + PNG</span>
+              <span class="font-bold text-brand-600 dark:text-brand-400 flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                100% Khớp Code
+              </span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= CAPSTONE SOLUTION PACKAGES ================= -->
+  <section id="packages" class="py-20 bg-white dark:bg-slate-900 border-b border-slate-200/80 dark:border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto space-y-3 mb-16 reveal-item">
+        <span class="text-xs sm:text-sm font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400" data-i18n="pkg_badge">
+          Giải Pháp Đồ Án Trọn Gói
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight" data-i18n="pkg_title">
+          Chọn gói giải pháp tối ưu theo môn học FPT
+        </h2>
+        <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed" data-i18n="pkg_desc">
+          Sinh viên không cần loay hoay tính từng sơ đồ. Chúng tôi cấu hình sẵn các gói đúng chuẩn rubric chấm điểm của từng môn.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- Package 1: Audit & Fix -->
+        <div class="bg-slate-50 dark:bg-slate-950 rounded-3xl p-7 border border-slate-200 dark:border-slate-800 flex flex-col justify-between shadow-sm hover:shadow-card-hover transition-all reveal-item">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold">
+                Cứu Cánh Sát Giờ
+              </span>
+              <span class="text-xs font-semibold text-emerald-600">Đã có sơ đồ</span>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-slate-900 dark:text-white">Gói Soát Lỗi Hội Đồng (Audit &amp; Fix)</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
+                Dành cho nhóm đã tự vẽ sơ đồ nhưng sợ bị giảng viên hội đồng bắt bẻ lỗi ký hiệu OMG UML và format sai template.
+              </p>
+            </div>
+            <div class="pt-3 pb-2 border-y border-slate-200 dark:border-slate-800">
+              <div class="flex items-baseline gap-1">
+                <span class="text-3xl font-extrabold text-brand-600 dark:text-brand-400">150.000 – 250.000</span>
+                <span class="text-xs text-slate-500 font-medium">đ / bộ</span>
+              </div>
+              <span class="text-[11px] text-slate-500">Áp dụng cho bộ 6 – 10 sơ đồ sẵn có</span>
+            </div>
+            <ul class="text-xs text-slate-600 dark:text-slate-300 space-y-2.5">
+              <li class="flex items-start gap-2">
+                <span class="text-brand-600 font-bold">&check;</span>
+                <span>Soát lỗi ký hiệu Actor, include, extend, lifeline</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-600 font-bold">&check;</span>
+                <span>Chỉnh sửa trực tiếp trên file .drawio gốc</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-600 font-bold">&check;</span>
+                <span>Tài liệu hướng dẫn trả lời khi phản biện</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-600 font-bold">&check;</span>
+                <span>Hoàn thành nhanh trong 12 – 24 giờ</span>
+              </li>
+            </ul>
+          </div>
+          <div class="pt-6">
+            <button onclick="applyPackagePreset('audit')" class="w-full py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs hover:border-brand-500 hover:text-brand-600 transition shadow-xs">
+              Chọn Gói Này &amp; Tính Giá &rarr;
+            </button>
+          </div>
+        </div>
+
+        <!-- Package 2: SWP391 / PRN (Featured) -->
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-7 border-2 border-brand-500 shadow-xl relative flex flex-col justify-between hover:shadow-glow transition-all reveal-item" style="transition-delay: 100ms;">
+          <div class="absolute -top-3.5 right-6 px-3 py-1 rounded-full bg-brand-600 text-white font-extrabold text-[11px] uppercase tracking-wider shadow-md">
+            Khuyên Dùng Môn SWP391
+          </div>
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 text-xs font-bold">
+                Môn Chuyên Ngành
+              </span>
+              <span class="text-xs font-bold text-brand-600">Đủ nộp SRS/SDS</span>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-slate-900 dark:text-white">Gói Đồ Án SWP391 / PRN231</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
+                Dựng trọn bộ sơ đồ từ chính source code Laravel / Spring Boot / .NET của nhóm bạn. Đảm bảo đúng tiến độ Milestone.
+              </p>
+            </div>
+            <div class="pt-3 pb-2 border-y border-slate-100 dark:border-slate-800">
+              <div class="flex items-baseline gap-1">
+                <span class="text-3xl font-extrabold text-brand-600 dark:text-brand-400">450.000 – 650.000</span>
+                <span class="text-xs text-slate-500 font-medium">đ / bộ</span>
+              </div>
+              <span class="text-[11px] text-emerald-600 font-semibold">Tự động áp dụng chiết khấu 15% nhóm</span>
+            </div>
+            <ul class="text-xs text-slate-600 dark:text-slate-300 space-y-2.5">
+              <li class="flex items-start gap-2">
+                <span class="text-brand-600 font-bold">&check;</span>
+                <span><strong>1 Use Case tổng</strong> + 2 Use Case phân vai trò</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-600 font-bold">&check;</span>
+                <span><strong>1 ERD chi tiết</strong> trích xuất từ database migrations</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-600 font-bold">&check;</span>
+                <span><strong>2 Activity Diagrams</strong> cho 2 luồng nghiệp vụ chính</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-600 font-bold">&check;</span>
+                <span><strong>2 Sequence Diagrams</strong> phân tầng Controller - Service</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-600 font-bold">&check;</span>
+                <span>Bàn giao file <code>.drawio</code> + PNG + 1 lần sửa free</span>
+              </li>
+            </ul>
+          </div>
+          <div class="pt-6">
+            <button onclick="applyPackagePreset('swp')" class="w-full py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-md shadow-brand-600/30 transition shimmer-btn">
+              Chọn Gói SWP391 Này &rarr;
+            </button>
+          </div>
+        </div>
+
+        <!-- Package 3: Capstone SEP490 -->
+        <div class="bg-slate-50 dark:bg-slate-950 rounded-3xl p-7 border border-slate-200 dark:border-slate-800 flex flex-col justify-between shadow-sm hover:shadow-card-hover transition-all reveal-item" style="transition-delay: 200ms;">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-full bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 text-xs font-bold">
+                Tốt Nghiệp
+              </span>
+              <span class="text-xs font-semibold text-indigo-600">Đầy đủ 7 loại</span>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-slate-900 dark:text-white">Gói Khóa Luận Capstone (SEP490)</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
+                Bộ tài liệu kiến trúc toàn diện cho đồ án tốt nghiệp quy mô lớn. Tách Bounded Context và phân tầng nghiêm ngặt.
+              </p>
+            </div>
+            <div class="pt-3 pb-2 border-y border-slate-200 dark:border-slate-800">
+              <div class="flex items-baseline gap-1">
+                <span class="text-3xl font-extrabold text-brand-600 dark:text-brand-400">850.000 – 1.200.000</span>
+                <span class="text-xs text-slate-500 font-medium">đ / bộ</span>
+              </div>
+              <span class="text-[11px] text-slate-500">Giảm 15% trọn bộ 12 – 16 sơ đồ</span>
+            </div>
+            <ul class="text-xs text-slate-600 dark:text-slate-300 space-y-2.5">
+              <li class="flex items-start gap-2">
+                <span class="text-brand-600 font-bold">&check;</span>
+                <span>Context DFD Level 0 + Package/Architecture</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-600 font-bold">&check;</span>
+                <span>Use Case hệ thống ma trận phân quyền</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-600 font-bold">&check;</span>
+                <span>Class Diagram 3 tầng (Domain / Service / Repo)</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-600 font-bold">&check;</span>
+                <span>ERD gom Bounded Contexts (Academic, Finance...)</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-600 font-bold">&check;</span>
+                <span>State Machines cho vòng đời thực thể</span>
+              </li>
+            </ul>
+          </div>
+          <div class="pt-6">
+            <button onclick="applyPackagePreset('capstone')" class="w-full py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs hover:border-brand-500 hover:text-brand-600 transition shadow-xs">
+              Chọn Gói Capstone Này &rarr;
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= SERVICES & PRICING TABLE ================= -->
+  <section id="services" class="py-20 bg-slate-50 dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Section Header -->
+      <div class="text-center max-w-3xl mx-auto space-y-3 mb-16 reveal-item">
+        <span class="text-xs sm:text-sm font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400" data-i18n="pricing_badge">
+          Dịch Vụ &amp; Bảng Giá Niêm Yết (VND)
+        </span>
+        <h3 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight" data-i18n="pricing_title">
+          Chi phí minh bạch, chuẩn từng loại sơ đồ
+        </h3>
+        <p class="text-slate-600 dark:text-slate-400 text-sm sm:text-base leading-relaxed" data-i18n="pricing_subtitle">
+          Không phát sinh chi phí ẩn. Mỗi sơ đồ đều bàn giao kèm file <code class="text-brand-600 dark:text-brand-400 font-mono font-semibold">.drawio</code> để nhóm tự tin chỉnh sửa và nộp bài.
+        </p>
+      </div>
+
+      <!-- Pricing Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+        <!-- Card 1: Review -->
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/80 dark:border-slate-800 hover:border-brand-500/50 hover:shadow-card-hover transition-all duration-300 flex flex-col justify-between reveal-item">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-600 dark:text-slate-300" data-i18n="cat_review">Thẩm định</span>
+              <span class="text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">Soát lỗi hội đồng</span>
+            </div>
+            <div>
+              <h4 class="text-lg font-bold text-slate-900 dark:text-white" data-i18n="srv_review_name">Review &amp; Chấm Lỗi Sơ Đồ</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed" data-i18n="srv_review_desc">Soát toàn bộ ký hiệu, quan hệ sai, hướng mũi tên và format theo template trường trước ngày nộp.</p>
+            </div>
+            <div class="pt-2">
+              <span class="text-2xl sm:text-3xl font-extrabold text-brand-600 dark:text-brand-400">20.000 – 30.000</span>
+              <span class="text-xs text-slate-500 font-medium">đ / sơ đồ</span>
+            </div>
+          </div>
+          <div class="pt-4 mt-6 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 space-y-2">
+            <div class="flex items-center gap-1.5">&bull; <span data-i18n="srv_review_f1">Ghi chú lỗi chi tiết từng hình</span></div>
+            <div class="flex items-center gap-1.5">&bull; <span data-i18n="srv_review_f2">Tư vấn cách sửa để bảo vệ</span></div>
+            <button onclick="changeQty('review', 1); scrollToCalc();" class="w-full mt-2 py-1.5 rounded-lg bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 font-bold text-xs hover:bg-brand-600 hover:text-white transition">
+              + Thêm vào dự toán
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 2: Use Case -->
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border-2 border-brand-500/30 dark:border-brand-500/40 hover:border-brand-500 hover:shadow-card-hover transition-all duration-300 flex flex-col justify-between relative shadow-sm reveal-item" style="transition-delay: 50ms;">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded-lg bg-brand-50 dark:bg-brand-950 text-xs font-bold text-brand-700 dark:text-brand-300" data-i18n="cat_draw">Vẽ mới từ code</span>
+              <span class="text-[11px] font-semibold text-brand-600">Bắt buộc đồ án</span>
+            </div>
+            <div>
+              <h4 class="text-lg font-bold text-slate-900 dark:text-white" data-i18n="srv_usecase_name">Use Case Diagram</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed" data-i18n="srv_usecase_desc">Phân tách Actor, System Boundary, &laquo;include&raquo;, &laquo;extend&raquo; chuẩn xác theo controllers thực tế.</p>
+            </div>
+            <div class="pt-2">
+              <span class="text-2xl sm:text-3xl font-extrabold text-brand-600 dark:text-brand-400">40.000 – 80.000</span>
+              <span class="text-xs text-slate-500 font-medium">đ / sơ đồ</span>
+            </div>
+          </div>
+          <div class="pt-4 mt-6 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 space-y-2">
+            <div class="flex items-center gap-1.5">&bull; <span data-i18n="srv_usecase_f1">Theo subsystem hoặc role</span></div>
+            <div class="flex items-center gap-1.5">&bull; <span data-i18n="srv_usecase_f2">Không lạm dụng extend/include</span></div>
+            <button onclick="changeQty('usecase', 1); scrollToCalc();" class="w-full mt-2 py-1.5 rounded-lg bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 font-bold text-xs hover:bg-brand-600 hover:text-white transition">
+              + Thêm vào dự toán
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 3: Activity -->
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/80 dark:border-slate-800 hover:border-brand-500/50 hover:shadow-card-hover transition-all duration-300 flex flex-col justify-between reveal-item" style="transition-delay: 100ms;">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded-lg bg-brand-50 dark:bg-brand-950 text-xs font-bold text-brand-700 dark:text-brand-300" data-i18n="cat_draw">Vẽ mới từ code</span>
+              <span class="text-[11px] font-semibold text-slate-500">Flow nghiệp vụ</span>
+            </div>
+            <div>
+              <h4 class="text-lg font-bold text-slate-900 dark:text-white" data-i18n="srv_activity_name">Activity Diagram</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed" data-i18n="srv_activity_desc">Luồng xử lý nghiệp vụ với Decision node, Merge, Fork/Join song song và phân làn Swimlanes.</p>
+            </div>
+            <div class="pt-2">
+              <span class="text-2xl sm:text-3xl font-extrabold text-brand-600 dark:text-brand-400">40.000</span>
+              <span class="text-xs text-slate-500 font-medium">đ / sơ đồ</span>
+            </div>
+          </div>
+          <div class="pt-4 mt-6 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 space-y-2">
+            <div class="flex items-center gap-1.5">&bull; <span data-i18n="srv_activity_f1">Tối ưu hình học (0 cắt nhau)</span></div>
+            <div class="flex items-center gap-1.5">&bull; <span data-i18n="srv_activity_f2">Khớp các if/else và logic code</span></div>
+            <button onclick="changeQty('activity', 1); scrollToCalc();" class="w-full mt-2 py-1.5 rounded-lg bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 font-bold text-xs hover:bg-brand-600 hover:text-white transition">
+              + Thêm vào dự toán
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 4: Sequence -->
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/80 dark:border-slate-800 hover:border-brand-500/50 hover:shadow-card-hover transition-all duration-300 flex flex-col justify-between reveal-item" style="transition-delay: 150ms;">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded-lg bg-brand-50 dark:bg-brand-950 text-xs font-bold text-brand-700 dark:text-brand-300" data-i18n="cat_draw">Vẽ mới từ code</span>
+              <span class="text-[11px] font-semibold text-slate-500">Tương tác tuần tự</span>
+            </div>
+            <div>
+              <h4 class="text-lg font-bold text-slate-900 dark:text-white" data-i18n="srv_sequence_name">Sequence Diagram</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed" data-i18n="srv_sequence_desc">Lifelines theo đúng kiến trúc (Actor, View, Controller, Service, DB), đồng bộ và khung alt/opt.</p>
+            </div>
+            <div class="pt-2">
+              <span class="text-2xl sm:text-3xl font-extrabold text-brand-600 dark:text-brand-400">60.000</span>
+              <span class="text-xs text-slate-500 font-medium">đ / sơ đồ</span>
+            </div>
+          </div>
+          <div class="pt-4 mt-6 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 space-y-2">
+            <div class="flex items-center gap-1.5">&bull; <span data-i18n="srv_sequence_f1">Activation bar chuẩn chiều dài</span></div>
+            <div class="flex items-center gap-1.5">&bull; <span data-i18n="srv_sequence_f2">Mũi tên trả lời nét đứt đúng luật</span></div>
+            <button onclick="changeQty('sequence', 1); scrollToCalc();" class="w-full mt-2 py-1.5 rounded-lg bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 font-bold text-xs hover:bg-brand-600 hover:text-white transition">
+              + Thêm vào dự toán
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 5: State Machine -->
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/80 dark:border-slate-800 hover:border-brand-500/50 hover:shadow-card-hover transition-all duration-300 flex flex-col justify-between reveal-item">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded-lg bg-brand-50 dark:bg-brand-950 text-xs font-bold text-brand-700 dark:text-brand-300" data-i18n="cat_draw">Vẽ mới từ code</span>
+              <span class="text-[11px] font-semibold text-slate-500">Vòng đời thực thể</span>
+            </div>
+            <div>
+              <h4 class="text-lg font-bold text-slate-900 dark:text-white" data-i18n="srv_state_name">State Machine Diagram</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed" data-i18n="srv_state_desc">Mô tả trọn vẹn trạng thái vòng đời từ các Enum, transitions, guards và triggers trong code.</p>
+            </div>
+            <div class="pt-2">
+              <span class="text-2xl sm:text-3xl font-extrabold text-brand-600 dark:text-brand-400">40.000</span>
+              <span class="text-xs text-slate-500 font-medium">đ / sơ đồ</span>
+            </div>
+          </div>
+          <div class="pt-4 mt-6 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 space-y-2">
+            <div class="flex items-center gap-1.5">&bull; <span data-i18n="srv_state_f1">Khớp đúng enum trong model</span></div>
+            <div class="flex items-center gap-1.5">&bull; <span data-i18n="srv_state_f2">Ký hiệu Initial / Final State chuẩn</span></div>
+            <button onclick="changeQty('state', 1); scrollToCalc();" class="w-full mt-2 py-1.5 rounded-lg bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 font-bold text-xs hover:bg-brand-600 hover:text-white transition">
+              + Thêm vào dự toán
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 6: Class Diagram -->
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/80 dark:border-slate-800 hover:border-brand-500/50 hover:shadow-card-hover transition-all duration-300 flex flex-col justify-between reveal-item" style="transition-delay: 50ms;">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded-lg bg-brand-600 text-white text-xs font-bold" data-i18n="cat_complex">Chuyên sâu</span>
+              <span class="text-[11px] font-semibold text-brand-600 dark:text-brand-400">Toàn hệ thống</span>
+            </div>
+            <div>
+              <h4 class="text-lg font-bold text-slate-900 dark:text-white" data-i18n="srv_class_name">Class Diagram</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed" data-i18n="srv_class_desc">Đầy đủ 3 ngăn (Attributes, Methods), Types, Visibility (+/-/ #), quan hệ Thừa kế, Implementation và Quan hệ.</p>
+            </div>
+            <div class="pt-2">
+              <span class="text-2xl sm:text-3xl font-extrabold text-brand-600 dark:text-brand-400">150.000</span>
+              <span class="text-xs text-slate-500 font-medium">đ / sơ đồ</span>
+            </div>
+          </div>
+          <div class="pt-4 mt-6 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 space-y-2">
+            <div class="flex items-center gap-1.5">&bull; <span data-i18n="srv_class_f1">Tách theo layer (Domain / Service)</span></div>
+            <div class="flex items-center gap-1.5">&bull; <span data-i18n="srv_class_f2">Đúng mũi tên rỗng / mũi tên kín</span></div>
+            <button onclick="changeQty('class', 1); scrollToCalc();" class="w-full mt-2 py-1.5 rounded-lg bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 font-bold text-xs hover:bg-brand-600 hover:text-white transition">
+              + Thêm vào dự toán
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 7: ERD -->
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/80 dark:border-slate-800 hover:border-brand-500/50 hover:shadow-card-hover transition-all duration-300 flex flex-col justify-between reveal-item" style="transition-delay: 100ms;">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded-lg bg-brand-600 text-white text-xs font-bold" data-i18n="cat_complex">Chuyên sâu</span>
+              <span class="text-[11px] font-semibold text-brand-600 dark:text-brand-400">Database CSDL</span>
+            </div>
+            <div>
+              <h4 class="text-lg font-bold text-slate-900 dark:text-white" data-i18n="srv_erd_name">ERD (Entity Relationship)</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed" data-i18n="srv_erd_desc">Đọc trực tiếp từ migrations &amp; models. Thể hiện khóa chính, khóa ngoại, bản số (1:1, 1:N, N:N) chuẩn Crow's Foot.</p>
+            </div>
+            <div class="pt-2">
+              <span class="text-2xl sm:text-3xl font-extrabold text-brand-600 dark:text-brand-400">150.000</span>
+              <span class="text-xs text-slate-500 font-medium">đ / sơ đồ</span>
+            </div>
+          </div>
+          <div class="pt-4 mt-6 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-400 space-y-2">
+            <div class="flex items-center gap-1.5">&bull; <span data-i18n="srv_erd_f1">Hỗ trợ gom Bounded Contexts</span></div>
+            <div class="flex items-center gap-1.5">&bull; <span data-i18n="srv_erd_f2">Khớp 100% database thật đang chạy</span></div>
+            <button onclick="changeQty('erd', 1); scrollToCalc();" class="w-full mt-2 py-1.5 rounded-lg bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 font-bold text-xs hover:bg-brand-600 hover:text-white transition">
+              + Thêm vào dự toán
+            </button>
+          </div>
+        </div>
+
+        <!-- Card 8: Terms & Offers -->
+        <div class="bg-gradient-to-br from-brand-50 to-indigo-50/50 dark:from-slate-900 dark:to-brand-950/40 rounded-3xl p-6 border border-brand-200 dark:border-brand-900/60 flex flex-col justify-between shadow-xs reveal-item" style="transition-delay: 150ms;">
+          <div class="space-y-3.5">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-1 rounded-lg bg-brand-600 text-white text-xs font-bold uppercase tracking-wider" data-i18n="policy_badge">
+                Chính Sách &amp; Ưu Đãi
+              </span>
+              <span class="text-xs font-bold text-brand-700 dark:text-brand-300">Minh bạch</span>
+            </div>
+            <h4 class="text-base font-bold text-slate-900 dark:text-white" data-i18n="policy_title">Điều Kiện Đặt Hàng</h4>
+            <ul class="text-xs text-slate-600 dark:text-slate-300 space-y-2.5 pt-1">
+              <li class="flex items-start gap-2">
+                <span class="text-brand-600 dark:text-brand-400 font-bold">&check;</span>
+                <span data-i18n="policy_min"><strong>Đơn tối thiểu:</strong> 150.000đ / lần đặt.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-600 dark:text-brand-400 font-bold">&check;</span>
+                <span data-i18n="policy_discount"><strong>Ưu đãi nhóm đồ án:</strong> Giảm ngay <span class="text-brand-600 dark:text-brand-400 font-bold">15%</span> khi đặt từ 10 sơ đồ trở lên.</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-600 dark:text-brand-400 font-bold">&check;</span>
+                <span data-i18n="policy_rush"><strong>Đơn gấp 24h:</strong> Phụ phí +40% (xử lý hỏa tốc).</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-600 dark:text-brand-400 font-bold">&check;</span>
+                <span data-i18n="policy_warranty"><strong>Bảo hành:</strong> 1 lần chỉnh sửa miễn phí theo nhận xét giảng viên.</span>
+              </li>
+            </ul>
+          </div>
+          <div class="pt-4 mt-4 border-t border-brand-200/80 dark:border-brand-900/60">
+            <a href="#calculator" class="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center justify-between">
+              <span data-i18n="policy_calc_link">Mở công cụ tính giá bên dưới</span>
+              <span>&rarr;</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= INTERACTIVE PRICING CALCULATOR WITH PROGRESS BAR ================= -->
+  <section id="calculator" class="py-20 bg-white dark:bg-slate-900 border-b border-slate-200/80 dark:border-slate-800/80">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="bg-slate-50 dark:bg-slate-950 rounded-3xl p-6 sm:p-10 border border-slate-200 dark:border-slate-800 shadow-xl space-y-8 reveal-item">
+        
+        <!-- Header -->
+        <div class="text-center space-y-2.5 max-w-2xl mx-auto">
+          <span class="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400" data-i18n="calc_badge">Bảng Tính Chi Phí Trực Tuyến</span>
+          <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight" data-i18n="calc_title">
+            Dự toán chi phí cho đồ án của bạn
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed" data-i18n="calc_desc">
+            Chọn số lượng từng loại sơ đồ cần làm, hệ thống tự động tính chiết khấu 15% (khi &ge; 10 sơ đồ) và kiểm tra mức đơn tối thiểu 150.000đ.
+          </p>
+        </div>
+
+        <!-- Calculator Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          <!-- Left: Diagram Steppers (7 cols) -->
+          <div class="lg:col-span-7 space-y-3">
+            
+            <!-- Item 1: Review -->
+            <div class="flex items-center justify-between p-3.5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 text-sm shadow-xs transition hover:border-brand-500/40">
+              <div>
+                <div class="font-bold text-slate-900 dark:text-white" data-i18n="calc_item_review">Review &amp; Chỉnh sửa sơ đồ</div>
+                <div class="text-xs text-slate-500">25.000đ / sơ đồ</div>
+              </div>
+              <div class="flex items-center gap-3">
+                <button onclick="changeQty('review', -1)" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-200 transition active:scale-90" aria-label="Giảm review">-</button>
+                <span id="qty-review" class="w-6 text-center font-bold text-slate-900 dark:text-white">0</span>
+                <button onclick="changeQty('review', 1)" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-200 transition active:scale-90" aria-label="Tăng review">+</button>
+              </div>
+            </div>
+
+            <!-- Item 2: Use Case -->
+            <div class="flex items-center justify-between p-3.5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 text-sm shadow-xs transition hover:border-brand-500/40">
+              <div>
+                <div class="font-bold text-slate-900 dark:text-white" data-i18n="calc_item_usecase">Use Case Diagram</div>
+                <div class="text-xs text-slate-500">50.000đ / sơ đồ (40–80k)</div>
+              </div>
+              <div class="flex items-center gap-3">
+                <button onclick="changeQty('usecase', -1)" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-200 transition active:scale-90" aria-label="Giảm use case">-</button>
+                <span id="qty-usecase" class="w-6 text-center font-bold text-slate-900 dark:text-white">2</span>
+                <button onclick="changeQty('usecase', 1)" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-200 transition active:scale-90" aria-label="Tăng use case">+</button>
+              </div>
+            </div>
+
+            <!-- Item 3: Activity -->
+            <div class="flex items-center justify-between p-3.5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 text-sm shadow-xs transition hover:border-brand-500/40">
+              <div>
+                <div class="font-bold text-slate-900 dark:text-white" data-i18n="calc_item_activity">Activity Diagram</div>
+                <div class="text-xs text-slate-500">40.000đ / sơ đồ</div>
+              </div>
+              <div class="flex items-center gap-3">
+                <button onclick="changeQty('activity', -1)" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-200 transition active:scale-90" aria-label="Giảm activity">-</button>
+                <span id="qty-activity" class="w-6 text-center font-bold text-slate-900 dark:text-white">1</span>
+                <button onclick="changeQty('activity', 1)" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-200 transition active:scale-90" aria-label="Tăng activity">+</button>
+              </div>
+            </div>
+
+            <!-- Item 4: Sequence -->
+            <div class="flex items-center justify-between p-3.5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 text-sm shadow-xs transition hover:border-brand-500/40">
+              <div>
+                <div class="font-bold text-slate-900 dark:text-white" data-i18n="calc_item_sequence">Sequence Diagram</div>
+                <div class="text-xs text-slate-500">60.000đ / sơ đồ</div>
+              </div>
+              <div class="flex items-center gap-3">
+                <button onclick="changeQty('sequence', -1)" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-200 transition active:scale-90" aria-label="Giảm sequence">-</button>
+                <span id="qty-sequence" class="w-6 text-center font-bold text-slate-900 dark:text-white">1</span>
+                <button onclick="changeQty('sequence', 1)" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-200 transition active:scale-90" aria-label="Tăng sequence">+</button>
+              </div>
+            </div>
+
+            <!-- Item 5: State Machine -->
+            <div class="flex items-center justify-between p-3.5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 text-sm shadow-xs transition hover:border-brand-500/40">
+              <div>
+                <div class="font-bold text-slate-900 dark:text-white" data-i18n="calc_item_state">State Machine Diagram</div>
+                <div class="text-xs text-slate-500">40.000đ / sơ đồ</div>
+              </div>
+              <div class="flex items-center gap-3">
+                <button onclick="changeQty('state', -1)" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-200 transition active:scale-90" aria-label="Giảm state">-</button>
+                <span id="qty-state" class="w-6 text-center font-bold text-slate-900 dark:text-white">0</span>
+                <button onclick="changeQty('state', 1)" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-200 transition active:scale-90" aria-label="Tăng state">+</button>
+              </div>
+            </div>
+
+            <!-- Item 6: Class -->
+            <div class="flex items-center justify-between p-3.5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 text-sm shadow-xs transition hover:border-brand-500/40">
+              <div>
+                <div class="font-bold text-slate-900 dark:text-white" data-i18n="calc_item_class">Class Diagram (Chi tiết)</div>
+                <div class="text-xs text-slate-500">150.000đ / sơ đồ</div>
+              </div>
+              <div class="flex items-center gap-3">
+                <button onclick="changeQty('class', -1)" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-200 transition active:scale-90" aria-label="Giảm class">-</button>
+                <span id="qty-class" class="w-6 text-center font-bold text-slate-900 dark:text-white">0</span>
+                <button onclick="changeQty('class', 1)" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-200 transition active:scale-90" aria-label="Tăng class">+</button>
+              </div>
+            </div>
+
+            <!-- Item 7: ERD -->
+            <div class="flex items-center justify-between p-3.5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 text-sm shadow-xs transition hover:border-brand-500/40">
+              <div>
+                <div class="font-bold text-slate-900 dark:text-white" data-i18n="calc_item_erd">ERD Database Diagram</div>
+                <div class="text-xs text-slate-500">150.000đ / sơ đồ</div>
+              </div>
+              <div class="flex items-center gap-3">
+                <button onclick="changeQty('erd', -1)" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-200 transition active:scale-90" aria-label="Giảm ERD">-</button>
+                <span id="qty-erd" class="w-6 text-center font-bold text-slate-900 dark:text-white">0</span>
+                <button onclick="changeQty('erd', 1)" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-200 transition active:scale-90" aria-label="Tăng ERD">+</button>
+              </div>
+            </div>
+
+            <!-- Rush Delivery Toggle Card -->
+            <div class="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 flex items-center justify-between shadow-xs">
+              <label for="rush-toggle" class="flex items-center gap-3 cursor-pointer select-none">
+                <input type="checkbox" id="rush-toggle" onchange="calculatePrice()" class="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 border-slate-300 dark:border-slate-700">
+                <div>
+                  <div class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span data-i18n="calc_rush_label">Giao hỏa tốc trong 24 giờ (+40%)</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 font-bold border border-amber-300 dark:border-amber-800">
+                      Ưu tiên làm ngay
+                    </span>
+                  </div>
+                  <div class="text-xs text-slate-500" data-i18n="calc_rush_desc">Phù hợp các bạn cần nộp bài gấp trong ngày hôm nay hoặc sáng mai.</div>
+                </div>
+              </label>
+            </div>
+
+          </div>
+
+          <!-- Right: Visual Bill / Receipt (5 cols) -->
+          <div class="lg:col-span-5 bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-7 border border-slate-200 dark:border-slate-800 shadow-xl space-y-5">
+            
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Dự toán đơn hàng</span>
+              <span class="text-[11px] font-semibold text-brand-600 dark:text-brand-400">Báo giá cố định</span>
+            </div>
+
+            <!-- Itemized breakdown -->
+            <div class="space-y-3 text-xs">
+              <div class="flex items-center justify-between text-slate-600 dark:text-slate-400">
+                <span data-i18n="calc_sum_qty">Tổng số sơ đồ:</span>
+                <span id="sum-count" class="font-bold text-slate-900 dark:text-white text-sm">4 sơ đồ</span>
+              </div>
+
+              <!-- Min order threshold progress bar -->
+              <div class="space-y-1">
+                <div class="flex items-center justify-between text-[11px] text-slate-500">
+                  <span>Điều kiện đơn tối thiểu (150k):</span>
+                  <span id="min-progress-text" class="font-bold text-emerald-600">Đã đạt chuẩn</span>
+                </div>
+                <div class="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                  <div id="min-progress-bar" class="h-full bg-brand-600 transition-all duration-300" style="width: 100%;"></div>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between text-slate-600 dark:text-slate-400 pt-1">
+                <span data-i18n="calc_sum_raw">Tạm tính sơ bộ:</span>
+                <span id="sum-raw" class="font-bold text-slate-900 dark:text-white">200.000đ</span>
+              </div>
+
+              <div id="row-discount" class="flex items-center justify-between text-emerald-600 dark:text-emerald-400 hidden font-medium">
+                <span data-i18n="calc_sum_discount">Ưu đãi đồ án (&ge; 10 sơ đồ -15%):</span>
+                <span id="sum-discount" class="font-bold">-0đ</span>
+              </div>
+
+              <div id="row-rush" class="flex items-center justify-between text-amber-600 dark:text-amber-400 hidden font-medium">
+                <span data-i18n="calc_sum_rush">Phụ phí hỏa tốc 24h (+40%):</span>
+                <span id="sum-rush" class="font-bold">+0đ</span>
+              </div>
+            </div>
+
+            <!-- Total Price Display Box -->
+            <div class="pt-4 border-t border-dashed border-slate-200 dark:border-slate-800 space-y-2">
+              <div class="flex items-baseline justify-between">
+                <div>
+                  <span class="text-xs font-bold uppercase text-slate-500 dark:text-slate-400" data-i18n="calc_sum_total">Tổng chi phí dự kiến:</span>
+                  <div id="min-order-note" class="text-[11px] text-amber-600 dark:text-amber-400 font-semibold hidden" data-i18n="calc_min_warning">
+                    (Đã áp dụng mức đơn tối thiểu 150.000đ)
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span id="sum-final" class="text-3xl sm:text-4xl font-extrabold text-brand-600 dark:text-brand-400">200.000đ</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Order via Zalo Button -->
+            <div class="pt-2">
+              <button onclick="sendCalculatedOrder()" class="w-full inline-flex items-center justify-center gap-2.5 px-6 py-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-lg shadow-brand-600/30 transition-all transform hover:-translate-y-0.5 active:translate-y-0 shimmer-btn">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.477 2 2 6.145 2 11.26c0 2.91 1.455 5.513 3.736 7.185L5 22l4.08-1.517c.928.245 1.906.377 2.92.377 5.523 0 10-4.145 10-9.26C22 6.145 17.523 2 12 2zm1 14h-2v-4h2v4zm0-6h-2V8h2v2z"/>
+                </svg>
+                <span data-i18n="calc_order_cta">Gửi Yêu Cầu &amp; Dự Toán Này Qua Zalo</span>
+              </button>
+              <p class="text-[11px] text-slate-500 text-center mt-2.5 leading-relaxed" data-i18n="calc_footer_note">
+                Nội dung chọn sẽ được tạo sẵn để bạn gửi cho chúng tôi xác nhận trong 15 phút.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= WHAT TO SEND ================= -->
+  <section class="py-20 bg-slate-50 dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto space-y-3 mb-16 reveal-item">
+        <span class="text-xs sm:text-sm font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400" data-i18n="wts_badge">Chuẩn Bị Tài Liệu</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight" data-i18n="wts_title">
+          Bạn cần chuẩn bị và gửi những gì?
+        </h2>
+        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed" data-i18n="wts_desc">
+          Để chúng tôi đối soát chuẩn và vẽ đúng 100%, bạn chỉ cần gửi qua Zalo 4 mục cơ bản sau:
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        <div class="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-3xl border border-slate-200/80 dark:border-slate-800 space-y-3.5 shadow-xs hover:border-brand-500/40 hover:shadow-card-hover transition-all reveal-item">
+          <div class="w-12 h-12 rounded-2xl bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 font-extrabold text-lg flex items-center justify-center border border-brand-200 dark:border-brand-900">
+            01
+          </div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white" data-i18n="wts_1_title">Repo Mã Nguồn</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed" data-i18n="wts_1_desc">
+            Link GitHub, GitLab (kèm quyền access) hoặc file nén <code>.zip</code> source code của nhóm. Cần có models, controllers và migrations để đối soát.
+          </p>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-3xl border border-slate-200/80 dark:border-slate-800 space-y-3.5 shadow-xs hover:border-brand-500/40 hover:shadow-card-hover transition-all reveal-item" style="transition-delay: 50ms;">
+          <div class="w-12 h-12 rounded-2xl bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 font-extrabold text-lg flex items-center justify-center border border-brand-200 dark:border-brand-900">
+            02
+          </div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white" data-i18n="wts_2_title">Đề Bài &amp; Yêu Cầu</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed" data-i18n="wts_2_desc">
+            File Assignment brief, rubric chấm điểm, slide hướng dẫn hoặc tin nhắn dặn dò cụ thể của giảng viên hướng dẫn về quy cách sơ đồ.
+          </p>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-3xl border border-slate-200/80 dark:border-slate-800 space-y-3.5 shadow-xs hover:border-brand-500/40 hover:shadow-card-hover transition-all reveal-item" style="transition-delay: 100ms;">
+          <div class="w-12 h-12 rounded-2xl bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 font-extrabold text-lg flex items-center justify-center border border-brand-200 dark:border-brand-900">
+            03
+          </div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white" data-i18n="wts_3_title">Môn Học &amp; Danh Sách</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed" data-i18n="wts_3_desc">
+            Tên mã môn học (ví dụ SWP391, PRN211, PRN231, SEP490...) cùng danh sách tên các sơ đồ cần vẽ hoặc review theo từng tính năng.
+          </p>
+        </div>
+
+        <div class="bg-white dark:bg-slate-900 p-6 sm:p-7 rounded-3xl border border-slate-200/80 dark:border-slate-800 space-y-3.5 shadow-xs hover:border-brand-500/40 hover:shadow-card-hover transition-all reveal-item" style="transition-delay: 150ms;">
+          <div class="w-12 h-12 rounded-2xl bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 font-extrabold text-lg flex items-center justify-center border border-brand-200 dark:border-brand-900">
+            04
+          </div>
+          <h3 class="text-base font-bold text-slate-900 dark:text-white" data-i18n="wts_4_title">Thời Hạn Nhận File</h3>
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed" data-i18n="wts_4_desc">
+            Hạn chót cụ thể bạn cần nhận lại file để kịp ghép vào báo cáo SRS/SDS và nộp lên hệ thống của trường.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= 4-STEP PROCESS ================= -->
+  <section id="process" class="py-20 bg-white dark:bg-slate-900 border-b border-slate-200/80 dark:border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto space-y-3 mb-16 reveal-item">
+        <span class="text-xs sm:text-sm font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400" data-i18n="step_badge">Quy Trình Làm Việc</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight" data-i18n="step_title">
+          4 bước tinh gọn từ code đến sơ đồ hoàn chỉnh
+        </h2>
+        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed" data-i18n="step_desc">
+          Rõ ràng từng bước, không để bạn phải chờ đợi mơ hồ.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+        
+        <div class="space-y-4 bg-slate-50 dark:bg-slate-950/60 p-7 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs relative reveal-item">
+          <div class="flex items-center justify-between">
+            <div class="w-12 h-12 rounded-2xl bg-brand-600 text-white font-extrabold text-lg flex items-center justify-center shadow-md shadow-brand-600/30">
+              1
+            </div>
+            <span class="text-[11px] font-semibold text-slate-400">Ước tính: 5 phút</span>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white" data-i18n="step_1_title">Gửi Repo &amp; Đề Bài</h3>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="step_1_desc">
+            Nhắn tin Zalo gửi link repo GitHub hoặc file zip, kèm đề bài môn học và số lượng sơ đồ bạn cần vẽ/review.
+          </p>
+        </div>
+
+        <div class="space-y-4 bg-slate-50 dark:bg-slate-950/60 p-7 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs relative reveal-item" style="transition-delay: 50ms;">
+          <div class="flex items-center justify-between">
+            <div class="w-12 h-12 rounded-2xl bg-brand-600 text-white font-extrabold text-lg flex items-center justify-center shadow-md shadow-brand-600/30">
+              2
+            </div>
+            <span class="text-[11px] font-semibold text-slate-400">Ước tính: 15 phút</span>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white" data-i18n="step_2_title">Xác Nhận &amp; Báo Giá</h3>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="step_2_desc">
+            Chúng tôi quét nhanh cấu trúc code, chốt danh sách actors, luồng chính và gửi báo giá cố định cùng cam kết giờ giao.
+          </p>
+        </div>
+
+        <div class="space-y-4 bg-slate-50 dark:bg-slate-950/60 p-7 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs relative reveal-item" style="transition-delay: 100ms;">
+          <div class="flex items-center justify-between">
+            <div class="w-12 h-12 rounded-2xl bg-brand-600 text-white font-extrabold text-lg flex items-center justify-center shadow-md shadow-brand-600/30">
+              3
+            </div>
+            <span class="text-[11px] font-semibold text-emerald-500 font-bold">Tức thì</span>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white" data-i18n="step_3_title">Thanh Toán Qua QR</h3>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="step_3_desc">
+            Quét mã VietQR chuyển khoản nhanh gọn và bảo mật. Nhóm nhận biên lai xác nhận tiến độ ngay lập tức.
+          </p>
+        </div>
+
+        <div class="space-y-4 bg-slate-50 dark:bg-slate-950/60 p-7 rounded-3xl border border-slate-200/80 dark:border-slate-800 shadow-xs relative reveal-item" style="transition-delay: 150ms;">
+          <div class="flex items-center justify-between">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-600 text-white font-extrabold text-lg flex items-center justify-center shadow-md shadow-emerald-600/30">
+              4
+            </div>
+            <span class="text-[11px] font-semibold text-emerald-600 font-bold">24h – 48h</span>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white" data-i18n="step_4_title">Nhận File .drawio &amp; PNG</h3>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="step_4_desc">
+            Nhận trọn bộ file editable <code>.drawio</code> + ảnh PNG nét căng, kèm giải thích logic để bạn sẵn sàng trả lời phản biện.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= BEFORE / AFTER COMPARISON ================= -->
+  <section id="before-after" class="py-20 bg-slate-50 dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto space-y-3 mb-14 reveal-item">
+        <span class="text-xs sm:text-sm font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400" data-i18n="ba_badge">Đối Chiếu Trực Quan</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight" data-i18n="ba_title">
+          Sơ đồ lỗi giảng viên thường gạch vs Chuẩn VeriDraw
+        </h2>
+        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed" data-i18n="ba_desc">
+          Đa số sinh viên bị trừ điểm vì dùng tool AI vẽ bừa hoặc không nắm chuẩn ký hiệu OMG UML. Xem cách chúng tôi chuẩn hóa:
+        </p>
+      </div>
+
+      <!-- Tab Buttons -->
+      <div class="flex justify-center mb-10 reveal-item">
+        <div class="inline-flex p-1.5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 text-xs sm:text-sm font-bold shadow-xs">
+          <button onclick="switchTab('usecase')" id="tab-btn-usecase" class="px-5 py-2.5 rounded-xl bg-brand-600 text-white shadow-xs font-bold transition">
+            Use Case
+          </button>
+          <button onclick="switchTab('sequence')" id="tab-btn-sequence" class="px-5 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition">
+            Sequence
+          </button>
+          <button onclick="switchTab('class')" id="tab-btn-class" class="px-5 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition">
+            Class &amp; ERD
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab 1: Use Case Comparison -->
+      <div id="tab-usecase" class="tab-content active">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          
+          <div class="bg-white dark:bg-slate-900 p-7 rounded-3xl border-2 border-rose-200 dark:border-rose-950/80 space-y-5 shadow-sm reveal-item">
+            <div class="flex items-center justify-between pb-3 border-b border-rose-100 dark:border-rose-950">
+              <span class="px-3 py-1 rounded-full bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-400 text-xs font-bold uppercase" data-i18n="ba_before_label">Trước khi sửa (Lỗi thường gặp)</span>
+              <span class="text-xs font-bold text-rose-600 flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                Giảng viên bắt bẻ
+              </span>
+            </div>
+            
+            <div class="p-4 bg-rose-50/50 dark:bg-rose-950/20 rounded-2xl space-y-3 font-mono text-xs">
+              <div class="text-rose-900 dark:text-rose-300 space-y-2">
+                <p>&bull; <strong>Lỗi 1:</strong> Nối Actor với Actor bằng mũi tên (Sai hoàn toàn quy chuẩn OMG UML).</p>
+                <p>&bull; <strong>Lỗi 2:</strong> Mũi tên &laquo;include&raquo; trỏ ngược chiều từ con về cha.</p>
+                <p>&bull; <strong>Lỗi 3:</strong> Đặt tên Use case bằng danh từ chung ("Sinh viên", "Quản lý").</p>
+                <p>&bull; <strong>Lỗi 4:</strong> Thiếu khung System Boundary, hình tròn use case trôi dạt vô định.</p>
+              </div>
+            </div>
+
+            <p class="text-xs text-slate-500 leading-relaxed italic" data-i18n="ba_usecase_before_note">
+              Hậu quả: Giảng viên hội đồng chất vấn ngay 5 phút đầu buổi bảo vệ vì sai kiến thức công nghệ phần mềm cơ bản.
+            </p>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 p-7 rounded-3xl border-2 border-emerald-300 dark:border-emerald-800 space-y-5 shadow-sm reveal-item" style="transition-delay: 100ms;">
+            <div class="flex items-center justify-between pb-3 border-b border-emerald-100 dark:border-emerald-950">
+              <span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 text-xs font-bold uppercase" data-i18n="ba_after_label">Sau khi chuẩn hóa (VeriDraw)</span>
+              <span class="text-xs font-bold text-emerald-600 flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                Chuẩn OMG 100%
+              </span>
+            </div>
+
+            <div class="p-4 bg-emerald-50/50 dark:bg-emerald-950/20 rounded-2xl space-y-3 font-mono text-xs">
+              <div class="text-emerald-950 dark:text-emerald-300 space-y-2">
+                <p>&bull; <strong>Chuẩn 1:</strong> System Boundary rõ ràng, phân nhóm theo Subsystem hoặc Role.</p>
+                <p>&bull; <strong>Chuẩn 2:</strong> Tên Use case là [Động từ + Tân ngữ] bám đúng controller action.</p>
+                <p>&bull; <strong>Chuẩn 3:</strong> Nét đứt có stereotype &laquo;include&raquo; và &laquo;extend&raquo; trỏ đúng hướng.</p>
+                <p>&bull; <strong>Chuẩn 4:</strong> Format theo đúng palette màu draw.io template trường yêu cầu.</p>
+              </div>
+            </div>
+
+            <p class="text-xs text-slate-500 leading-relaxed" data-i18n="ba_usecase_after_note">
+              Kết quả: Sơ đồ sắc nét, logic chặt chẽ, sinh viên tự tin thuyết minh khớp với source code đang demo.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Tab 2: Sequence -->
+      <div id="tab-sequence" class="tab-content">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          
+          <div class="bg-white dark:bg-slate-900 p-7 rounded-3xl border-2 border-rose-200 dark:border-rose-950/80 space-y-5 shadow-sm">
+            <div class="flex items-center justify-between pb-3 border-b border-rose-100 dark:border-rose-950">
+              <span class="px-3 py-1 rounded-full bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-400 text-xs font-bold uppercase">Lỗi phổ biến ở Sequence</span>
+              <span class="text-xs font-bold text-rose-600">&cross; Giảng viên bắt bẻ</span>
+            </div>
+            <div class="p-4 bg-rose-50/50 dark:bg-rose-950/20 rounded-2xl space-y-2 text-xs font-mono text-rose-900 dark:text-rose-300">
+              <p>&bull; Coi "System" là một cục đen duy nhất (Hội đồng bắt vẽ phân tầng MVC/3-tier).</p>
+              <p>&bull; Dùng mũi tên nét liền cho thông điệp trả về (Return message).</p>
+              <p>&bull; Thiếu khối alt/opt khi có phân nhánh if/else trong code.</p>
+              <p>&bull; Không có activation bars (thanh hoạt động) thể hiện thời gian sống của hàm.</p>
+            </div>
+            <p class="text-xs text-slate-500 italic">Giảng viên nhận xét: "Sơ đồ vẽ đối phó, không hiểu gì về luồng chạy thực tế."</p>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 p-7 rounded-3xl border-2 border-emerald-300 dark:border-emerald-800 space-y-5 shadow-sm">
+            <div class="flex items-center justify-between pb-3 border-b border-emerald-100 dark:border-emerald-950">
+              <span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 text-xs font-bold uppercase">Chuẩn hóa tại VeriDraw</span>
+              <span class="text-xs font-bold text-emerald-600">&check; Khớp kiến trúc code</span>
+            </div>
+            <div class="p-4 bg-emerald-50/50 dark:bg-emerald-950/20 rounded-2xl space-y-2 text-xs font-mono text-emerald-950 dark:text-emerald-300">
+              <p>&bull; Đầy đủ lifelines: :User &rarr; :View &rarr; :Controller &rarr; :Service &rarr; :Database.</p>
+              <p>&bull; Khung alt [điều kiện hợp lệ] và [else ngoại lệ] khớp đúng logic code.</p>
+              <p>&bull; Mũi tên gọi hàm là nét liền, mũi tên phản hồi là nét đứt có nhãn giá trị.</p>
+              <p>&bull; Activation bar đo đúng độ sâu từ lúc gọi tới khi return.</p>
+            </div>
+            <p class="text-xs text-slate-500">Hội đồng đánh giá cao vì sơ đồ khớp từng hàm trong service và controller.</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Tab 3: Class & ERD -->
+      <div id="tab-class" class="tab-content">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          
+          <div class="bg-white dark:bg-slate-900 p-7 rounded-3xl border-2 border-rose-200 dark:border-rose-950/80 space-y-5 shadow-sm">
+            <div class="flex items-center justify-between pb-3 border-b border-rose-100 dark:border-rose-950">
+              <span class="px-3 py-1 rounded-full bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-400 text-xs font-bold uppercase">Lỗi ở Class &amp; ERD</span>
+              <span class="text-xs font-bold text-rose-600">&cross; Giảng viên bắt bẻ</span>
+            </div>
+            <div class="p-4 bg-rose-50/50 dark:bg-rose-950/20 rounded-2xl space-y-2 text-xs font-mono text-rose-900 dark:text-rose-300">
+              <p>&bull; Thiếu kiểu dữ liệu (String, int, DateTime) ở thuộc tính.</p>
+              <p>&bull; Nhầm lẫn mũi tên kế thừa (Inheritance) và quan hệ liên kết (Association).</p>
+              <p>&bull; ERD sai đầu bản số (1:1, 1:N) ngược so với khóa ngoại trong DB.</p>
+              <p>&bull; Bỏ sót bảng trung gian (pivot table) của quan hệ nhiều-nhiều (N:N).</p>
+            </div>
+            <p class="text-xs text-slate-500 italic">Dẫn đến việc bị bắt sửa lại toàn bộ CSDL và hoãn buổi bảo vệ.</p>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 p-7 rounded-3xl border-2 border-emerald-300 dark:border-emerald-800 space-y-5 shadow-sm">
+            <div class="flex items-center justify-between pb-3 border-b border-emerald-100 dark:border-emerald-950">
+              <span class="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 text-xs font-bold uppercase">Chuẩn hóa tại VeriDraw</span>
+              <span class="text-xs font-bold text-emerald-600">&check; Khớp Migration Thật</span>
+            </div>
+            <div class="p-4 bg-emerald-50/50 dark:bg-emerald-950/20 rounded-2xl space-y-2 text-xs font-mono text-emerald-950 dark:text-emerald-300">
+              <p>&bull; Đọc trực tiếp từ migration file &rarr; khóa chính (PK), khóa ngoại (FK) chuẩn xác.</p>
+              <p>&bull; Ký hiệu chân quạ (Crow's Foot) hoặc UML Multiplicity chuẩn chỉ.</p>
+              <p>&bull; Tách thành các Bounded Context dễ đọc nếu đồ án có trên 25 bảng.</p>
+              <p>&bull; Đầy đủ access modifier: + public, - private, # protected.</p>
+            </div>
+            <p class="text-xs text-slate-500">Bảo vệ tự tin tuyệt đối, khớp 100% với database chạy thật trên demo máy chiếu.</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= DEMO GALLERY LINK & HIGHLIGHTS ================= -->
+  <section id="demo" class="py-20 bg-white dark:bg-slate-900 border-b border-slate-200/80 dark:border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto space-y-3 mb-14 reveal-item">
+        <span class="text-xs sm:text-sm font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400" data-i18n="demo_badge">Demo Gallery</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight" data-i18n="demo_title">
+          Bộ sưu tập 29 sơ đồ mẫu thực tế
+        </h2>
+        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed" data-i18n="demo_desc">
+          Xem trực tiếp bộ 29 sơ đồ hoàn chỉnh được trích xuất từ case study mã nguồn mở quy mô 1.054 files (153.417 dòng code), đạt chứng nhận 0 lỗi hình học.
+        </p>
+      </div>
+
+      <!-- Categories Count Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 reveal-item">
+        
+        <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center space-y-1.5 shadow-xs hover:border-brand-500 transition-all">
+          <span class="text-3xl font-extrabold text-brand-600 dark:text-brand-400">12</span>
+          <div class="text-xs font-bold text-slate-900 dark:text-slate-100">Use Case Diagrams</div>
+          <p class="text-[11px] text-slate-500">Phân quyền theo vai trò</p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center space-y-1.5 shadow-xs hover:border-brand-500 transition-all">
+          <span class="text-3xl font-extrabold text-brand-600 dark:text-brand-400">4</span>
+          <div class="text-xs font-bold text-slate-900 dark:text-slate-100">Activity Diagrams</div>
+          <p class="text-[11px] text-slate-500">Swimlanes, 0 giao cắt</p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center space-y-1.5 shadow-xs hover:border-brand-500 transition-all">
+          <span class="text-3xl font-extrabold text-brand-600 dark:text-brand-400">3</span>
+          <div class="text-xs font-bold text-slate-900 dark:text-slate-100">Sequence Diagrams</div>
+          <p class="text-[11px] text-slate-500">Lifelines &amp; Alt blocks</p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center space-y-1.5 shadow-xs hover:border-brand-500 transition-all">
+          <span class="text-3xl font-extrabold text-brand-600 dark:text-brand-400">3</span>
+          <div class="text-xs font-bold text-slate-900 dark:text-slate-100">ERD Diagrams</div>
+          <p class="text-[11px] text-slate-500">83 quan hệ thực thể</p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center space-y-1.5 shadow-xs hover:border-brand-500 transition-all">
+          <span class="text-3xl font-extrabold text-brand-600 dark:text-brand-400">3</span>
+          <div class="text-xs font-bold text-slate-900 dark:text-slate-100">State Machines</div>
+          <p class="text-[11px] text-slate-500">Vòng đời enum trạng thái</p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center space-y-1.5 shadow-xs hover:border-brand-500 transition-all">
+          <span class="text-3xl font-extrabold text-brand-600 dark:text-brand-400">1</span>
+          <div class="text-xs font-bold text-slate-900 dark:text-slate-100">Context Diagram</div>
+          <p class="text-[11px] text-slate-500">Bối cảnh hệ thống</p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 text-center space-y-1.5 shadow-xs hover:border-brand-500 transition-all">
+          <span class="text-3xl font-extrabold text-brand-600 dark:text-brand-400">3</span>
+          <div class="text-xs font-bold text-slate-900 dark:text-slate-100">Architecture / Package</div>
+          <p class="text-[11px] text-slate-500">Kiến trúc tổng thể</p>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-center space-y-1.5 shadow-xs hover:border-emerald-500 transition-all">
+          <span class="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">29</span>
+          <div class="text-xs font-bold text-emerald-950 dark:text-emerald-200">TỔNG SƠ ĐỒ MẪU</div>
+          <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">Có sẵn .drawio + PNG</p>
+        </div>
+
+      </div>
+
+      <!-- Action Banner to open Demo Gallery -->
+      <div class="bg-gradient-to-r from-brand-700 via-brand-600 to-indigo-700 rounded-3xl p-8 sm:p-10 text-white text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl reveal-item">
+        <div class="space-y-2 max-w-xl">
+          <h3 class="text-2xl sm:text-3xl font-bold tracking-tight" data-i18n="demo_cta_title">Khám phá toàn bộ 29 sơ đồ mẫu chi tiết</h3>
+          <p class="text-xs sm:text-sm text-brand-100 leading-relaxed" data-i18n="demo_cta_desc">
+            Bao gồm file hình PNG độ phân giải cao và liên kết tải file nguồn XML Draw.io để bạn kiểm chứng độ chi tiết trước khi đặt.
+          </p>
+        </div>
+        <a href="./docs/index.html" target="_blank" rel="noopener noreferrer" class="shrink-0 px-7 py-4 rounded-xl bg-white hover:bg-slate-50 text-brand-700 font-bold text-sm shadow-xl transition-all transform hover:scale-105 active:scale-95 inline-flex items-center gap-2 shimmer-btn">
+          <span data-i18n="demo_cta_btn">Mở Demo Gallery (29 Sơ đồ)</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+          </svg>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ================= TRANSPARENCY & INTEGRITY ================= -->
+  <section id="transparency" class="py-20 bg-white dark:bg-slate-900 border-b border-slate-200/80 dark:border-slate-800/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="max-w-3xl mx-auto text-center space-y-3 mb-14 reveal-item">
+        <span class="text-xs sm:text-sm font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400" data-i18n="trans_badge">Cam Kết Minh Bạch</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight" data-i18n="trans_title">
+          Chính sách phản hồi &amp; Liêm chính học thuật
+        </h2>
+        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed" data-i18n="trans_desc">
+          Chúng tôi tuân thủ nguyên tắc: <strong class="text-slate-900 dark:text-slate-100 font-semibold">Không bịa đặt đánh giá ảo, không thổi phồng số liệu khách hàng</strong>. Uy tín của dịch vụ dựa trên bằng chứng kỹ thuật có thể kiểm tra độc lập.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        
+        <div class="bg-slate-50 dark:bg-slate-950 p-7 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 space-y-4 shadow-xs reveal-item">
+          <div class="flex items-center gap-2 text-brand-600 dark:text-brand-400 font-bold text-base">
+            <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span data-i18n="trans_case_title">Bằng Chứng Năng Lực (Case Study Thật)</span>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="trans_case_desc">
+            Toàn bộ 29 sơ đồ trong gallery được trích xuất từ repo LMSERP-OneWorld (Laravel + Filament v3). Đã chạy kiểm tra hình học tự động với script kiểm định độc lập: 0 lỗi crossing ở activity, 100% khớp entity và enum trong code.
+          </p>
+          <div class="pt-2 text-xs font-mono text-slate-500 space-y-1 bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200/60 dark:border-slate-800">
+            <div>&bull; Quy mô repo mẫu: 1.054 files / 153.417 dòng code</div>
+            <div>&bull; Kiểm định kỹ thuật: 15 PASS, 0 THẤT BẠI</div>
+          </div>
+        </div>
+
+        <div class="bg-slate-50 dark:bg-slate-950 p-7 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 space-y-4 shadow-xs reveal-item" style="transition-delay: 100ms;">
+          <div class="flex items-center gap-2 text-brand-600 dark:text-brand-400 font-bold text-base">
+            <svg class="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+            </svg>
+            <span data-i18n="trans_feed_title">Thu Nhận Đánh Giá Sinh Viên Kỳ Này</span>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" data-i18n="trans_feed_desc">
+            Các nhận xét thực tế từ sinh viên các nhóm đồ án SWP391 và SEP490 kỳ này đang được tổng hợp sau đợt bảo vệ chính thức (với sự đồng ý ẩn danh của nhóm). Chúng tôi không tạo reviews ảo nhằm câu khách.
+          </p>
+          <div class="pt-2">
+            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold">
+              <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+              <span data-i18n="trans_feed_status">Đang cập nhật đánh giá sau các đợt bảo vệ</span>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= FAQ SECTION ================= -->
+  <section id="faq" class="py-20 bg-slate-50 dark:bg-slate-950 border-b border-slate-200/80 dark:border-slate-800/80">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center space-y-3 mb-16 reveal-item">
+        <span class="text-xs sm:text-sm font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400" data-i18n="faq_badge">Giải Đáp Thắc Mắc</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight" data-i18n="faq_title">
+          Câu hỏi thường gặp (FAQ)
+        </h2>
+        <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed" data-i18n="faq_desc">
+          Mọi điều bạn cần biết về bảo mật mã nguồn, bảo hành lỗi giảng viên và quy trình nhận file.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+
+        <!-- FAQ 1 -->
+        <div class="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs reveal-item">
+          <button onclick="toggleFaq(1)" class="w-full p-5 text-left flex items-center justify-between gap-4 font-bold text-slate-900 dark:text-white text-sm sm:text-base transition hover:text-brand-600" aria-expanded="false" id="faq-btn-1">
+            <span data-i18n="faq_q1">1. Mã nguồn repository của nhóm em có được bảo mật không?</span>
+            <svg id="faq-icon-1" class="w-5 h-5 text-slate-500 shrink-0 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div id="faq-ans-1" class="hidden px-5 pb-5 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-200/60 dark:border-slate-800/80 pt-3.5">
+            <span data-i18n="faq_a1">Tuyệt đối bảo mật 100%. Chúng tôi cam kết không phát tán, không chia sẻ cho bên thứ ba, và không sử dụng code của bạn cho bất kỳ đồ án nào khác. Mã nguồn chỉ được dùng nội bộ để đọc controller/model vẽ sơ đồ và sẽ được xóa vĩnh viễn khỏi máy sau khi bàn giao xong.</span>
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs reveal-item">
+          <button onclick="toggleFaq(2)" class="w-full p-5 text-left flex items-center justify-between gap-4 font-bold text-slate-900 dark:text-white text-sm sm:text-base transition hover:text-brand-600" aria-expanded="false" id="faq-btn-2">
+            <span data-i18n="faq_q2">2. Thời gian hoàn thành và bàn giao sơ đồ mất bao lâu?</span>
+            <svg id="faq-icon-2" class="w-5 h-5 text-slate-500 shrink-0 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div id="faq-ans-2" class="hidden px-5 pb-5 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-200/60 dark:border-slate-800/80 pt-3.5">
+            <span data-i18n="faq_a2">Thời gian tiêu chuẩn là 24 – 48 giờ tùy quy mô repo và số lượng sơ đồ. Với các bộ sơ đồ lớn của cả nhóm đồ án (từ 10 sơ đồ trở lên), thời gian thường từ 2 – 3 ngày. Giờ bàn giao cụ thể sẽ được chốt trước khi bạn chuyển khoản thanh toán.</span>
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs reveal-item">
+          <button onclick="toggleFaq(3)" class="w-full p-5 text-left flex items-center justify-between gap-4 font-bold text-slate-900 dark:text-white text-sm sm:text-base transition hover:text-brand-600" aria-expanded="false" id="faq-btn-3">
+            <span data-i18n="faq_q3">3. Nếu giảng viên phản biện bắt bẻ lỗi ký hiệu thì có được sửa không?</span>
+            <svg id="faq-icon-3" class="w-5 h-5 text-slate-500 shrink-0 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div id="faq-ans-3" class="hidden px-5 pb-5 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-200/60 dark:border-slate-800/80 pt-3.5">
+            <span data-i18n="faq_a3">SỬA MIỄN PHÍ 100%. Nếu giảng viên bắt lỗi chuẩn ký hiệu UML hoặc template draw.io của trường, chúng tôi sẽ chỉnh sửa lại ngay lập tức mà không thu bất kỳ chi phí nào. Ngoài ra, mỗi đơn hàng đều bao gồm 1 lần chỉnh sửa miễn phí nếu nhóm cập nhật thêm logic tính năng môn học.</span>
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs reveal-item">
+          <button onclick="toggleFaq(4)" class="w-full p-5 text-left flex items-center justify-between gap-4 font-bold text-slate-900 dark:text-white text-sm sm:text-base transition hover:text-brand-600" aria-expanded="false" id="faq-btn-4">
+            <span data-i18n="faq_q4">4. Dịch vụ có nhận làm hỏa tốc trong 24 giờ không?</span>
+            <svg id="faq-icon-4" class="w-5 h-5 text-slate-500 shrink-0 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div id="faq-ans-4" class="hidden px-5 pb-5 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-200/60 dark:border-slate-800/80 pt-3.5">
+            <span data-i18n="faq_a4">CÓ. Chúng tôi nhận các đơn gấp cứu cánh sát giờ nộp bài với phụ phí hỏa tốc +40%. Đơn hỏa tốc sẽ được ưu tiên đưa lên đầu hàng đợi và thực hiện xuyên suốt để bạn kịp nộp báo cáo. Hãy nhắn Zalo ngay và ghi rõ 'CẦN GẤP 24H'.</span>
+          </div>
+        </div>
+
+        <!-- FAQ 5 -->
+        <div class="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-xs reveal-item">
+          <button onclick="toggleFaq(5)" class="w-full p-5 text-left flex items-center justify-between gap-4 font-bold text-slate-900 dark:text-white text-sm sm:text-base transition hover:text-brand-600" aria-expanded="false" id="faq-btn-5">
+            <span data-i18n="faq_q5">5. Bên bạn có nhận làm đồ án hộ hoặc viết tài liệu SRS trọn gói không?</span>
+            <svg id="faq-icon-5" class="w-5 h-5 text-slate-500 shrink-0 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div id="faq-ans-5" class="hidden px-5 pb-5 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-200/60 dark:border-slate-800/80 pt-3.5">
+            <span data-i18n="faq_a5">KHÔNG. Chúng tôi tuyệt đối tuân thủ liêm chính học thuật: Không code thuê, không làm đồ án hộ, không viết báo cáo nộp thay. Chúng tôi chỉ cung cấp dịch vụ kỹ thuật: đọc mã nguồn nhóm bạn đã code và vẽ lại các sơ đồ kỹ thuật chuẩn chỉ để bạn hoàn thiện báo cáo và hiểu sâu code khi phản biện.</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= BOTTOM CONVERSION CTA ================= -->
+  <section class="py-20 sm:py-24 bg-gradient-to-b from-slate-900 to-slate-950 text-white relative overflow-hidden bg-grid-pattern">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-7 relative z-10 reveal-item">
+      
+      <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-500/20 text-brand-300 text-xs font-bold uppercase tracking-wider border border-brand-500/30">
+        <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+        Sẵn sàng chuẩn hóa đồ án
+      </span>
+
+      <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+        <span data-i18n="bottom_cta_title_1">Đừng để bị trừ điểm oan</span><br>
+        <span class="bg-gradient-to-r from-brand-400 via-indigo-300 to-sky-400 bg-clip-text text-transparent" data-i18n="bottom_cta_title_2">chỉ vì sơ đồ vẽ ẩu và sai ký hiệu.</span>
+      </h2>
+
+      <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed" data-i18n="bottom_cta_desc">
+        Gửi repo code và danh sách sơ đồ qua Zalo để nhận tư vấn nhanh trong 15 phút, chốt báo giá minh bạch và nhận file <code>.drawio</code> chuẩn chỉnh trước ngày bảo vệ.
+      </p>
+
+      <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="https://zalo.me/0901234567" target="_blank" rel="noopener noreferrer" class="zalo-link-btn w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-bold text-base shadow-xl shadow-brand-600/40 transition-all transform hover:scale-105 active:scale-95 shimmer-btn">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.477 2 2 6.145 2 11.26c0 2.91 1.455 5.513 3.736 7.185L5 22l4.08-1.517c.928.245 1.906.377 2.92.377 5.523 0 10-4.145 10-9.26C22 6.145 17.523 2 12 2zm1 14h-2v-4h2v4zm0-6h-2V8h2v2z"/>
+          </svg>
+          <span data-i18n="bottom_cta_btn">Nhắn tin qua Zalo báo giá ngay</span>
+        </a>
+      </div>
+
+      <div class="pt-4 text-xs text-slate-400 flex items-center justify-center gap-6 flex-wrap font-medium">
+        <span>&bull; Đơn tối thiểu: 150.000đ</span>
+        <span>&bull; 1 lần sửa miễn phí</span>
+        <span>&bull; Hỗ trợ gấp 24h</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-white dark:bg-slate-950 border-t border-slate-200/80 dark:border-slate-800/80 py-12 text-xs text-slate-500 dark:text-slate-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+        
+        <div class="space-y-1.5">
+          <div class="text-slate-900 dark:text-white font-extrabold text-lg tracking-tight flex items-center justify-center md:justify-start gap-2">
+            Veri<span class="text-brand-600 dark:text-brand-400">Draw</span>
+            <span class="text-[10px] text-brand-700 dark:text-brand-300 font-bold uppercase px-2 py-0.5 rounded-full bg-brand-50 dark:bg-brand-950 border border-brand-200/60 dark:border-brand-800 font-mono">
+              veridraw.me
+            </span>
+          </div>
+          <p class="max-w-md leading-relaxed" data-i18n="footer_summary">
+            Dịch vụ thẩm định và vẽ sơ đồ kỹ thuật UML, ERD bám sát repository cho sinh viên.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-6 font-semibold flex-wrap justify-center">
+          <a href="#packages" class="hover:text-brand-600 transition" data-i18n="nav_packages">Gói đồ án</a>
+          <a href="#services" class="hover:text-brand-600 transition" data-i18n="nav_pricing">Bảng giá lẻ</a>
+          <a href="#process" class="hover:text-brand-600 transition" data-i18n="nav_process">Quy trình</a>
+          <a href="#demo" class="hover:text-brand-600 transition" data-i18n="nav_demo">Demo Gallery</a>
+          <a href="#faq" class="hover:text-brand-600 transition" data-i18n="nav_faq">FAQ</a>
+          <a href="https://zalo.me/0901234567" target="_blank" rel="noopener noreferrer" class="zalo-link-btn text-brand-600 dark:text-brand-400 font-bold hover:underline">Zalo: 0901234567</a>
+        </div>
+
+      </div>
+
+      <!-- MANDATORY INDEPENDENT DISCLAIMER -->
+      <div class="pt-6 border-t border-slate-200/80 dark:border-slate-800/80 text-center space-y-2">
+        <p class="text-slate-800 dark:text-slate-200 font-bold text-xs sm:text-sm" data-i18n="footer_affiliation_notice">
+          Dịch vụ độc lập, không trực thuộc Đại học FPT.
+        </p>
+        <p class="text-[11px] text-slate-500 max-w-2xl mx-auto leading-relaxed" data-i18n="footer_legal_detail">
+          Chúng tôi là đơn vị tư vấn kỹ thuật và chuẩn hóa sơ đồ độc lập, cung cấp tài liệu tham khảo học tập theo mã nguồn của sinh viên. Mọi nhãn hiệu thuộc về chủ sở hữu tương ứng.
+        </p>
+      </div>
+
+      <div class="text-center text-[11px] text-slate-400 dark:text-slate-600 pt-2 font-mono">
+        &copy; 2026 VeriDraw (veridraw.me). All rights reserved. Engineering rigor &amp; academic integrity.
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ================= STICKY MOBILE CTA BAR ================= -->
+  <div class="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border-t border-slate-200/80 dark:border-slate-800 p-3 shadow-2xl flex items-center justify-between gap-3">
+    <div class="flex flex-col">
+      <span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium" data-i18n="sticky_label">Đơn tối thiểu 150k</span>
+      <span class="text-xs font-bold text-slate-900 dark:text-white" data-i18n="sticky_sub">Tặng 1 lần sửa free</span>
+    </div>
+    <a href="https://zalo.me/0901234567" target="_blank" rel="noopener noreferrer" class="zalo-link-btn shrink-0 inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-brand-600 text-white font-bold text-xs shadow-md shadow-brand-600/30 shimmer-btn">
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.477 2 2 6.145 2 11.26c0 2.91 1.455 5.513 3.736 7.185L5 22l4.08-1.517c.928.245 1.906.377 2.92.377 5.523 0 10-4.145 10-9.26C22 6.145 17.523 2 12 2zm1 14h-2v-4h2v4zm0-6h-2V8h2v2z"/>
+      </svg>
+      <span data-i18n="sticky_cta">Nhắn Zalo</span>
+    </a>
+  </div>
+
+  <div class="h-16 sm:hidden"></div>
+
+  <!-- ================= FLOATING TOAST CONTAINER (SONNER-STYLE) ================= -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- ================= INLINE LOGIC & I18N ================= -->
+  <script>
+    /* =========================================================
+     * CONFIGURATION CONSTANTS
+     * ========================================================= */
+    const CONFIG = {
+      serviceName: "VeriDraw",
+      domain: "veridraw.me",
+      siteUrl: "https://veridraw.me",
+      founderName: "Lê Huy Tường",
+      founderAcademic: "Kỹ sư Kỹ thuật Phần mềm (Software Engineering) • Cựu sinh viên CNTT",
+      zaloPhone: "0901234567",
+      zaloLink: "https://zalo.me/0901234567",
+      minOrderVnd: 150000,
+      rushMultiplier: 0.40,
+      bulkDiscountRate: 0.15,
+      bulkThreshold: 10,
+      prices: {
+        review: 25000,
+        usecase: 50000,
+        activity: 40000,
+        sequence: 60000,
+        state: 40000,
+        class: 150000,
+        erd: 150000
+      }
+    };
+
+    // Apply Zalo Link across elements
+    document.querySelectorAll('.zalo-link-btn').forEach(function(el) {
+      el.href = CONFIG.zaloLink;
+    });
+
+    /* =========================================================
+     * BILINGUAL DICTIONARY (VI & EN)
+     * ========================================================= */
+    const TRANSLATIONS = {
+      vi: {
+        top_bar_tag: "Mùa Đồ Án K18-K20",
+        top_bar: "Thẩm định & vẽ sơ đồ UML chuẩn ký hiệu từ source code thực tế",
+        top_bar_sub: "Bàn giao file .drawio gốc + PNG sắc nét",
+        tagline_mini: "UML Diagram Review & Drawing",
+        nav_packages: "Gói đồ án",
+        nav_pricing: "Bảng giá lẻ",
+        nav_calc: "Tính giá",
+        nav_process: "Quy trình",
+        nav_comparison: "Chuẩn OMG UML",
+        nav_demo: "Bộ mẫu (29 sơ đồ)",
+        nav_transparency: "Minh bạch",
+        nav_faq: "FAQ",
+        cta_header: "Nhắn tin qua Zalo",
+        
+        // Hero
+        hero_badge: "Chuẩn Ký Hiệu OMG UML • Khớp 100% Code Repo • Template Draw.io",
+        hero_title_1: "Sơ đồ UML & ERD chuẩn chỉ,",
+        hero_title_2: "được vẽ trực tiếp từ code thật",
+        hero_title_3: "của đồ án nhóm bạn.",
+        hero_desc: "Giảng viên bắt bẻ lỗi ký hiệu? Sơ đồ vẽ ẩu không khớp controllers, database và routes? Chúng tôi đọc trực tiếp mã nguồn của bạn, chuẩn hóa từng actor, mũi tên include/extend, lifeline và bàn giao trọn bộ file .drawio chỉnh sửa được + PNG sắc nét.",
+        hero_cta_primary: "Nhắn tin qua Zalo báo giá ngay",
+        hero_cta_secondary: "Xem 29 sơ đồ mẫu (Demo Gallery)",
+        pill_1_title: "File .drawio gốc",
+        pill_1_desc: "Tự mở & sửa trên app.diagrams.net",
+        pill_2_title: "Truy về dòng code",
+        pill_2_desc: "Khớp models, routes, controllers",
+        pill_3_title: "1 lần sửa miễn phí",
+        pill_3_desc: "Bảo hành lỗi ký hiệu giảng viên bắt",
+        pill_4_title: "Hỏa tốc 24 giờ",
+        pill_4_desc: "Cứu nguy sát hạn nộp đồ án",
+        hero_card_note: "Xuất chuẩn XML Draw.io + PNG",
+
+        // Packages
+        pkg_badge: "Giải Pháp Đồ Án Trọn Gói",
+        pkg_title: "Chọn gói giải pháp tối ưu theo môn học FPT",
+        pkg_desc: "Sinh viên không cần loay hoay tính từng sơ đồ. Chúng tôi cấu hình sẵn các gói đúng chuẩn rubric chấm điểm của từng môn.",
+
+        // Founder
+        founder_badge: "Người Thẩm Định & Chịu Trách Nhiệm Chuyên Môn",
+        founder_desc: "Trực tiếp đọc repository mã nguồn của các bạn, kiểm tra cấu trúc Controller, Service, Model và Database Migration để vẽ nên sơ đồ đúng thực tế hệ thống. Không qua trung gian cộng tác viên, không dùng prompt AI sinh sơ đồ rác không khớp code. Mọi sơ đồ đều tuân thủ chặt chẽ chuẩn UML và template bài nộp môn học.",
+
+        // Pricing
+        pricing_badge: "Dịch Vụ & Bảng Giá Niêm Yết (VND)",
+        pricing_title: "Chi phí minh bạch, chuẩn từng loại sơ đồ",
+        pricing_subtitle: "Không phát sinh chi phí ẩn. Mỗi sơ đồ đều bàn giao kèm file .drawio để nhóm tự tin chỉnh sửa và nộp bài.",
+        cat_review: "Thẩm định",
+        cat_draw: "Vẽ mới từ code",
+        cat_complex: "Chuyên sâu",
+        srv_review_name: "Review & Chấm Lỗi Sơ Đồ",
+        srv_review_desc: "Soát toàn bộ ký hiệu, quan hệ sai, hướng mũi tên và format theo template trường trước ngày nộp.",
+        srv_review_f1: "Ghi chú lỗi chi tiết từng hình",
+        srv_review_f2: "Tư vấn cách sửa để bảo vệ",
+        srv_usecase_name: "Use Case Diagram",
+        srv_usecase_desc: "Phân tách Actor, System Boundary, «include», «extend» chuẩn xác theo controllers thực tế.",
+        srv_usecase_f1: "Theo subsystem hoặc role",
+        srv_usecase_f2: "Không lạm dụng extend/include",
+        srv_activity_name: "Activity Diagram",
+        srv_activity_desc: "Luồng xử lý nghiệp vụ với Decision node, Merge, Fork/Join song song và phân làn Swimlanes.",
+        srv_activity_f1: "Tối ưu hình học (0 cắt nhau)",
+        srv_activity_f2: "Khớp các if/else và logic code",
+        srv_sequence_name: "Sequence Diagram",
+        srv_sequence_desc: "Lifelines theo đúng kiến trúc (Actor, View, Controller, Service, DB), đồng bộ và khung alt/opt.",
+        srv_sequence_f1: "Activation bar chuẩn chiều dài",
+        srv_sequence_f2: "Mũi tên trả lời nét đứt đúng luật",
+        srv_state_name: "State Machine Diagram",
+        srv_state_desc: "Mô tả trọn vẹn trạng thái vòng đời từ các Enum, transitions, guards và triggers trong code.",
+        srv_state_f1: "Khớp đúng enum trong model",
+        srv_state_f2: "Ký hiệu Initial / Final State chuẩn",
+        srv_class_name: "Class Diagram",
+        srv_class_desc: "Đầy đủ 3 ngăn (Attributes, Methods), Types, Visibility (+/-/ #), quan hệ Thừa kế, Implementation và Quan hệ.",
+        srv_class_f1: "Tách theo layer (Domain / Service)",
+        srv_class_f2: "Đúng mũi tên rỗng / mũi tên kín",
+        srv_erd_name: "ERD (Entity Relationship)",
+        srv_erd_desc: "Đọc trực tiếp từ migrations & models. Thể hiện khóa chính, khóa ngoại, bản số (1:1, 1:N, N:N) chuẩn Crow's Foot.",
+        srv_erd_f1: "Hỗ trợ gom Bounded Contexts",
+        srv_erd_f2: "Khớp 100% database thật đang chạy",
+        policy_badge: "Chính Sách & Ưu Đãi",
+        policy_title: "Điều Kiện Đặt Hàng",
+        policy_min: "Đơn tối thiểu: 150.000đ / lần đặt.",
+        policy_discount: "Ưu đãi nhóm đồ án: Giảm ngay 15% khi đặt từ 10 sơ đồ trở lên.",
+        policy_rush: "Đơn gấp 24h: Phụ phí +40% (xử lý hỏa tốc).",
+        policy_warranty: "Bảo hành: 1 lần chỉnh sửa miễn phí theo nhận xét giảng viên.",
+        policy_calc_link: "Mở công cụ tính giá bên dưới",
+
+        // Calculator
+        calc_badge: "Bảng Tính Chi Phí Trực Tuyến",
+        calc_title: "Dự toán chi phí cho đồ án của bạn",
+        calc_desc: "Chọn số lượng từng loại sơ đồ cần làm, hệ thống tự động tính chiết khấu 15% (khi ≥ 10 sơ đồ) và kiểm tra mức đơn tối thiểu 150.000đ.",
+        calc_item_review: "Review & Chỉnh sửa sơ đồ",
+        calc_item_usecase: "Use Case Diagram",
+        calc_item_activity: "Activity Diagram",
+        calc_item_sequence: "Sequence Diagram",
+        calc_item_state: "State Machine Diagram",
+        calc_item_class: "Class Diagram (Chi tiết)",
+        calc_item_erd: "ERD Database Diagram",
+        calc_rush_label: "Giao hỏa tốc trong 24 giờ (+40%)",
+        calc_rush_desc: "Phù hợp các bạn cần nộp bài gấp trong ngày hôm nay hoặc sáng mai.",
+        calc_sum_qty: "Tổng số sơ đồ:",
+        calc_sum_raw: "Tạm tính sơ bộ:",
+        calc_sum_discount: "Ưu đãi đồ án (≥ 10 sơ đồ -15%):",
+        calc_sum_rush: "Phụ phí hỏa tốc 24h (+40%):",
+        calc_sum_total: "Tổng chi phí dự kiến:",
+        calc_min_warning: "(Đã áp dụng mức đơn tối thiểu 150.000đ)",
+        calc_order_cta: "Gửi Yêu Cầu & Dự Toán Này Qua Zalo",
+        calc_footer_note: "Nội dung chọn sẽ được tạo sẵn để bạn gửi cho chúng tôi xác nhận trong 15 phút.",
+
+        // What to send
+        wts_badge: "Chuẩn Bị Tài Liệu",
+        wts_title: "Bạn cần chuẩn bị và gửi những gì?",
+        wts_desc: "Để chúng tôi đối soát chuẩn và vẽ đúng 100%, bạn chỉ cần gửi qua Zalo 4 mục cơ bản sau:",
+        wts_1_title: "Repo Mã Nguồn",
+        wts_1_desc: "Link GitHub, GitLab (kèm quyền access) hoặc file nén .zip source code của nhóm. Cần có models, controllers và migrations để đối soát.",
+        wts_2_title: "Đề Bài & Yêu Cầu",
+        wts_2_desc: "File Assignment brief, rubric chấm điểm, slide hướng dẫn hoặc tin nhắn dặn dò cụ thể của giảng viên hướng dẫn về quy cách sơ đồ.",
+        wts_3_title: "Môn Học & Danh Sách",
+        wts_3_desc: "Tên mã môn học (ví dụ SWP391, PRN211, PRN231, SEP490...) cùng danh sách tên các sơ đồ cần vẽ hoặc review theo từng tính năng.",
+        wts_4_title: "Thời Hạn Nhận File",
+        wts_4_desc: "Hạn chót cụ thể bạn cần nhận lại file để kịp ghép vào báo cáo SRS/SDS và nộp lên hệ thống của trường.",
+
+        // Steps
+        step_badge: "Quy Trình Làm Việc",
+        step_title: "4 bước tinh gọn từ code đến sơ đồ hoàn chỉnh",
+        step_desc: "Rõ ràng từng bước, không để bạn phải chờ đợi mơ hồ.",
+        step_1_title: "Gửi Repo & Đề Bài",
+        step_1_desc: "Nhắn tin Zalo gửi link repo GitHub hoặc file zip, kèm đề bài môn học và số lượng sơ đồ bạn cần vẽ/review.",
+        step_2_title: "Xác Nhận & Báo Giá",
+        step_2_desc: "Chúng tôi quét nhanh cấu trúc code, chốt danh sách actors, luồng chính và gửi báo giá cố định cùng cam kết giờ giao.",
+        step_3_title: "Thanh Toán Qua QR",
+        step_3_desc: "Quét mã VietQR chuyển khoản nhanh gọn và bảo mật. Nhóm nhận biên lai xác nhận tiến độ ngay lập tức.",
+        step_4_title: "Nhận File .drawio & PNG",
+        step_4_desc: "Nhận trọn bộ file editable .drawio + ảnh PNG nét căng, kèm giải thích logic để bạn sẵn sàng trả lời phản biện.",
+
+        // Before After
+        ba_badge: "Đối Chiếu Trực Quan",
+        ba_title: "Sơ đồ lỗi giảng viên thường gạch vs Chuẩn VeriDraw",
+        ba_desc: "Đa số sinh viên bị trừ điểm vì dùng tool AI vẽ bừa hoặc không nắm chuẩn ký hiệu OMG UML. Xem cách chúng tôi chuẩn hóa:",
+        ba_before_label: "Trước khi sửa (Lỗi thường gặp)",
+        ba_after_label: "Sau khi chuẩn hóa (VeriDraw)",
+        ba_usecase_before_note: "Hậu quả: Giảng viên hội đồng chất vấn ngay 5 phút đầu buổi bảo vệ vì sai kiến thức công nghệ phần mềm cơ bản.",
+        ba_usecase_after_note: "Kết quả: Sơ đồ sắc nét, logic chặt chẽ, sinh viên tự tin thuyết minh khớp với source code đang demo.",
+
+        // Demo
+        demo_badge: "Demo Gallery",
+        demo_title: "Bộ sưu tập 29 sơ đồ mẫu thực tế",
+        demo_desc: "Xem trực tiếp bộ 29 sơ đồ hoàn chỉnh được trích xuất từ case study mã nguồn mở quy mô 1.054 files (153.417 dòng code), đạt chứng nhận 0 lỗi hình học.",
+        demo_cta_title: "Khám phá toàn bộ 29 sơ đồ mẫu chi tiết",
+        demo_cta_desc: "Bao gồm file hình PNG độ phân giải cao và liên kết tải file nguồn XML Draw.io để bạn kiểm chứng độ chi tiết trước khi đặt.",
+        demo_cta_btn: "Mở Demo Gallery (29 Sơ đồ)",
+
+        // Transparency
+        trans_badge: "Cam Kết Minh Bạch",
+        trans_title: "Chính sách phản hồi & Liêm chính học thuật",
+        trans_desc: "Chúng tôi tuân thủ nguyên tắc: Không bịa đặt đánh giá ảo, không thổi phồng số liệu khách hàng. Uy tín của dịch vụ dựa trên bằng chứng kỹ thuật có thể kiểm tra độc lập.",
+        trans_case_title: "Bằng Chứng Năng Lực (Case Study Thật)",
+        trans_case_desc: "Toàn bộ 29 sơ đồ trong gallery được trích xuất từ repo LMSERP-OneWorld (Laravel + Filament v3). Đã chạy kiểm tra hình học tự động với script kiểm định độc lập: 0 lỗi crossing ở activity, 100% khớp entity và enum trong code.",
+        trans_feed_title: "Thu Nhận Đánh Giá Sinh Viên Kỳ Này",
+        trans_feed_desc: "Các nhận xét thực tế từ sinh viên các nhóm đồ án SWP391 và SEP490 kỳ này đang được tổng hợp sau đợt bảo vệ chính thức (với sự đồng ý ẩn danh của nhóm). Chúng tôi không tạo reviews ảo nhằm câu khách.",
+        trans_feed_status: "Đang cập nhật đánh giá sau các đợt bảo vệ",
+
+        // FAQ
+        faq_badge: "Giải Đáp Thắc Mắc",
+        faq_title: "Câu hỏi thường gặp (FAQ)",
+        faq_desc: "Mọi điều bạn cần biết về bảo mật mã nguồn, bảo hành lỗi giảng viên và quy trình nhận file.",
+        faq_q1: "1. Mã nguồn repository của nhóm em có được bảo mật không?",
+        faq_a1: "Tuyệt đối bảo mật 100%. Chúng tôi cam kết không phát tán, không chia sẻ cho bên thứ ba, và không sử dụng code của bạn cho bất kỳ đồ án nào khác. Mã nguồn chỉ được dùng nội bộ để đọc controller/model vẽ sơ đồ và sẽ được xóa vĩnh viễn khỏi máy sau khi bàn giao xong.",
+        faq_q2: "2. Thời gian hoàn thành và bàn giao sơ đồ mất bao lâu?",
+        faq_a2: "Thời gian tiêu chuẩn là 24 – 48 giờ tùy quy mô repo và số lượng sơ đồ. Với các bộ sơ đồ lớn của cả nhóm đồ án (từ 10 sơ đồ trở lên), thời gian thường từ 2 – 3 ngày. Giờ bàn giao cụ thể sẽ được chốt trước khi bạn chuyển khoản thanh toán.",
+        faq_q3: "3. Nếu giảng viên phản biện bắt bẻ lỗi ký hiệu thì có được sửa không?",
+        faq_a3: "SỬA MIỄN PHÍ 100%. Nếu giảng viên bắt lỗi chuẩn ký hiệu UML hoặc template draw.io của trường, chúng tôi sẽ chỉnh sửa lại ngay lập tức mà không thu bất kỳ chi phí nào. Ngoài ra, mỗi đơn hàng đều bao gồm 1 lần chỉnh sửa miễn phí nếu nhóm cập nhật thêm logic tính năng môn học.",
+        faq_q4: "4. Dịch vụ có nhận làm hỏa tốc trong 24 giờ không?",
+        faq_a4: "CÓ. Chúng tôi nhận các đơn gấp cứu cánh sát giờ nộp bài với phụ phí hỏa tốc +40%. Đơn hỏa tốc sẽ được ưu tiên đưa lên đầu hàng đợi và thực hiện xuyên suốt để bạn kịp nộp báo cáo. Hãy nhắn Zalo ngay và ghi rõ 'CẦN GẤP 24H'.",
+        faq_q5: "5. Bên bạn có nhận làm đồ án hộ hoặc viết tài liệu SRS trọn gói không?",
+        faq_a5: "KHÔNG. Chúng tôi tuyệt đối tuân thủ liêm chính học thuật: Không code thuê, không làm đồ án hộ, không viết báo cáo nộp thay. Chúng tôi chỉ cung cấp dịch vụ kỹ thuật: đọc mã nguồn nhóm bạn đã code và vẽ lại các sơ đồ kỹ thuật chuẩn chỉ để bạn hoàn thiện báo cáo và hiểu sâu code khi phản biện.",
+
+        // Bottom CTA & Footer
+        bottom_cta_title_1: "Đừng để bị trừ điểm oan",
+        bottom_cta_title_2: "chỉ vì sơ đồ vẽ ẩu và sai ký hiệu.",
+        bottom_cta_desc: "Gửi repo code và danh sách sơ đồ qua Zalo để nhận tư vấn nhanh trong 15 phút, chốt báo giá minh bạch và nhận file .drawio chuẩn chỉnh trước ngày bảo vệ.",
+        bottom_cta_btn: "Nhắn tin qua Zalo báo giá ngay",
+        footer_summary: "Dịch vụ thẩm định và vẽ sơ đồ kỹ thuật UML, ERD bám sát repository cho sinh viên.",
+        footer_affiliation_notice: "Dịch vụ độc lập, không trực thuộc Đại học FPT.",
+        footer_legal_detail: "Chúng tôi là đơn vị tư vấn kỹ thuật và chuẩn hóa sơ đồ độc lập, cung cấp tài liệu tham khảo học tập theo mã nguồn của sinh viên. Mọi nhãn hiệu thuộc về chủ sở hữu tương ứng.",
+        sticky_label: "Đơn tối thiểu 150k",
+        sticky_sub: "Tặng 1 lần sửa free",
+        sticky_cta: "Nhắn Zalo"
+      },
+
+      en: {
+        top_bar_tag: "Capstone Season K18-K20",
+        top_bar: "UML review & drawing service built directly from real source code",
+        top_bar_sub: "Delivered as editable .drawio + high-res PNG",
+        tagline_mini: "UML Diagram Review & Drawing",
+        nav_packages: "Capstone Packs",
+        nav_pricing: "Itemized Rates",
+        nav_calc: "Pricing Calc",
+        nav_process: "4-Step Process",
+        nav_comparison: "OMG UML Standards",
+        nav_demo: "Sample Gallery (29)",
+        nav_transparency: "Transparency",
+        nav_faq: "FAQ",
+        cta_header: "Message on Zalo",
+
+        // Hero
+        hero_badge: "OMG UML Standard • 100% Code-Aligned • FPT Draw.io Template",
+        hero_title_1: "Rigorous UML & ERD diagrams,",
+        hero_title_2: "crafted directly from real code",
+        hero_title_3: "of your student project repo.",
+        hero_desc: "Lecturers penalizing notation errors? Rushed diagrams out of sync with controllers, database, and routes? We read your actual codebase, normalize every actor, include/extend link, and lifeline, delivering editable .drawio files + crisp PNGs.",
+        hero_cta_primary: "Message on Zalo for Quote",
+        hero_cta_secondary: "View 29 Sample Diagrams (Demo)",
+        pill_1_title: "Editable .drawio files",
+        pill_1_desc: "Open & customize on app.diagrams.net",
+        pill_2_title: "Code-level traceability",
+        pill_2_desc: "Strictly matching models, routes, controllers",
+        pill_3_title: "1 Free Revision",
+        pill_3_desc: "Covering any lecturer notation feedback",
+        pill_4_title: "24-Hour Rush Delivery",
+        pill_4_desc: "Available for urgent submission deadlines",
+        hero_card_note: "Exported in Draw.io XML + high-res PNG",
+
+        // Packages
+        pkg_badge: "Capstone Solution Bundles",
+        pkg_title: "Optimized packages tailored for FPT courses",
+        pkg_desc: "No guessing what diagrams are needed. Pre-configured bundles meeting strict course grading rubrics.",
+
+        // Founder
+        founder_badge: "Founder & Lead Technical Reviewer",
+        founder_desc: "Directly reviewing your student repo, analyzing Controllers, Services, Models, and Database Migrations to draw diagrams that match real system behavior. No sub-contracting, no generic hallucinated AI diagrams. Every artifact complies with UML specs and university submission templates.",
+
+        // Pricing
+        pricing_badge: "Services & Published Rates (VND)",
+        pricing_title: "Transparent pricing per diagram type",
+        pricing_subtitle: "No hidden fees. Every diagram includes editable .drawio files so your team can confidently edit and submit.",
+        cat_review: "Audit & Review",
+        cat_draw: "Code-to-Diagram",
+        cat_complex: "Advanced",
+        srv_review_name: "Diagram Notation Review",
+        srv_review_desc: "Audits notation syntax, invalid relationships, inverted arrows, and university template formatting before submission.",
+        srv_review_f1: "Itemized notation feedback",
+        srv_review_f2: "Defense preparation advice",
+        srv_usecase_name: "Use Case Diagram",
+        srv_usecase_desc: "Separates Actors, System Boundaries, «include», and «extend» strictly aligned with actual controller endpoints.",
+        srv_usecase_f1: "Subsystem or role-based",
+        srv_usecase_f2: "Clean include/extend semantics",
+        srv_activity_name: "Activity Diagram",
+        srv_activity_desc: "Business logic flows with Decision nodes, Merges, Fork/Join concurrency, and role Swimlanes.",
+        srv_activity_f1: "Geometric layout (0 crossings)",
+        srv_activity_f2: "Mirrors code branches & loops",
+        srv_sequence_name: "Sequence Diagram",
+        srv_sequence_desc: "Multi-tier lifelines (Actor, View, Controller, Service, DB), synchronous messages, and alt/opt fragments.",
+        srv_sequence_f1: "Accurate activation bar lengths",
+        srv_sequence_f2: "Proper dashed reply messages",
+        srv_state_name: "State Machine Diagram",
+        srv_state_desc: "Models complete entity lifecycle states based on Model Enums, transition guards, and triggers in code.",
+        srv_state_f1: "Direct enum mapping",
+        srv_state_f2: "Standard initial/final states",
+        srv_class_name: "Class Diagram",
+        srv_class_desc: "Complete 3 compartments (Attributes, Methods), Types, Visibility (+/-/ #), Inheritance, and Realization.",
+        srv_class_f1: "Layered architecture (Domain/Service)",
+        srv_class_f2: "Standard triangle inheritance arrows",
+        srv_erd_name: "ERD (Entity Relationship)",
+        srv_erd_desc: "Extracted directly from migrations & models. Primary/foreign keys, cardinalities (1:1, 1:N, N:N) in Crow's Foot.",
+        srv_erd_f1: "Supports Bounded Contexts",
+        srv_erd_f2: "100% matches active database schema",
+        policy_badge: "Policies & Discounts",
+        policy_title: "Ordering Terms",
+        policy_min: "Minimum order: 150,000 VND per booking.",
+        policy_discount: "Team discount: 15% off for 10 or more diagrams.",
+        policy_rush: "24h rush orders: +40% surcharge (fast-tracked).",
+        policy_warranty: "Warranty: 1 free revision covering lecturer remarks.",
+        policy_calc_link: "Open interactive calculator below",
+
+        // Calculator
+        calc_badge: "Interactive Price Calculator",
+        calc_title: "Estimate your project cost instantly",
+        calc_desc: "Select diagram counts to calculate subtotal, automatic 15% bulk discount (when ≥ 10 diagrams), and 150k min order check.",
+        calc_item_review: "Diagram Review & Audit",
+        calc_item_usecase: "Use Case Diagram",
+        calc_item_activity: "Activity Diagram",
+        calc_item_sequence: "Sequence Diagram",
+        calc_item_state: "State Machine Diagram",
+        calc_item_class: "Class Diagram (Detailed)",
+        calc_item_erd: "ERD Database Diagram",
+        calc_rush_label: "24-Hour Rush Delivery (+40%)",
+        calc_rush_desc: "Recommended for urgent same-day or next-morning project deadlines.",
+        calc_sum_qty: "Total diagrams:",
+        calc_sum_raw: "Subtotal:",
+        calc_sum_discount: "Bulk discount (≥ 10 diagrams -15%):",
+        calc_sum_rush: "24h Rush surcharge (+40%):",
+        calc_sum_total: "Estimated total cost:",
+        calc_min_warning: "(Minimum order rate 150,000 VND applied)",
+        calc_order_cta: "Send Order & Estimate via Zalo",
+        calc_footer_note: "Your configuration will be pre-formatted to confirm via Zalo within 15 minutes.",
+
+        // What to send
+        wts_badge: "What to Prepare",
+        wts_title: "What do you need to send us?",
+        wts_desc: "For accurate code alignment and 100% compliance, send us these 4 items on Zalo:",
+        wts_1_title: "Source Code Repo",
+        wts_1_desc: "GitHub/GitLab repository link (with access granted) or a compressed .zip file. Must contain models, controllers, and migrations.",
+        wts_2_title: "Assignment Brief",
+        wts_2_desc: "Assignment brief, grading rubric, lab guidelines, or lecturer instructions regarding diagram expectations.",
+        wts_3_title: "Course & Diagram List",
+        wts_3_desc: "Course code (e.g. SWP391, PRN211, PRN231, SEP490...) plus list of required diagrams per feature.",
+        wts_4_title: "Submission Deadline",
+        wts_4_desc: "Your target completion date/time to ensure diagrams are ready for your SRS/SDS submission.",
+
+        // Steps
+        step_badge: "Our Process",
+        step_title: "4 streamlined steps from code to compliant diagrams",
+        step_desc: "Transparent and predictable at every milestone.",
+        step_1_title: "Send Repo & Brief",
+        step_1_desc: "Message on Zalo with your code link/zip, assignment brief, and diagram checklist.",
+        step_2_title: "Confirm & Quote",
+        step_2_desc: "We scan your code structure, align on actors/flows, and provide a fixed quote with delivery deadline.",
+        step_3_title: "Pay via QR",
+        step_3_desc: "Fast, secure bank transfer via VietQR. You receive immediate order confirmation.",
+        step_4_title: "Receive .drawio & PNG",
+        step_4_desc: "Receive editable .drawio source files + crisp PNGs, accompanied by flow explanations for your defense.",
+
+        // Before After
+        ba_badge: "Visual Comparison",
+        ba_title: "Common Student / AI Mistakes vs VeriDraw Standard",
+        ba_desc: "Most students lose points due to sloppy AI prompts or invalid UML syntax. Here is how we normalize diagrams:",
+        ba_before_label: "Common Mistakes (Before)",
+        ba_after_label: "VeriDraw Standard (After)",
+        ba_usecase_before_note: "Result: Defense committees penalize fundamental software engineering notation errors immediately.",
+        ba_usecase_after_note: "Result: Crisp diagrams, verified logic, full confidence defending code implementation.",
+
+        // Demo
+        demo_badge: "Demo Gallery",
+        demo_title: "Real Case Study Gallery (29 Diagrams)",
+        demo_desc: "Explore 29 verified diagrams extracted from an active open-source case study (1,054 files, 153k LOC) with 0 geometric crossing errors.",
+        demo_cta_title: "Explore the full 29 sample diagram gallery",
+        demo_cta_desc: "Includes high-resolution PNG renders and downloadable XML Draw.io sources to inspect fidelity before ordering.",
+        demo_cta_btn: "Open Demo Gallery (29 Diagrams)",
+
+        // Transparency
+        trans_badge: "Academic Integrity",
+        trans_title: "Transparency Policy & Genuine Review Commitment",
+        trans_desc: "We strictly uphold the rule: No fabricated reviews, no inflated client metrics. Our reputation relies on verifiable technical proof.",
+        trans_case_title: "Verified Capability (Real Case Study)",
+        trans_case_desc: "All 29 gallery diagrams originate from LMSERP-OneWorld (Laravel + Filament v3). Independently validated with geometry verification scripts: 0 crossing violations in activity diagrams, 100% code entity match.",
+        trans_feed_title: "Collecting Semester Student Reviews",
+        trans_feed_desc: "Genuine feedback from students defending SWP391 and SEP490 this semester is being compiled following final defense sessions (with team consent). We do not fake testimonials.",
+        trans_feed_status: "Compiling post-defense student reviews",
+
+        // FAQ
+        faq_badge: "Got Questions?",
+        faq_title: "Frequently Asked Questions (FAQ)",
+        faq_desc: "Everything you need to know about code privacy, lecturer warranty, and delivery.",
+        faq_q1: "1. Is our student repository kept private and secure?",
+        faq_a1: "100% strictly confidential. We guarantee your code is never shared, leaked, or repurposed for any other project. Code is inspected solely for extracting models/controllers to draw diagrams and is deleted upon delivery.",
+        faq_q2: "2. What is the standard turnaround time?",
+        faq_a2: "Standard delivery is 24–48 hours depending on repo scale and diagram quantity. Comprehensive project bundles (10+ diagrams) take 2–3 days. Exact delivery deadlines are committed prior to payment.",
+        faq_q3: "3. Will you fix diagrams if our lecturer flags notation errors?",
+        faq_a3: "100% FREE REVISIONS. If your lecturer flags any OMG UML notation defect or draw.io template non-compliance, we fix it immediately at no cost. Each order also includes 1 complimentary logic update revision.",
+        faq_q4: "4. Do you accept 24-hour rush orders?",
+        faq_a4: "YES. We accept rush orders with a +40% priority surcharge for teams facing imminent deadlines. Rush orders receive top priority in our queue. Message on Zalo with 'RUSH 24H'.",
+        faq_q5: "5. Do you offer full capstone completion or ghostwriting?",
+        faq_a5: "NO. We strictly observe academic integrity: No ghostwriting, no taking exams, no building entire projects for hire. We provide specialized technical diagramming extracted from your own working code.",
+
+        // Bottom CTA & Footer
+        bottom_cta_title_1: "Avoid losing vital grades",
+        bottom_cta_title_2: "due to sloppy diagrams and invalid notation.",
+        bottom_cta_desc: "Send your repo link and required diagrams via Zalo for a quick 15-minute consultation, fixed transparent quote, and editable .drawio deliverables.",
+        bottom_cta_btn: "Message on Zalo for Quote",
+        footer_summary: "Professional code-to-UML and ERD review & drawing service for university students.",
+        footer_affiliation_notice: "Independent service, not affiliated with FPT University.",
+        footer_legal_detail: "We are an independent technical consulting service providing educational reference diagrams extracted from student codebases. All trademarks belong to their respective owners.",
+        sticky_label: "Min order 150k VND",
+        sticky_sub: "1 Free Revision Included",
+        sticky_cta: "Zalo Message"
+      }
+    };
+
+    let currentLang = 'vi';
+
+    /* =========================================================
+     * I18N SWITCHER
+     * ========================================================= */
+    function setLanguage(lang) {
+      if (!TRANSLATIONS[lang]) return;
+      currentLang = lang;
+      localStorage.setItem('lang', lang);
+
+      const viBtn = document.getElementById('lang-vi-btn');
+      const enBtn = document.getElementById('lang-en-btn');
+
+      if (lang === 'vi') {
+        viBtn.className = "px-2.5 py-1 rounded-lg transition-all duration-200 shadow-xs bg-white text-brand-600 dark:bg-slate-900 dark:text-brand-400 font-bold";
+        viBtn.setAttribute('aria-pressed', 'true');
+        enBtn.className = "px-2.5 py-1 rounded-lg transition-all duration-200 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white";
+        enBtn.setAttribute('aria-pressed', 'false');
+        document.documentElement.lang = 'vi';
+      } else {
+        enBtn.className = "px-2.5 py-1 rounded-lg transition-all duration-200 shadow-xs bg-white text-brand-600 dark:bg-slate-900 dark:text-brand-400 font-bold";
+        enBtn.setAttribute('aria-pressed', 'true');
+        viBtn.className = "px-2.5 py-1 rounded-lg transition-all duration-200 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white";
+        viBtn.setAttribute('aria-pressed', 'false');
+        document.documentElement.lang = 'en';
+      }
+
+      document.querySelectorAll('[data-i18n]').forEach(function (el) {
+        const key = el.getAttribute('data-i18n');
+        if (TRANSLATIONS[lang][key]) {
+          el.innerHTML = TRANSLATIONS[lang][key];
+        }
+      });
+
+      calculatePrice();
+    }
+
+    /* =========================================================
+     * DARK MODE HANDLER
+     * ========================================================= */
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      updateThemeIcons(isDark);
+    }
+
+    function updateThemeIcons(isDark) {
+      const sunIcon = document.getElementById('theme-icon-sun');
+      const moonIcon = document.getElementById('theme-icon-moon');
+      if (isDark) {
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+      } else {
+        sunIcon.classList.add('hidden');
+        moonIcon.classList.remove('hidden');
+      }
+    }
+
+    (function initTheme() {
+      const isDark = document.documentElement.classList.contains('dark');
+      updateThemeIcons(isDark);
+
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+        if (!localStorage.getItem('theme')) {
+          if (e.matches) {
+            document.documentElement.classList.add('dark');
+            updateThemeIcons(true);
+          } else {
+            document.documentElement.classList.remove('dark');
+            updateThemeIcons(false);
+          }
+        }
+      });
+    })();
+
+    /* =========================================================
+     * MOBILE NAVIGATION TOGGLE
+     * ========================================================= */
+    function toggleMobileMenu() {
+      const nav = document.getElementById('mobile-nav');
+      nav.classList.toggle('hidden');
+    }
+
+    /* =========================================================
+     * BEFORE / AFTER TAB SWITCHER
+     * ========================================================= */
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(function(el) {
+        el.classList.remove('active');
+      });
+
+      ['usecase', 'sequence', 'class'].forEach(function(id) {
+        const btn = document.getElementById('tab-btn-' + id);
+        if (id === tabId) {
+          btn.className = "px-5 py-2.5 rounded-xl bg-brand-600 text-white shadow-xs font-bold transition";
+        } else {
+          btn.className = "px-5 py-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition";
+        }
+      });
+
+      const target = document.getElementById('tab-' + tabId);
+      if (target) {
+        target.classList.add('active');
+      }
+    }
+
+    /* =========================================================
+     * FAQ ACCORDION HANDLER
+     * ========================================================= */
+    function toggleFaq(index) {
+      const ans = document.getElementById('faq-ans-' + index);
+      const icon = document.getElementById('faq-icon-' + index);
+      const btn = document.getElementById('faq-btn-' + index);
+      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+
+      if (isExpanded) {
+        ans.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+        btn.setAttribute('aria-expanded', 'false');
+      } else {
+        ans.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    }
+
+    /* =========================================================
+     * DYNAMIC STUDIO PREVIEWS (HERO CANVAS TABS)
+     * ========================================================= */
+    const STUDIO_DATA = {
+      sequence: {
+        file: "app/Services/EnrollmentService.php:84",
+        code: `<span class="text-purple-400 font-semibold">public function</span> <span class="text-blue-400 font-semibold">verifyTuitionAndEnroll</span>(Student <span class="text-emerald-400">$s</span>) {<br>&nbsp;&nbsp;<span class="text-slate-400">$bal</span> = <span class="text-yellow-300">Wallet</span>::<span class="text-blue-400">getBalance</span>(<span class="text-emerald-400">$s</span>-&gt;id);<br>&nbsp;&nbsp;<span class="text-purple-400">if</span> (<span class="text-slate-400">$bal</span> &gt;= <span class="text-orange-400">5000000</span>) { <span class="text-emerald-400">$this</span>-&gt;confirm(); }<br>}`,
+        title: "Sequence Diagram &bull; Controller &rarr; Service &rarr; DB",
+        mockup: `
+          <div class="grid grid-cols-3 text-center gap-2">
+            <div class="p-1.5 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-lg font-bold text-slate-800 dark:text-slate-200 shadow-xs">:Student</div>
+            <div class="p-1.5 border border-brand-400 dark:border-brand-700 bg-brand-50 dark:bg-slate-800 rounded-lg font-bold text-brand-700 dark:text-brand-300 shadow-xs">:EnrollController</div>
+            <div class="p-1.5 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 rounded-lg font-bold text-slate-800 dark:text-slate-200 shadow-xs">:TuitionService</div>
+          </div>
+          <div class="space-y-1.5 text-[10px] text-slate-600 dark:text-slate-300 pt-1 font-mono">
+            <div class="flex items-center justify-between border-b border-dashed border-slate-200 dark:border-slate-800 pb-1">
+              <span class="text-brand-700 dark:text-brand-300 font-semibold">1: register() &rarr;</span>
+              <span class="text-emerald-600 dark:text-emerald-400 font-semibold">sync call</span>
+            </div>
+            <div class="flex items-center justify-between border-b border-dashed border-slate-200 dark:border-slate-800 pb-1">
+              <span>&nbsp;&nbsp;1.1: verifyBalance() &rarr;</span>
+              <span class="text-slate-500 bg-slate-200/60 dark:bg-slate-800 px-1 rounded">alt [bal &ge; fee]</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-slate-500">&larr; 1.2: return receipt</span>
+              <span class="text-slate-500">dashed reply</span>
+            </div>
+          </div>
+        `
+      },
+      usecase: {
+        file: "routes/web.php & app/Http/Controllers/StudentController.php",
+        code: `<span class="text-purple-400 font-semibold">Route</span>::<span class="text-blue-400 font-semibold">middleware</span>([<span class="text-yellow-300">'auth:student'</span>])-&gt;<span class="text-blue-400 font-semibold">group</span>(<span class="text-purple-400">function</span>() {<br>&nbsp;&nbsp;<span class="text-purple-400">Route</span>::<span class="text-blue-400">post</span>(<span class="text-green-300">'/courses/enroll'</span>, [EnrollController::<span class="text-purple-400">class</span>, <span class="text-green-300">'store'</span>]);<br>&nbsp;&nbsp;<span class="text-purple-400">Route</span>::<span class="text-blue-400">get</span>(<span class="text-green-300">'/schedules'</span>, [ScheduleController::<span class="text-purple-400">class</span>, <span class="text-green-300">'index'</span>]);<br>});`,
+        title: "Use Case Diagram &bull; Boundary &laquo;include&raquo; &laquo;extend&raquo;",
+        mockup: `
+          <div class="border border-brand-300 dark:border-brand-800 rounded-xl p-2.5 bg-white/80 dark:bg-slate-900/80 space-y-2">
+            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-1">
+              <span class="font-bold text-brand-700 dark:text-brand-300 text-[10px]">System Boundary: Academic Subsystem</span>
+              <span class="text-slate-400 text-[9px]">Actor: Student</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-[10px] text-center font-mono">
+              <div class="p-1 rounded-full border border-brand-400 bg-brand-50 dark:bg-slate-800 text-brand-800 dark:text-brand-200">
+                (Đăng ký môn học)
+              </div>
+              <div class="p-1 rounded-full border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                (Xem thời khóa biểu)
+              </div>
+            </div>
+            <div class="text-[9px] text-slate-500 flex items-center justify-center gap-1">
+              <span>(Đăng ký môn học)</span>
+              <span class="text-brand-600 font-bold">&dash;&dash;&laquo;include&raquo;&dash;&gt;</span>
+              <span>(Thanh toán học phí)</span>
+            </div>
+          </div>
+        `
+      },
+      erd: {
+        file: "database/migrations/2026_01_create_enrollments_table.php",
+        code: `<span class="text-purple-400 font-semibold">Schema</span>::<span class="text-blue-400 font-semibold">create</span>(<span class="text-green-300">'enrollments'</span>, <span class="text-purple-400">function</span> (Blueprint <span class="text-emerald-400">$t</span>) {<br>&nbsp;&nbsp;<span class="text-emerald-400">$t</span>-&gt;<span class="text-blue-400">id</span>();<br>&nbsp;&nbsp;<span class="text-emerald-400">$t</span>-&gt;<span class="text-blue-400">foreignId</span>(<span class="text-green-300">'student_id'</span>)-&gt;<span class="text-blue-400">constrained</span>();<br>&nbsp;&nbsp;<span class="text-emerald-400">$t</span>-&gt;<span class="text-blue-400">foreignId</span>(<span class="text-green-300">'course_id'</span>)-&gt;<span class="text-blue-400">constrained</span>();<br>});`,
+        title: "Conceptual ERD &bull; Crow's Foot Cardinalities",
+        mockup: `
+          <div class="grid grid-cols-2 gap-3 text-[10px] font-mono">
+            <div class="border border-slate-300 dark:border-slate-700 rounded-lg p-2 bg-white dark:bg-slate-800">
+              <div class="font-bold border-b border-slate-200 dark:border-slate-700 pb-1 text-slate-900 dark:text-white">STUDENTS</div>
+              <div class="text-[9px] text-slate-500 pt-1">PK: id (bigint)<br>name: string<br>student_code: varchar</div>
+            </div>
+            <div class="border border-brand-300 dark:border-brand-800 rounded-lg p-2 bg-brand-50/50 dark:bg-slate-800">
+              <div class="font-bold border-b border-brand-200 dark:border-brand-700 pb-1 text-brand-900 dark:text-brand-200">ENROLLMENTS</div>
+              <div class="text-[9px] text-slate-500 pt-1">PK: id (bigint)<br>FK: student_id<br>FK: course_id</div>
+            </div>
+          </div>
+          <div class="text-[9px] text-center text-brand-600 dark:text-brand-400 font-bold font-mono">
+            STUDENTS ||&dash;&dash;&dash;&dash;&lt; ENROLLMENTS (Quan hệ 1 - Nhiều chuẩn Crow's Foot)
+          </div>
+        `
+      }
+    };
+
+    function setStudioPreview(mode) {
+      const data = STUDIO_DATA[mode];
+      if (!data) return;
+
+      document.getElementById('studio-code-file').textContent = data.file;
+      document.getElementById('studio-code-content').innerHTML = data.code;
+      document.getElementById('studio-diagram-title').textContent = data.title;
+      document.getElementById('studio-diagram-body').innerHTML = data.mockup;
+
+      ['seq', 'uc', 'erd'].forEach(k => {
+        const btn = document.getElementById('studio-tab-' + k);
+        if ((mode === 'sequence' && k === 'seq') || (mode === 'usecase' && k === 'uc') || (mode === 'erd' && k === 'erd')) {
+          btn.className = "px-2.5 py-1 rounded-md bg-brand-100 text-brand-700 dark:bg-brand-950 dark:text-brand-300 font-bold transition";
+        } else {
+          btn.className = "px-2.5 py-1 rounded-md text-slate-500 hover:text-slate-900 dark:hover:text-white transition";
+        }
+      });
+    }
+
+    /* =========================================================
+     * INTERACTIVE PRICING CALCULATOR LOGIC
+     * ========================================================= */
+    const orderState = {
+      review: 0,
+      usecase: 2,
+      activity: 1,
+      sequence: 1,
+      state: 0,
+      class: 0,
+      erd: 0,
+      rush: false
+    };
+
+    function applyPackagePreset(type) {
+      if (type === 'audit') {
+        orderState.review = 8;
+        orderState.usecase = 0;
+        orderState.activity = 0;
+        orderState.sequence = 0;
+        orderState.state = 0;
+        orderState.class = 0;
+        orderState.erd = 0;
+        showToast("Đã chọn gói Soát Lỗi Hội Đồng (8 sơ đồ review)");
+      } else if (type === 'swp') {
+        orderState.review = 0;
+        orderState.usecase = 3;
+        orderState.erd = 1;
+        orderState.activity = 2;
+        orderState.sequence = 2;
+        orderState.state = 0;
+        orderState.class = 0;
+        showToast("Đã chọn gói Đồ Án SWP391 (Combo 8 sơ đồ chuẩn)");
+      } else if (type === 'capstone') {
+        orderState.review = 0;
+        orderState.usecase = 4;
+        orderState.erd = 2;
+        orderState.class = 1;
+        orderState.activity = 3;
+        orderState.sequence = 3;
+        orderState.state = 1;
+        showToast("Đã chọn gói Khóa Luận Capstone (SEP490)");
+      }
+
+      ['review', 'usecase', 'activity', 'sequence', 'state', 'class', 'erd'].forEach(k => {
+        const el = document.getElementById('qty-' + k);
+        if (el) el.textContent = orderState[k];
+      });
+
+      calculatePrice();
+      scrollToCalc();
+    }
+
+    function scrollToCalc() {
+      const el = document.getElementById('calculator');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function changeQty(item, delta) {
+      const current = orderState[item] || 0;
+      const next = Math.max(0, current + delta);
+      orderState[item] = next;
+      const display = document.getElementById('qty-' + item);
+      if (display) display.textContent = next;
+      calculatePrice();
+    }
+
+    function calculatePrice() {
+      const rushToggle = document.getElementById('rush-toggle');
+      orderState.rush = rushToggle ? rushToggle.checked : false;
+
+      let totalCount = 0;
+      let rawTotal = 0;
+
+      for (const [key, qty] of Object.entries(orderState)) {
+        if (key !== 'rush' && CONFIG.prices[key]) {
+          totalCount += qty;
+          rawTotal += qty * CONFIG.prices[key];
+        }
+      }
+
+      let discountAmount = 0;
+      if (totalCount >= CONFIG.bulkThreshold) {
+        discountAmount = Math.round(rawTotal * CONFIG.bulkDiscountRate);
+      }
+
+      let afterDiscount = rawTotal - discountAmount;
+
+      let rushAmount = 0;
+      if (orderState.rush && afterDiscount > 0) {
+        rushAmount = Math.round(afterDiscount * CONFIG.rushMultiplier);
+      }
+
+      let subtotal = afterDiscount + rushAmount;
+
+      let finalTotal = subtotal;
+      let minWarning = false;
+      if (totalCount > 0 && subtotal < CONFIG.minOrderVnd) {
+        finalTotal = CONFIG.minOrderVnd;
+        minWarning = true;
+      }
+
+      // Progress bar towards 150k min order
+      const progBar = document.getElementById('min-progress-bar');
+      const progText = document.getElementById('min-progress-text');
+      if (progBar && progText) {
+        const pct = Math.min(100, Math.round((subtotal / CONFIG.minOrderVnd) * 100));
+        progBar.style.width = pct + '%';
+        if (pct >= 100) {
+          progBar.className = "h-full bg-emerald-500 transition-all duration-300";
+          progText.textContent = "Đã đạt chuẩn";
+          progText.className = "font-bold text-emerald-600";
+        } else {
+          progBar.className = "h-full bg-amber-500 transition-all duration-300";
+          progText.textContent = `${subtotal.toLocaleString('vi-VN')}đ / 150.000đ`;
+          progText.className = "font-bold text-amber-600";
+        }
+      }
+
+      const countEl = document.getElementById('sum-count');
+      const rawEl = document.getElementById('sum-raw');
+      const discRow = document.getElementById('row-discount');
+      const discEl = document.getElementById('sum-discount');
+      const rushRow = document.getElementById('row-rush');
+      const rushEl = document.getElementById('sum-rush');
+      const minWarnEl = document.getElementById('min-order-note');
+      const finalEl = document.getElementById('sum-final');
+
+      if (countEl) countEl.textContent = totalCount + (currentLang === 'vi' ? ' sơ đồ' : ' diagrams');
+      if (rawEl) rawEl.textContent = rawTotal.toLocaleString('vi-VN') + 'đ';
+
+      if (discountAmount > 0) {
+        discRow.classList.remove('hidden');
+        discEl.textContent = '-' + discountAmount.toLocaleString('vi-VN') + 'đ';
+      } else {
+        discRow.classList.add('hidden');
+      }
+
+      if (rushAmount > 0) {
+        rushRow.classList.remove('hidden');
+        rushEl.textContent = '+' + rushAmount.toLocaleString('vi-VN') + 'đ';
+      } else {
+        rushRow.classList.add('hidden');
+      }
+
+      if (minWarning) {
+        minWarnEl.classList.remove('hidden');
+      } else {
+        minWarnEl.classList.add('hidden');
+      }
+
+      if (finalEl) finalEl.textContent = finalTotal.toLocaleString('vi-VN') + 'đ';
+    }
+
+    /* =========================================================
+     * SONNER-STYLE FLOATING TOAST SYSTEM
+     * ========================================================= */
+    function showToast(message) {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      toast.className = "pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-2xl border border-slate-800 dark:border-slate-200 text-xs font-semibold transform transition-all duration-300 translate-y-2 opacity-0";
+      toast.innerHTML = `
+        <svg class="w-4 h-4 text-emerald-400 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+        </svg>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-2', 'opacity-0');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    function sendCalculatedOrder() {
+      let itemsSummary = [];
+      if (orderState.review > 0) itemsSummary.push(`Review: ${orderState.review}`);
+      if (orderState.usecase > 0) itemsSummary.push(`Use Case: ${orderState.usecase}`);
+      if (orderState.activity > 0) itemsSummary.push(`Activity: ${orderState.activity}`);
+      if (orderState.sequence > 0) itemsSummary.push(`Sequence: ${orderState.sequence}`);
+      if (orderState.state > 0) itemsSummary.push(`State: ${orderState.state}`);
+      if (orderState.class > 0) itemsSummary.push(`Class: ${orderState.class}`);
+      if (orderState.erd > 0) itemsSummary.push(`ERD: ${orderState.erd}`);
+
+      const rushText = orderState.rush ? "(Có gấp 24h)" : "(Bình thường)";
+      const finalTotal = document.getElementById('sum-final').textContent;
+
+      let msg = "";
+      if (currentLang === 'vi') {
+        msg = `Chào VeriDraw (veridraw.me), mình muốn đặt vẽ/review sơ đồ cho đồ án:\n` +
+              `- Danh sách sơ đồ: ${itemsSummary.join(', ') || 'Chưa chọn cụ thể'}\n` +
+              `- Tiến độ: ${rushText}\n` +
+              `- Chi phí dự toán trên web: ${finalTotal}\n` +
+              `Nhờ bạn xem qua repo và tư vấn giúp mình nhé!`;
+      } else {
+        msg = `Hello VeriDraw (veridraw.me), I'd like to request diagram review & drawing for our project:\n` +
+              `- Selected diagrams: ${itemsSummary.join(', ') || 'Custom inquiry'}\n` +
+              `- Delivery speed: ${rushText}\n` +
+              `- Estimated web quote: ${finalTotal}\n` +
+              `Please review our repo and advise!`;
+      }
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(msg);
+        showToast(currentLang === 'vi' 
+          ? "Đã sao chép nội dung dự toán! Bạn có thể dán trực tiếp vào tin nhắn Zalo." 
+          : "Estimated order copied to clipboard! You can paste it directly in Zalo chat.");
+      }
+      window.open(CONFIG.zaloLink, '_blank');
+    }
+
+    /* =========================================================
+     * SCROLL PROGRESS & REVEAL SYSTEM
+     * ========================================================= */
+    window.addEventListener('scroll', function () {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      const bar = document.getElementById('scroll-progress');
+      if (bar) bar.style.width = scrolled + '%';
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const savedLang = localStorage.getItem('lang') || 'vi';
+      setLanguage(savedLang);
+      calculatePrice();
+
+      document.querySelectorAll('.reveal-item').forEach(el => observer.observe(el));
+    });
+  </script>
+
 </body>
 </html>

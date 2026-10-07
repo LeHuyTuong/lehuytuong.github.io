@@ -1,0 +1,28 @@
+<mxfile host="drawio" agent="dsh diagram-builder" version="31.4.5">
+  <diagram id="Use-case-diagram" name="Use case diagram">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="subject" value="LMSERP OneWorld" style="swimlane;whiteSpace=wrap;html=1;startSize=20;" vertex="1" parent="1"><mxGeometry x="198.5" y="24" width="240" height="680" as="geometry"/></mxCell>
+        <mxCell id="uc_UC01" value="Login" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="subject"><mxGeometry x="30" y="50" width="180" height="46" as="geometry"/></mxCell>
+        <mxCell id="uc_UC02" value="Logout" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="subject"><mxGeometry x="30" y="124" width="180" height="46" as="geometry"/></mxCell>
+        <mxCell id="uc_UC03" value="Change&lt;br&gt;Password" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="subject"><mxGeometry x="30" y="198" width="180" height="52" as="geometry"/></mxCell>
+        <mxCell id="uc_UC08" value="Manage&lt;br&gt;Class Rooms" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="subject"><mxGeometry x="30" y="278" width="180" height="52" as="geometry"/></mxCell>
+        <mxCell id="uc_UC09" value="View&lt;br&gt;Attendance" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="subject"><mxGeometry x="30" y="358" width="180" height="52" as="geometry"/></mxCell>
+        <mxCell id="uc_UC10" value="Take&lt;br&gt;Attendance" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="subject"><mxGeometry x="30" y="438" width="180" height="52" as="geometry"/></mxCell>
+        <mxCell id="uc_UC19" value="Manage Session&lt;br&gt;Journals" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="subject"><mxGeometry x="30" y="518" width="180" height="52" as="geometry"/></mxCell>
+        <mxCell id="uc_UC20" value="Manage Teaching&lt;br&gt;Work Logs" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="subject"><mxGeometry x="30" y="598" width="180" height="52" as="geometry"/></mxCell>
+        <mxCell id="actor_Teacher" value="Teacher" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;align=right;" vertex="1" parent="1"><mxGeometry x="27.5" y="337.5" width="40" height="70" as="geometry"/></mxCell>
+        <mxCell id="assoc1" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.33;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_Teacher" target="uc_UC01"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="assoc2" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.33;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_Teacher" target="uc_UC02"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="assoc3" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.33;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_Teacher" target="uc_UC03"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="assoc4" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.33;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_Teacher" target="uc_UC08"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="assoc5" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.33;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_Teacher" target="uc_UC09"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="assoc6" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.33;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_Teacher" target="uc_UC10"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="assoc7" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.33;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_Teacher" target="uc_UC19"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="assoc8" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.33;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_Teacher" target="uc_UC20"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

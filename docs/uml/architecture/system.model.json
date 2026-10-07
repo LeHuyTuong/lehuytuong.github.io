@@ -1,0 +1,15 @@
+{
+  "system": "LMSERP OneWorld",
+  "fe": { "name": "Web App", "app": "Filament Admin Panel" },
+  "servers": [
+    {
+      "name": "Backend",
+      "layers": ["Controller", "Service", "Repository", "Entity"],
+      "db": "MySQL"
+    }
+  ],
+  "thirdParty": [
+    { "name": "Google Drive API", "from": "Backend", "protocol": "HTTPS", "layer": "Service" },
+    { "name": "GitHub API", "from": "Backend", "protocol": "HTTPS", "layer": "Service" }
+  ]
+}

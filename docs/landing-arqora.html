@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Veridraw — Turn your vibe-built codebase into verified SRS/UML</title>
+<style>
+:root{
+  --bg:#f7f7f5; --panel:#fff; --ink:#1c1c1e; --muted:#6b6b70;
+  --line:#e3e3df; --accent:#1f5fd0; --ok:#1a7f45;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:980px;margin:0 auto;padding:0 22px}
+header{padding:80px 0 54px;border-bottom:1px solid var(--line)}
+h1{font-size:42px;line-height:1.15;margin:0 0 14px;letter-spacing:-.02em}
+.lead{font-size:21px;color:#3a3a3d;margin:0 0 26px;font-weight:400}
+code{background:#f2f2ef;padding:1.5px 6px;border-radius:4px;font-size:13.5px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+ul{margin:0 0 6px;padding-left:22px}
+li{margin:6px 0}
+ul li code{background:#f2f2ef;padding:1px 5px;border-radius:3px;font-size:12.5px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:42px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px}
+.card .k{font-size:12px;text-transform:uppercase;color:var(--muted);letter-spacing:.05em;font-weight:600}
+.card .v{font-size:28px;font-weight:650;margin:6px 0}
+.mt70{margin-top:70px}
+footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Veridraw</h1>
+  <p class="lead">We read your real vibe-built code <em>(Filament / Laravel / Next.js)</em> and draw
+  use case, activity, sequence, class, ERD and state diagrams that <strong>actually match what runs</strong> —
+  not what AI guesses.</p>
+  <p><a href="mailto:founder@veridraw.me">founder@veridraw.me</a> &middot;
+     POC repo: <code>LMSERP-OneWorld</code> (1.054 files · 153.417 LOC)</p>
+</header>
+
+<h2>Why us?</h2>
+<p>Your code exists, but nobody — not even you — remembers what it does.
+   You vibe-coded it fast to ship, now it needs documentation.
+   We don't invent a system that never existed. We read <strong>your</strong> code and draw
+   <strong>your</strong> system, dead accurate.</p>
+
+<div class="cards">
+  <div class="card"><div class="k">Diagrams</div><div class="v">29+</div><div>verified on a real repo</div></div>
+  <div class="card"><div class="k">Machine time</div><div class="v">0.12%</div><div>rest is reading code + fixing layout</div></div>
+  <div class="card"><div class="k">Legal risk</div><div class="v">≈ 0</div><div>code is yours — you submit</div></div>
+</div>
+
+<h2>What we deliver</h2>
+<ul>
+  <li><strong>Use case</strong> — actors from real enums (<code>app/Enums/Role.php:7</code>), not guessed</li>
+  <li><strong>Activity</strong> — swimlane flow with <em>[Yes]/[No]</em> decision diamonds</li>
+  <li><strong>Sequence + Class</strong> — controller→service→repository, correct UML</li>
+  <li><strong>Conceptual ERD</strong> — crow's foot, no dead attributes</li>
+  <li><strong>State machine</strong> — from real <code>enum</code> lifecycle in your code</li>
+  <li><strong>Context (DFD L0)</strong> — one circle for the system</li>
+</ul>
+<ul>
+  <li>All diagrams shipped as <strong>.drawio</strong> + <strong>PNG</strong> — editable by you</li>
+  <li>Verification gate: <code>gen → check → verify_geometry.py</code> independent checker</li>
+</ul>
+
+<h2>Process (manual, until we hit 2 paid customers)</h2>
+<ol>
+  <li>You share repo (GitHub link or <code>.zip</code>). We confirm ownership.</li>
+  <li>We scan → <code>inventory.json</code> + <code>flows.json</code>.</li>
+  <li>We draw 1 diagram set — you review in 10 min call.</li>
+  <li>Edits included. Final delivery in 3-4h wall-clock.</li>
+</ol>
+
+<h2>Pricing pilot (test phase)</h2>
+<table>
+  <thead><tr><th>Scope</th><th>Price (VND)</th></tr></thead>
+  <tbody>
+    <tr><td>3 core use cases + activity + sequence</td><td>2,000,000₫</td></tr>
+    <tr><td>Full set (all 6 use cases + ERD + state)</td><td>5,000,000₫</td></tr>
+  </tbody>
+</table>
+<p class="mt70"><small>We don't auto-scale. We stop at 2 paid customers to validate fit first.</small></p>
+
+<footer>
+  <p>Business email: <a href="mailto:founder@veridraw.me">founder@veridraw.me</a> ·
+     Landing page is static HTML (no scripts, no forms, no tracker).
+     Built as a single static HTML file — no build step, no dependencies.</p>
+</footer>
+
+</div>
+</body>
+</html>

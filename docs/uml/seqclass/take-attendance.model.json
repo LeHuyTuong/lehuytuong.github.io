@@ -1,0 +1,260 @@
+{
+  "feature": "Take Attendance",
+  "activity": "/Volumes/SSD/Dev/active/startup-srs/docs/uml/activity/take-attendance.drawio",
+  "level": "subsystem",
+  "style": "REST",
+  "actor": "Teacher",
+  "boundary": "Web App",
+  "external": [
+    "Attendance Service",
+    "Permission Service"
+  ],
+  "database": "MySQL",
+  "steps": [
+    {
+      "call": "POST /livewire/update",
+      "from": "Teacher",
+      "to": "Web App",
+      "step": "Open session attendance sheet"
+    },
+    {
+      "call": "«in-process» roster(user, sessionId)",
+      "from": "Web App",
+      "to": "Attendance Service",
+      "step": "List enrolled students"
+    },
+    {
+      "reply": "enrolled students with current marks",
+      "from": "Attendance Service",
+      "to": "Web App",
+      "step": "Load permission rules for current user"
+    },
+    {
+      "call": "«in-process» canOpen(user, session)",
+      "from": "Web App",
+      "to": "Permission Service",
+      "step": "Load permission rules for current user"
+    },
+    {
+      "alt": [
+        {
+          "guard": "Session cancelled?",
+          "steps": [
+            {
+              "reply": "false — cancelled session",
+              "from": "Permission Service",
+              "to": "Web App",
+              "step": "Show locked attendance form"
+            }
+          ]
+        },
+        {
+          "guard": "Session in future?",
+          "steps": [
+            {
+              "reply": "false — attendance is not a guess",
+              "from": "Permission Service",
+              "to": "Web App"
+            }
+          ]
+        },
+        {
+          "guard": "Role is read-only?",
+          "steps": [
+            {
+              "reply": "false — manager or accountant",
+              "from": "Permission Service",
+              "to": "Web App"
+            }
+          ]
+        },
+        {
+          "guard": "Admin?",
+          "steps": [
+            {
+              "reply": "true — override the edit window",
+              "from": "Permission Service",
+              "to": "Web App",
+              "step": "Allow marking"
+            }
+          ]
+        },
+        {
+          "guard": "Staffs, window?",
+          "steps": [
+            {
+              "call": "«SQL» SELECT session_staff WHERE user_id = :user",
+              "from": "Permission Service",
+              "to": "MySQL"
+            },
+            {
+              "reply": "is a staff of THIS session",
+              "from": "MySQL",
+              "to": "Permission Service"
+            },
+            {
+              "reply": "true — inside the edit window",
+              "from": "Permission Service",
+              "to": "Web App",
+              "step": "Allow marking"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "call": "POST /livewire/update",
+      "from": "Teacher",
+      "to": "Web App",
+      "step": "Show editable attendance form"
+    },
+    {
+      "call": "«SQL» SELECT class_sessions WHERE id = :sessionId",
+      "from": "Web App",
+      "to": "MySQL",
+      "step": "Mark present, absent or late for each student"
+    },
+    {
+      "reply": "session row",
+      "from": "MySQL",
+      "to": "Web App"
+    },
+    {
+      "call": "«in-process» authorizeOpen(user, session)",
+      "from": "Web App",
+      "to": "Permission Service",
+      "step": "Mark present, absent or late for each student"
+    },
+    {
+      "alt": [
+        {
+          "guard": "Session still open?",
+          "steps": [
+            {
+              "reply": "may write",
+              "from": "Permission Service",
+              "to": "Web App"
+            }
+          ]
+        },
+        {
+          "guard": "else",
+          "steps": [
+            {
+              "reply": "403 Forbidden",
+              "from": "Permission Service",
+              "to": "Web App"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "call": "«in-process» saveBatch(user, class, changes)",
+      "from": "Web App",
+      "to": "Attendance Service",
+      "step": "Save attendance records"
+    },
+    {
+      "call": "«SQL» SELECT class_sessions WHERE class_room_id = :class AND id IN (...)",
+      "from": "Attendance Service",
+      "to": "MySQL",
+      "step": "Save attendance records"
+    },
+    {
+      "reply": "sessions",
+      "from": "MySQL",
+      "to": "Attendance Service"
+    },
+    {
+      "call": "«SQL» SELECT enrollments WHERE class_room_id = :class AND id IN (...)",
+      "from": "Attendance Service",
+      "to": "MySQL",
+      "step": "Save attendance records"
+    },
+    {
+      "reply": "enrollments",
+      "from": "MySQL",
+      "to": "Attendance Service"
+    },
+    {
+      "call": "«in-process» canMark(actor, session)",
+      "from": "Attendance Service",
+      "to": "Permission Service",
+      "step": "Save attendance records"
+    },
+    {
+      "reply": "true — memoized, 20 cells = 1 check",
+      "from": "Permission Service",
+      "to": "Attendance Service",
+      "step": "Save attendance records"
+    },
+    {
+      "call": "«SQL» SELECT attendances WHERE session_id IN (...) AND enrollment_id IN (...)",
+      "from": "Attendance Service",
+      "to": "MySQL",
+      "step": "Save attendance records"
+    },
+    {
+      "reply": "rows already written",
+      "from": "MySQL",
+      "to": "Attendance Service",
+      "step": "Save attendance records"
+    },
+    {
+      "opt": {
+        "guard": "Row changed or new?",
+        "steps": [
+          {
+            "call": "«SQL» UPDATE attendances SET deleted_at",
+            "from": "Attendance Service",
+            "to": "MySQL",
+            "step": "Save attendance records"
+          },
+          {
+            "call": "«SQL» INSERT attendances (...)",
+            "from": "Attendance Service",
+            "to": "MySQL",
+            "step": "Save attendance records"
+          }
+        ]
+      }
+    },
+    {
+      "reply": "saved, rejected, applied",
+      "from": "Attendance Service",
+      "to": "Web App",
+      "step": "Save attendance records"
+    },
+    {
+      "call": "«in-process» reloadRoster(sessionId)",
+      "from": "Web App",
+      "to": "Attendance Service",
+      "step": "Refresh attendance summary"
+    },
+    {
+      "call": "«SQL» SELECT attendances WHERE session_id = :sessionId",
+      "from": "Attendance Service",
+      "to": "MySQL",
+      "step": "Refresh attendance summary"
+    },
+    {
+      "reply": "fresh marks",
+      "from": "MySQL",
+      "to": "Attendance Service",
+      "step": "Refresh attendance summary"
+    },
+    {
+      "reply": "board with updated counts",
+      "from": "Attendance Service",
+      "to": "Web App",
+      "step": "Refresh attendance summary"
+    },
+    {
+      "reply": "attendance summary",
+      "from": "Web App",
+      "to": "Teacher",
+      "step": "View attendance summary"
+    }
+  ]
+}

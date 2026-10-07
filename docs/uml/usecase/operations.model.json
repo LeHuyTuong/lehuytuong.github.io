@@ -1,0 +1,222 @@
+{
+  "subject": {
+    "name": "LMSERP OneWorld"
+  },
+  "actors": [
+    {
+      "id": "RegisteredUser",
+      "name": "Registered User"
+    },
+    {
+      "id": "Administrator",
+      "name": "Administrator"
+    },
+    {
+      "id": "Manager",
+      "name": "Manager"
+    },
+    {
+      "id": "Teacher",
+      "name": "Teacher"
+    },
+    {
+      "id": "Assistant",
+      "name": "Assistant"
+    }
+  ],
+  "usecases": [
+    {
+      "id": "UC04",
+      "name": "Manage Students",
+      "evidence": [
+        "app/Policies/StudentPolicy.php"
+      ]
+    },
+    {
+      "id": "UC05",
+      "name": "Create Student",
+      "evidence": [
+        "app/Policies/StudentPolicy.php"
+      ]
+    },
+    {
+      "id": "UC06",
+      "name": "Edit Student",
+      "evidence": [
+        "app/Policies/StudentPolicy.php"
+      ]
+    },
+    {
+      "id": "UC07",
+      "name": "Manage Enrollments",
+      "evidence": [
+        "app/Policies/EnrollmentPolicy.php"
+      ]
+    },
+    {
+      "id": "UC08",
+      "name": "Manage Class Rooms",
+      "evidence": [
+        "app/Policies/ClassRoomPolicy.php"
+      ]
+    },
+    {
+      "id": "UC09",
+      "name": "View Attendance",
+      "evidence": [
+        "app/Policies/AttendancePolicy.php:45-63"
+      ]
+    },
+    {
+      "id": "UC10",
+      "name": "Take Attendance",
+      "evidence": [
+        "app/Services/Attendance/AttendancePermission.php:71-94"
+      ]
+    },
+    {
+      "id": "UC19",
+      "name": "Manage Session Journals",
+      "evidence": [
+        "app/Policies/SessionJournalPolicy.php"
+      ]
+    },
+    {
+      "id": "UC20",
+      "name": "Manage Teaching Work Logs",
+      "evidence": [
+        "app/Policies/TeachingWorkLogPolicy.php"
+      ]
+    },
+    {
+      "id": "UC21",
+      "name": "Manage Rooms",
+      "evidence": [
+        "app/Policies/RoomPolicy.php"
+      ]
+    },
+    {
+      "id": "UC22",
+      "name": "Manage Holidays",
+      "evidence": [
+        "app/Policies/HolidayPolicy.php"
+      ]
+    }
+  ],
+  "associations": [
+    {
+      "actor": "Administrator",
+      "usecase": "UC04"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC07"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC08"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC10"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC19"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC20"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC21"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC22"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC04"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC07"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC08"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC09"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC19"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC21"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC22"
+    },
+    {
+      "actor": "Teacher",
+      "usecase": "UC08"
+    },
+    {
+      "actor": "Teacher",
+      "usecase": "UC09"
+    },
+    {
+      "actor": "Teacher",
+      "usecase": "UC10"
+    },
+    {
+      "actor": "Teacher",
+      "usecase": "UC19"
+    },
+    {
+      "actor": "Teacher",
+      "usecase": "UC20"
+    },
+    {
+      "actor": "Assistant",
+      "usecase": "UC08"
+    },
+    {
+      "actor": "Assistant",
+      "usecase": "UC09"
+    },
+    {
+      "actor": "Assistant",
+      "usecase": "UC10"
+    },
+    {
+      "actor": "Assistant",
+      "usecase": "UC20"
+    }
+  ],
+  "includes": [],
+  "extends": [],
+  "generalizations": [
+    {
+      "child": "UC05",
+      "parent": "UC04"
+    },
+    {
+      "child": "UC06",
+      "parent": "UC04"
+    }
+  ],
+  "actorParents": {
+    "Administrator": "RegisteredUser",
+    "Manager": "RegisteredUser",
+    "Teacher": "RegisteredUser",
+    "Assistant": "RegisteredUser"
+  }
+}

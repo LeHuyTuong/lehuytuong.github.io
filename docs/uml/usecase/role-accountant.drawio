@@ -1,0 +1,36 @@
+<mxfile host="drawio" agent="dsh diagram-builder" version="31.4.5">
+  <diagram id="Use-case-diagram" name="Use case diagram">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="subject" value="LMSERP OneWorld" style="swimlane;whiteSpace=wrap;html=1;startSize=20;" vertex="1" parent="1"><mxGeometry x="249" y="24" width="538" height="856" as="geometry"/></mxCell>
+        <mxCell id="uc_UC07" value="Manage&lt;br&gt;Enrollments" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="subject"><mxGeometry x="30" y="50" width="171" height="52" as="geometry"/></mxCell>
+        <mxCell id="uc_UC09" value="View&lt;br&gt;Attendance" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="subject"><mxGeometry x="30" y="130" width="171" height="52" as="geometry"/></mxCell>
+        <mxCell id="uc_UC12" value="Review Charge&lt;br&gt;Proposals" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="subject"><mxGeometry x="30" y="210" width="171" height="52" as="geometry"/></mxCell>
+        <mxCell id="uc_UC13" value="Manage Charges" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="subject"><mxGeometry x="30" y="298" width="171" height="46" as="geometry"/></mxCell>
+        <mxCell id="uc_UC14" value="Run Monthly&lt;br&gt;Charge Cycle" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="subject"><mxGeometry x="30" y="372" width="171" height="52" as="geometry"/></mxCell>
+        <mxCell id="uc_UC15" value="Manage&lt;br&gt;Payments" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="subject"><mxGeometry x="30" y="452" width="171" height="52" as="geometry"/></mxCell>
+        <mxCell id="uc_UC16" value="Collect&lt;br&gt;Payment" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="subject"><mxGeometry x="30" y="532" width="171" height="52" as="geometry"/></mxCell>
+        <mxCell id="uc_UC19" value="Record Payment" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="subject"><mxGeometry x="337" y="535" width="171" height="46" as="geometry"/></mxCell>
+        <mxCell id="uc_UC20" value="Record Deposit" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="subject"><mxGeometry x="30" y="620" width="171" height="46" as="geometry"/></mxCell>
+        <mxCell id="uc_UC17" value="Manage Tax&lt;br&gt;Invoices" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="subject"><mxGeometry x="30" y="694" width="171" height="52" as="geometry"/></mxCell>
+        <mxCell id="uc_UC18" value="Issue Tax&lt;br&gt;Invoice" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="subject"><mxGeometry x="30" y="774" width="171" height="52" as="geometry"/></mxCell>
+        <mxCell id="actor_Accountant" value="Accountant" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;align=right;" vertex="1" parent="1"><mxGeometry x="37" y="427" width="40" height="70" as="geometry"/></mxCell>
+        <mxCell id="assoc1" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.33;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_Accountant" target="uc_UC07"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="assoc2" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.33;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_Accountant" target="uc_UC09"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="assoc3" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.33;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_Accountant" target="uc_UC13"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="assoc4" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.33;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_Accountant" target="uc_UC14"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="assoc5" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.33;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_Accountant" target="uc_UC15"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="assoc6" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.33;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_Accountant" target="uc_UC16"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="assoc7" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.33;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_Accountant" target="uc_UC17"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="assoc8" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.33;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_Accountant" target="uc_UC18"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="assoc9" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.33;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_Accountant" target="uc_UC20"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="assoc10" value="" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.33;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="actor_Accountant" target="uc_UC12"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="inc11" value="«include»" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="uc_UC12" target="uc_UC13"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="ext12" value="«extend»" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="uc_UC19" target="uc_UC16"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="ext13" value="«extend»" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="uc_UC20" target="uc_UC16"><mxGeometry relative="1" as="geometry"></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

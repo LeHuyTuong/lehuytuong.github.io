@@ -1,0 +1,171 @@
+{
+  "subject": {
+    "name": "LMSERP OneWorld"
+  },
+  "actors": [
+    {
+      "id": "RegisteredUser",
+      "name": "Registered User"
+    },
+    {
+      "id": "Administrator",
+      "name": "Administrator"
+    },
+    {
+      "id": "Manager",
+      "name": "Manager"
+    },
+    {
+      "id": "Teacher",
+      "name": "Teacher"
+    },
+    {
+      "id": "Assistant",
+      "name": "Assistant"
+    },
+    {
+      "id": "Accountant",
+      "name": "Accountant"
+    }
+  ],
+  "usecases": [
+    {
+      "id": "UC04",
+      "name": "Manage Students",
+      "evidence": [
+        "app/Policies/StudentPolicy.php"
+      ]
+    },
+    {
+      "id": "UC05",
+      "name": "Create Student",
+      "evidence": [
+        "app/Policies/StudentPolicy.php"
+      ]
+    },
+    {
+      "id": "UC06",
+      "name": "Edit Student",
+      "evidence": [
+        "app/Policies/StudentPolicy.php"
+      ]
+    },
+    {
+      "id": "UC07",
+      "name": "Manage Enrollments",
+      "evidence": [
+        "app/Policies/EnrollmentPolicy.php"
+      ]
+    },
+    {
+      "id": "UC08",
+      "name": "Manage Class Rooms",
+      "evidence": [
+        "app/Policies/ClassRoomPolicy.php"
+      ]
+    },
+    {
+      "id": "UC09",
+      "name": "View Attendance",
+      "evidence": [
+        "app/Policies/AttendancePolicy.php:45-63"
+      ]
+    },
+    {
+      "id": "UC10",
+      "name": "Take Attendance",
+      "evidence": [
+        "app/Services/Attendance/AttendancePermission.php:71-94"
+      ]
+    }
+  ],
+  "associations": [
+    {
+      "actor": "Administrator",
+      "usecase": "UC04"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC07"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC08"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC10"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC04"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC07"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC08"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC09"
+    },
+    {
+      "actor": "Teacher",
+      "usecase": "UC08"
+    },
+    {
+      "actor": "Teacher",
+      "usecase": "UC09"
+    },
+    {
+      "actor": "Teacher",
+      "usecase": "UC10"
+    },
+    {
+      "actor": "Assistant",
+      "usecase": "UC08"
+    },
+    {
+      "actor": "Assistant",
+      "usecase": "UC09"
+    },
+    {
+      "actor": "Assistant",
+      "usecase": "UC10"
+    },
+    {
+      "actor": "Accountant",
+      "usecase": "UC04"
+    },
+    {
+      "actor": "Accountant",
+      "usecase": "UC07"
+    },
+    {
+      "actor": "Accountant",
+      "usecase": "UC09"
+    }
+  ],
+  "includes": [],
+  "extends": [],
+  "generalizations": [
+    {
+      "child": "UC05",
+      "parent": "UC04"
+    },
+    {
+      "child": "UC06",
+      "parent": "UC04"
+    }
+  ],
+  "actorParents": {
+    "Administrator": "RegisteredUser",
+    "Manager": "RegisteredUser",
+    "Teacher": "RegisteredUser",
+    "Assistant": "RegisteredUser",
+    "Accountant": "RegisteredUser"
+  }
+}

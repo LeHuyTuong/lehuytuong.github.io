@@ -1,0 +1,224 @@
+{
+ "title": "LMS ERP - Registry and People",
+ "source": "code",
+ "core": "Students",
+ "entities": [
+  {
+   "name": "Balance Transfers"
+  },
+  {
+   "name": "Enrollments"
+  },
+  {
+   "name": "Student Notes"
+  },
+  {
+   "name": "Settings"
+  },
+  {
+   "name": "Media Assets"
+  },
+  {
+   "name": "Users"
+  },
+  {
+   "name": "Centers"
+  },
+  {
+   "name": "Guardians"
+  },
+  {
+   "name": "Qualifications"
+  },
+  {
+   "name": "Students"
+  },
+  {
+   "name": "Branches"
+  }
+ ],
+ "relationships": [
+  {
+   "from": "Balance Transfers",
+   "to": "Enrollments",
+   "verb": "derive from",
+   "card": "}o--o{",
+   "evidence": "app/Models/BalanceTransfer.php:37"
+  },
+  {
+   "from": "Branches",
+   "to": "Centers",
+   "verb": "belong to",
+   "card": "}o--o{",
+   "evidence": "app/Models/Branch.php:35"
+  },
+  {
+   "from": "Guardians",
+   "to": "Branches",
+   "verb": "operate in",
+   "card": "}o--o{",
+   "evidence": "app/Models/Guardian.php:42"
+  },
+  {
+   "from": "Media Assets",
+   "to": "Branches",
+   "verb": "operate in",
+   "card": "}o--o{",
+   "evidence": "app/Models/MediaAsset.php:180"
+  },
+  {
+   "from": "Settings",
+   "to": "Branches",
+   "verb": "operate in",
+   "card": "}o--o{",
+   "evidence": "app/Models/Setting.php:44"
+  },
+  {
+   "from": "Students",
+   "to": "Branches",
+   "verb": "operate in",
+   "card": "}o--o{",
+   "evidence": "app/Models/Student.php:131"
+  },
+  {
+   "from": "Student Notes",
+   "to": "Branches",
+   "verb": "operate in",
+   "card": "}o--o{",
+   "evidence": "app/Models/StudentNote.php:174"
+  },
+  {
+   "from": "Users",
+   "to": "Branches",
+   "verb": "operate in",
+   "card": "}o--o{",
+   "evidence": "app/Features/System/Models/User.php:50"
+  },
+  {
+   "from": "Guardians",
+   "to": "Centers",
+   "verb": "belong to",
+   "card": "}o--o{",
+   "evidence": "app/Models/Guardian.php:37"
+  },
+  {
+   "from": "Media Assets",
+   "to": "Centers",
+   "verb": "belong to",
+   "card": "}o--o{",
+   "evidence": "app/Models/MediaAsset.php:175"
+  },
+  {
+   "from": "Settings",
+   "to": "Centers",
+   "verb": "belong to",
+   "card": "}o--o{",
+   "evidence": "app/Models/Setting.php:39"
+  },
+  {
+   "from": "Students",
+   "to": "Centers",
+   "verb": "belong to",
+   "card": "}o--o{",
+   "evidence": "app/Models/Student.php:126"
+  },
+  {
+   "from": "Student Notes",
+   "to": "Centers",
+   "verb": "belong to",
+   "card": "}o--o{",
+   "evidence": "app/Models/StudentNote.php:169"
+  },
+  {
+   "from": "Users",
+   "to": "Centers",
+   "verb": "belong to",
+   "card": "}o--o{",
+   "evidence": "app/Features/System/Models/User.php:45"
+  },
+  {
+   "from": "Enrollments",
+   "to": "Students",
+   "verb": "teach",
+   "card": "}o--o{",
+   "evidence": "app/Models/Enrollment.php:61"
+  },
+  {
+   "from": "Student Notes",
+   "to": "Enrollments",
+   "verb": "enroll",
+   "card": "}o--o{",
+   "evidence": "app/Models/StudentNote.php:142"
+  },
+  {
+   "from": "Guardians",
+   "to": "Students",
+   "verb": "teach",
+   "card": "}o--o{",
+   "evidence": "app/Models/Guardian.php:52"
+  },
+  {
+   "from": "Qualifications",
+   "to": "Media Assets",
+   "verb": "evidence",
+   "card": "}o--o{",
+   "evidence": "app/Models/Qualification.php:67"
+  },
+  {
+   "from": "Student Notes",
+   "to": "Media Assets",
+   "verb": "attach",
+   "card": "}o--o{",
+   "evidence": "app/Models/StudentNote.php:179"
+  },
+  {
+   "from": "Media Assets",
+   "to": "Users",
+   "verb": "upload",
+   "card": "}o--o{",
+   "evidence": "app/Models/MediaAsset.php:170"
+  },
+  {
+   "from": "Qualifications",
+   "to": "Students",
+   "verb": "teach",
+   "card": "}o--o{",
+   "evidence": "app/Models/Qualification.php:61"
+  },
+  {
+   "from": "Qualifications",
+   "to": "Users",
+   "verb": "record",
+   "card": "}o--o{",
+   "evidence": "app/Models/Qualification.php:72"
+  },
+  {
+   "from": "Students",
+   "to": "Users",
+   "verb": "advise",
+   "card": "}o--o{",
+   "evidence": "app/Models/Student.php:153"
+  },
+  {
+   "from": "Student Notes",
+   "to": "Users",
+   "verb": "write",
+   "card": "}o--o{",
+   "evidence": "app/Models/StudentNote.php:152"
+  },
+  {
+   "from": "Guardians",
+   "to": "Students",
+   "verb": "guard",
+   "card": "}o--o{",
+   "evidence": "app/Models/GuardianStudent.php:44"
+  },
+  {
+   "from": "Branches",
+   "to": "Users",
+   "verb": "act as",
+   "card": "}o--o{",
+   "evidence": "app/Features/System/Models/UserBranchAssignment.php:42"
+  }
+ ]
+}

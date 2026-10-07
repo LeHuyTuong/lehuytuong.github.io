@@ -1,0 +1,176 @@
+{
+  "feature": "Collect Payment",
+  "activity": "collect-payment",
+  "level": "subsystem",
+  "style": "REST",
+  "actor": "Accountant",
+  "boundary": "Web App",
+  "database": "MySQL",
+  "external": [
+    "Payment Service",
+    "Credit Pool"
+  ],
+  "steps": [
+    {
+      "call": "POST /livewire/update",
+      "from": "Accountant",
+      "to": "Web App",
+      "step": "Open collect form"
+    },
+    {
+      "call": "«in-process» recordCollection(charge, amount, paidOn, method)",
+      "from": "Web App",
+      "to": "Payment Service",
+      "step": "Enter amount and date"
+    },
+    {
+      "call": "«SQL» SELECT limits config",
+      "from": "Web App",
+      "to": "MySQL",
+      "step": "Enter amount and date"
+    },
+    {
+      "call": "«SQL» begin; lockForUpdate charge",
+      "from": "Payment Service",
+      "to": "MySQL",
+      "step": "Lock charge and read remaining"
+    },
+    {
+      "call": "«SQL» SELECT remaining_amount",
+      "from": "Payment Service",
+      "to": "MySQL",
+      "step": "Lock charge and read remaining"
+    },
+    {
+      "alt": [
+        {
+          "guard": "Amount covers remaining?",
+          "steps": [
+            {
+              "call": "«SQL» INSERT payment (whole amount)",
+              "from": "Payment Service",
+              "to": "MySQL",
+              "step": "Apply whole amount to remaining"
+            }
+          ]
+        },
+        {
+          "guard": "else",
+          "steps": [
+            {
+              "call": "«SQL» INSERT payment (remaining)",
+              "from": "Payment Service",
+              "to": "MySQL",
+              "step": "Apply remaining and split the rest"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "call": "«SQL» INSERT receipt",
+      "from": "Payment Service",
+      "to": "MySQL",
+      "step": "Create payment row"
+    },
+    {
+      "call": "«in-process» next(Counter::next)",
+      "from": "Payment Service",
+      "to": "Payment Service",
+      "step": "Issue receipt in transaction"
+    },
+    {
+      "call": "«SQL» UPDATE charge SET status",
+      "from": "Payment Service",
+      "to": "MySQL",
+      "step": "Set charge PAID or PARTIAL"
+    },
+    {
+      "call": "«SQL» INSERT activity_log payment",
+      "from": "Payment Service",
+      "to": "MySQL",
+      "step": "Log payment in transaction"
+    },
+    {
+      "alt": [
+        {
+          "guard": "Overflow remains?",
+          "steps": [
+            {
+              "call": "«SQL» INSERT deposit payment",
+              "from": "Payment Service",
+              "to": "MySQL",
+              "step": "Record deposit to credit pool"
+            },
+            {
+              "call": "«in-process» applyToOpenCharges(student)",
+              "from": "Payment Service",
+              "to": "Credit Pool",
+              "step": "Allocate to open charges oldest first"
+            },
+            {
+              "call": "«SQL» INSERT payment_allocations",
+              "from": "Payment Service",
+              "to": "MySQL",
+              "step": "Allocate to open charges oldest first"
+            },
+            {
+              "call": "«SQL» INSERT activity_log allocation",
+              "from": "Payment Service",
+              "to": "MySQL",
+              "step": "Log allocations"
+            }
+          ]
+        },
+        {
+          "guard": "else",
+          "steps": [
+            {
+              "opt": {
+                "guard": "Charge already paid?",
+                "steps": [
+                  {
+                    "call": "«SQL» rollback",
+                    "from": "Payment Service",
+                    "to": "MySQL",
+                    "step": "Show error and keep form"
+                  },
+                  {
+                    "reply": "422: ChargeAlreadySettled",
+                    "from": "Payment Service",
+                    "to": "Web App",
+                    "step": "Show error and keep form"
+                  },
+                  {
+                    "reply": "422: form with errors",
+                    "from": "Web App",
+                    "to": "Accountant",
+                    "step": "Show error and keep form"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "call": "«SQL» commit",
+      "from": "Payment Service",
+      "to": "MySQL",
+      "step": "Show receipt to accountant"
+    },
+    {
+      "reply": "200 OK: applied, overflow",
+      "from": "Payment Service",
+      "to": "Web App",
+      "step": "Show receipt to accountant"
+    },
+    {
+      "reply": "«HTTP» 200: receipts.show",
+      "from": "Web App",
+      "to": "Accountant",
+      "step": "Show receipt to accountant"
+    }
+  ]
+}

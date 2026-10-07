@@ -1,0 +1,61 @@
+{
+  "title": "Charge proposal lifecycle",
+  "level": "system",
+  "owner": "Charge Proposal",
+  "actors": [
+    "Scheduler",
+    "Finance Service"
+  ],
+  "nodes": [
+    {
+      "id": "start",
+      "kind": "start"
+    },
+    {
+      "id": "pending",
+      "kind": "state",
+      "text": "Pending"
+    },
+    {
+      "id": "approved",
+      "kind": "state",
+      "text": "Approved"
+    },
+    {
+      "id": "dismissed",
+      "kind": "state",
+      "text": "Dismissed"
+    },
+    {
+      "id": "end",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "start",
+      "to": "pending",
+      "label": "Scheduler proposes the cycle charge"
+    },
+    {
+      "from": "pending",
+      "to": "approved",
+      "label": "[conditions unchanged] Finance Service approves"
+    },
+    {
+      "from": "pending",
+      "to": "dismissed",
+      "label": "[accountant reads the reason] Finance Service dismisses"
+    },
+    {
+      "from": "approved",
+      "to": "end",
+      "label": "Finance Service links the new charge"
+    },
+    {
+      "from": "dismissed",
+      "to": "end",
+      "label": "Scheduler pauses the enrollment when asked"
+    }
+  ]
+}

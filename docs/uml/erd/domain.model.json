@@ -1,0 +1,689 @@
+{
+ "title": "LMSERP OneWorld domain",
+ "source": "code",
+ "core": "Students",
+ "entities": [
+  {
+   "name": "Attendance Records"
+  },
+  {
+   "name": "Balance Transfers"
+  },
+  {
+   "name": "Branches"
+  },
+  {
+   "name": "Centers"
+  },
+  {
+   "name": "Charge Adjustments"
+  },
+  {
+   "name": "Charge Proposals"
+  },
+  {
+   "name": "Charge Sessions"
+  },
+  {
+   "name": "Charges"
+  },
+  {
+   "name": "Class Room Notes"
+  },
+  {
+   "name": "Class Rooms"
+  },
+  {
+   "name": "Class Sessions"
+  },
+  {
+   "name": "Curriculums"
+  },
+  {
+   "name": "Enrollments"
+  },
+  {
+   "name": "Guardians"
+  },
+  {
+   "name": "Holidays"
+  },
+  {
+   "name": "Journal Entries"
+  },
+  {
+   "name": "Media Assets"
+  },
+  {
+   "name": "Payments"
+  },
+  {
+   "name": "Price Packages"
+  },
+  {
+   "name": "Qualifications"
+  },
+  {
+   "name": "Receipts"
+  },
+  {
+   "name": "Refunds"
+  },
+  {
+   "name": "Rooms"
+  },
+  {
+   "name": "Schedules"
+  },
+  {
+   "name": "Score Sheets"
+  },
+  {
+   "name": "Scores"
+  },
+  {
+   "name": "Session Journals"
+  },
+  {
+   "name": "Settings"
+  },
+  {
+   "name": "Student Notes"
+  },
+  {
+   "name": "Students"
+  },
+  {
+   "name": "Tax Invoices"
+  },
+  {
+   "name": "Teaching Work Logs"
+  },
+  {
+   "name": "Users"
+  }
+ ],
+ "relationships": [
+  {
+   "from": "Attendance Records",
+   "to": "Class Sessions",
+   "verb": "meet in",
+   "card": "}o--o{",
+   "evidence": "app/Models/Attendance.php:49"
+  },
+  {
+   "from": "Attendance Records",
+   "to": "Enrollments",
+   "verb": "enroll",
+   "card": "}o--o{",
+   "evidence": "app/Models/Attendance.php:44"
+  },
+  {
+   "from": "Attendance Records",
+   "to": "Users",
+   "verb": "assist",
+   "card": "}o--o{",
+   "evidence": "app/Models/Attendance.php:67"
+  },
+  {
+   "from": "Balance Transfers",
+   "to": "Enrollments",
+   "verb": "derive from",
+   "card": "}o--o{",
+   "evidence": "app/Models/BalanceTransfer.php:37"
+  },
+  {
+   "from": "Branches",
+   "to": "Centers",
+   "verb": "belong to",
+   "card": "}o--o{",
+   "evidence": "app/Models/Branch.php:35"
+  },
+  {
+   "from": "Class Rooms",
+   "to": "Branches",
+   "verb": "operate in",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassRoom.php:127"
+  },
+  {
+   "from": "Curriculums",
+   "to": "Branches",
+   "verb": "operate in",
+   "card": "}o--o{",
+   "evidence": "app/Models/Curriculum.php:96"
+  },
+  {
+   "from": "Guardians",
+   "to": "Branches",
+   "verb": "operate in",
+   "card": "}o--o{",
+   "evidence": "app/Models/Guardian.php:42"
+  },
+  {
+   "from": "Media Assets",
+   "to": "Branches",
+   "verb": "operate in",
+   "card": "}o--o{",
+   "evidence": "app/Models/MediaAsset.php:180"
+  },
+  {
+   "from": "Rooms",
+   "to": "Branches",
+   "verb": "operate in",
+   "card": "}o--o{",
+   "evidence": "app/Models/Room.php:211"
+  },
+  {
+   "from": "Settings",
+   "to": "Branches",
+   "verb": "operate in",
+   "card": "}o--o{",
+   "evidence": "app/Models/Setting.php:44"
+  },
+  {
+   "from": "Students",
+   "to": "Branches",
+   "verb": "operate in",
+   "card": "}o--o{",
+   "evidence": "app/Models/Student.php:131"
+  },
+  {
+   "from": "Student Notes",
+   "to": "Branches",
+   "verb": "operate in",
+   "card": "}o--o{",
+   "evidence": "app/Models/StudentNote.php:174"
+  },
+  {
+   "from": "Teaching Work Logs",
+   "to": "Branches",
+   "verb": "operate in",
+   "card": "}o--o{",
+   "evidence": "app/Models/TeachingWorkLog.php:97"
+  },
+  {
+   "from": "Users",
+   "to": "Branches",
+   "verb": "operate in",
+   "card": "}o--o{",
+   "evidence": "app/Features/System/Models/User.php:50"
+  },
+  {
+   "from": "Curriculums",
+   "to": "Centers",
+   "verb": "belong to",
+   "card": "}o--o{",
+   "evidence": "app/Models/Curriculum.php:91"
+  },
+  {
+   "from": "Guardians",
+   "to": "Centers",
+   "verb": "belong to",
+   "card": "}o--o{",
+   "evidence": "app/Models/Guardian.php:37"
+  },
+  {
+   "from": "Holidays",
+   "to": "Centers",
+   "verb": "belong to",
+   "card": "}o--o{",
+   "evidence": "app/Models/Holiday.php:43"
+  },
+  {
+   "from": "Media Assets",
+   "to": "Centers",
+   "verb": "belong to",
+   "card": "}o--o{",
+   "evidence": "app/Models/MediaAsset.php:175"
+  },
+  {
+   "from": "Receipts",
+   "to": "Centers",
+   "verb": "belong to",
+   "card": "}o--o{",
+   "evidence": "app/Models/Receipt.php:54"
+  },
+  {
+   "from": "Rooms",
+   "to": "Centers",
+   "verb": "belong to",
+   "card": "}o--o{",
+   "evidence": "app/Models/Room.php:206"
+  },
+  {
+   "from": "Settings",
+   "to": "Centers",
+   "verb": "belong to",
+   "card": "}o--o{",
+   "evidence": "app/Models/Setting.php:39"
+  },
+  {
+   "from": "Students",
+   "to": "Centers",
+   "verb": "belong to",
+   "card": "}o--o{",
+   "evidence": "app/Models/Student.php:126"
+  },
+  {
+   "from": "Student Notes",
+   "to": "Centers",
+   "verb": "belong to",
+   "card": "}o--o{",
+   "evidence": "app/Models/StudentNote.php:169"
+  },
+  {
+   "from": "Teaching Work Logs",
+   "to": "Centers",
+   "verb": "belong to",
+   "card": "}o--o{",
+   "evidence": "app/Models/TeachingWorkLog.php:92"
+  },
+  {
+   "from": "Users",
+   "to": "Centers",
+   "verb": "belong to",
+   "card": "}o--o{",
+   "evidence": "app/Features/System/Models/User.php:45"
+  },
+  {
+   "from": "Charges",
+   "to": "Charge Adjustments",
+   "verb": "adjust",
+   "card": "}o--o{",
+   "evidence": "app/Models/Charge.php:198"
+  },
+  {
+   "from": "Charge Proposals",
+   "to": "Charges",
+   "verb": "bill",
+   "card": "}o--o{",
+   "evidence": "app/Models/ChargeProposal.php:90"
+  },
+  {
+   "from": "Charges",
+   "to": "Charge Sessions",
+   "verb": "cover",
+   "card": "}o--o{",
+   "evidence": "app/Models/Charge.php:222"
+  },
+  {
+   "from": "Charges",
+   "to": "Enrollments",
+   "verb": "enroll",
+   "card": "}o--o{",
+   "evidence": "app/Models/Charge.php:188"
+  },
+  {
+   "from": "Charges",
+   "to": "Payments",
+   "verb": "pay",
+   "card": "}o--o{",
+   "evidence": "app/Models/Charge.php:193"
+  },
+  {
+   "from": "Charges",
+   "to": "Refunds",
+   "verb": "refund",
+   "card": "}o--o{",
+   "evidence": "app/Models/Charge.php:203"
+  },
+  {
+   "from": "Students",
+   "to": "Charges",
+   "verb": "raise",
+   "card": "}o--o{",
+   "evidence": "app/Models/Student.php:232"
+  },
+  {
+   "from": "Charges",
+   "to": "Tax Invoices",
+   "verb": "invoice",
+   "card": "}o--o{",
+   "evidence": "app/Models/Charge.php:271"
+  },
+  {
+   "from": "Charge Proposals",
+   "to": "Enrollments",
+   "verb": "enroll",
+   "card": "}o--o{",
+   "evidence": "app/Models/ChargeProposal.php:68"
+  },
+  {
+   "from": "Charge Proposals",
+   "to": "Users",
+   "verb": "decide",
+   "card": "}o--o{",
+   "evidence": "app/Models/ChargeProposal.php:95"
+  },
+  {
+   "from": "Charge Sessions",
+   "to": "Class Sessions",
+   "verb": "meet in",
+   "card": "}o--o{",
+   "evidence": "app/Models/ChargeSession.php:53"
+  },
+  {
+   "from": "Charge Sessions",
+   "to": "Enrollments",
+   "verb": "enroll",
+   "card": "}o--o{",
+   "evidence": "app/Models/ChargeSession.php:58"
+  },
+  {
+   "from": "Class Rooms",
+   "to": "Class Room Notes",
+   "verb": "note",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassRoom.php:137"
+  },
+  {
+   "from": "Class Rooms",
+   "to": "Class Sessions",
+   "verb": "meet",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassRoom.php:190"
+  },
+  {
+   "from": "Class Rooms",
+   "to": "Curriculums",
+   "verb": "follow",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassRoom.php:120"
+  },
+  {
+   "from": "Class Rooms",
+   "to": "Enrollments",
+   "verb": "enroll",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassRoom.php:156"
+  },
+  {
+   "from": "Class Rooms",
+   "to": "Price Packages",
+   "verb": "price",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassRoom.php:150"
+  },
+  {
+   "from": "Class Rooms",
+   "to": "Rooms",
+   "verb": "default to",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassRoom.php:60"
+  },
+  {
+   "from": "Class Rooms",
+   "to": "Schedules",
+   "verb": "schedule",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassRoom.php:185"
+  },
+  {
+   "from": "Score Sheets",
+   "to": "Class Rooms",
+   "verb": "meet in",
+   "card": "}o--o{",
+   "evidence": "app/Models/ScoreSheet.php:32"
+  },
+  {
+   "from": "Class Room Notes",
+   "to": "Class Sessions",
+   "verb": "meet in",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassRoomNote.php:197"
+  },
+  {
+   "from": "Class Room Notes",
+   "to": "Users",
+   "verb": "act as",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassRoomNote.php:187"
+  },
+  {
+   "from": "Class Sessions",
+   "to": "Holidays",
+   "verb": "fall on",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassSession.php:90"
+  },
+  {
+   "from": "Class Sessions",
+   "to": "Rooms",
+   "verb": "use",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassSession.php:61"
+  },
+  {
+   "from": "Class Sessions",
+   "to": "Schedules",
+   "verb": "schedule",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassSession.php:66"
+  },
+  {
+   "from": "Class Sessions",
+   "to": "Session Journals",
+   "verb": "journal",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassSession.php:84"
+  },
+  {
+   "from": "Student Notes",
+   "to": "Class Sessions",
+   "verb": "meet in",
+   "card": "}o--o{",
+   "evidence": "app/Models/StudentNote.php:147"
+  },
+  {
+   "from": "Teaching Work Logs",
+   "to": "Class Sessions",
+   "verb": "meet in",
+   "card": "}o--o{",
+   "evidence": "app/Models/TeachingWorkLog.php:72"
+  },
+  {
+   "from": "Scores",
+   "to": "Enrollments",
+   "verb": "enroll",
+   "card": "}o--o{",
+   "evidence": "app/Models/Score.php:50"
+  },
+  {
+   "from": "Enrollments",
+   "to": "Students",
+   "verb": "teach",
+   "card": "}o--o{",
+   "evidence": "app/Models/Enrollment.php:61"
+  },
+  {
+   "from": "Student Notes",
+   "to": "Enrollments",
+   "verb": "enroll",
+   "card": "}o--o{",
+   "evidence": "app/Models/StudentNote.php:142"
+  },
+  {
+   "from": "Guardians",
+   "to": "Students",
+   "verb": "teach",
+   "card": "}o--o{",
+   "evidence": "app/Models/Guardian.php:52"
+  },
+  {
+   "from": "Journal Entries",
+   "to": "Session Journals",
+   "verb": "journal",
+   "card": "}o--o{",
+   "evidence": "app/Models/JournalEntry.php:98"
+  },
+  {
+   "from": "Journal Entries",
+   "to": "Users",
+   "verb": "write",
+   "card": "}o--o{",
+   "evidence": "app/Models/JournalEntry.php:103"
+  },
+  {
+   "from": "Qualifications",
+   "to": "Media Assets",
+   "verb": "evidence",
+   "card": "}o--o{",
+   "evidence": "app/Models/Qualification.php:67"
+  },
+  {
+   "from": "Student Notes",
+   "to": "Media Assets",
+   "verb": "attach",
+   "card": "}o--o{",
+   "evidence": "app/Models/StudentNote.php:179"
+  },
+  {
+   "from": "Media Assets",
+   "to": "Users",
+   "verb": "upload",
+   "card": "}o--o{",
+   "evidence": "app/Models/MediaAsset.php:170"
+  },
+  {
+   "from": "Payments",
+   "to": "Receipts",
+   "verb": "receive",
+   "card": "}o--o{",
+   "evidence": "app/Models/Payment.php:141"
+  },
+  {
+   "from": "Refunds",
+   "to": "Payments",
+   "verb": "pay",
+   "card": "}o--o{",
+   "evidence": "app/Models/Refund.php:67"
+  },
+  {
+   "from": "Payments",
+   "to": "Students",
+   "verb": "teach",
+   "card": "}o--o{",
+   "evidence": "app/Models/Payment.php:130"
+  },
+  {
+   "from": "Payments",
+   "to": "Users",
+   "verb": "receive",
+   "card": "}o--o{",
+   "evidence": "app/Models/Payment.php:147"
+  },
+  {
+   "from": "Qualifications",
+   "to": "Students",
+   "verb": "teach",
+   "card": "}o--o{",
+   "evidence": "app/Models/Qualification.php:61"
+  },
+  {
+   "from": "Qualifications",
+   "to": "Users",
+   "verb": "record",
+   "card": "}o--o{",
+   "evidence": "app/Models/Qualification.php:72"
+  },
+  {
+   "from": "Rooms",
+   "to": "Schedules",
+   "verb": "schedule",
+   "card": "}o--o{",
+   "evidence": "app/Models/Room.php:79"
+  },
+  {
+   "from": "Scores",
+   "to": "Score Sheets",
+   "verb": "score",
+   "card": "}o--o{",
+   "evidence": "app/Models/Score.php:45"
+  },
+  {
+   "from": "Score Sheets",
+   "to": "Users",
+   "verb": "create",
+   "card": "}o--o{",
+   "evidence": "app/Models/ScoreSheet.php:37"
+  },
+  {
+   "from": "Teaching Work Logs",
+   "to": "Session Journals",
+   "verb": "derive from",
+   "card": "}o--o{",
+   "evidence": "app/Models/TeachingWorkLog.php:87"
+  },
+  {
+   "from": "Session Journals",
+   "to": "Users",
+   "verb": "open",
+   "card": "}o--o{",
+   "evidence": "app/Models/SessionJournal.php:145"
+  },
+  {
+   "from": "Tax Invoices",
+   "to": "Students",
+   "verb": "teach",
+   "card": "}o--o{",
+   "evidence": "app/Models/TaxInvoice.php:92"
+  },
+  {
+   "from": "Students",
+   "to": "Users",
+   "verb": "advise",
+   "card": "}o--o{",
+   "evidence": "app/Models/Student.php:153"
+  },
+  {
+   "from": "Student Notes",
+   "to": "Users",
+   "verb": "write",
+   "card": "}o--o{",
+   "evidence": "app/Models/StudentNote.php:152"
+  },
+  {
+   "from": "Tax Invoices",
+   "to": "Users",
+   "verb": "issue",
+   "card": "}o--o{",
+   "evidence": "app/Models/TaxInvoice.php:97"
+  },
+  {
+   "from": "Teaching Work Logs",
+   "to": "Users",
+   "verb": "act as",
+   "card": "}o--o{",
+   "evidence": "app/Models/TeachingWorkLog.php:82"
+  },
+  {
+   "from": "Class Rooms",
+   "to": "Users",
+   "verb": "meet in",
+   "card": "}o--o{",
+   "evidence": "app/Models/ClassStaff.php:43"
+  },
+  {
+   "from": "Guardians",
+   "to": "Students",
+   "verb": "guard",
+   "card": "}o--o{",
+   "evidence": "app/Models/GuardianStudent.php:44"
+  },
+  {
+   "from": "Class Sessions",
+   "to": "Users",
+   "verb": "meet in",
+   "card": "}o--o{",
+   "evidence": "app/Models/SessionStaff.php:39"
+  },
+  {
+   "from": "Branches",
+   "to": "Users",
+   "verb": "act as",
+   "card": "}o--o{",
+   "evidence": "app/Features/System/Models/UserBranchAssignment.php:42"
+  }
+ ]
+}

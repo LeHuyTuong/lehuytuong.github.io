@@ -1,0 +1,355 @@
+{
+  "subject": {
+    "name": "LMSERP OneWorld"
+  },
+  "actors": [
+    {
+      "id": "RegisteredUser",
+      "name": "Registered User",
+      "side": "bottom"
+    },
+    {
+      "id": "Administrator",
+      "name": "Administrator",
+      "side": "left"
+    },
+    {
+      "id": "Manager",
+      "name": "Manager",
+      "side": "left"
+    },
+    {
+      "id": "Teacher",
+      "name": "Teacher",
+      "side": "left"
+    },
+    {
+      "id": "Assistant",
+      "name": "Assistant",
+      "side": "left"
+    },
+    {
+      "id": "Accountant",
+      "name": "Accountant",
+      "side": "right"
+    }
+  ],
+  "usecases": [
+    {
+      "id": "UC01",
+      "name": "Login",
+      "evidence": [
+        "app/Filament/Pages/Auth/Login.php"
+      ]
+    },
+    {
+      "id": "UC02",
+      "name": "Logout",
+      "evidence": [
+        "app/Enums/Role.php:10"
+      ]
+    },
+    {
+      "id": "UC03",
+      "name": "Change Password",
+      "evidence": [
+        "app/Filament/Pages/Auth/ChangePassword.php"
+      ]
+    },
+    {
+      "id": "UC04",
+      "name": "Manage Students",
+      "evidence": [
+        "app/Policies/StudentPolicy.php"
+      ]
+    },
+    {
+      "id": "UC07",
+      "name": "Manage Enrollments",
+      "evidence": [
+        "app/Policies/EnrollmentPolicy.php"
+      ]
+    },
+    {
+      "id": "UC08",
+      "name": "Manage Class Rooms",
+      "evidence": [
+        "app/Policies/ClassRoomPolicy.php"
+      ]
+    },
+    {
+      "id": "UC09",
+      "name": "View Attendance",
+      "evidence": [
+        "app/Policies/AttendancePolicy.php:45-63"
+      ]
+    },
+    {
+      "id": "UC10",
+      "name": "Take Attendance",
+      "evidence": [
+        "app/Services/Attendance/AttendancePermission.php:71-94"
+      ]
+    },
+    {
+      "id": "UC11",
+      "name": "Manage Charge Proposals",
+      "evidence": [
+        "app/Policies/ChargeProposalPolicy.php"
+      ]
+    },
+    {
+      "id": "UC13",
+      "name": "Manage Charges",
+      "evidence": [
+        "app/Policies/ChargePolicy.php"
+      ]
+    },
+    {
+      "id": "UC14",
+      "name": "Run Monthly Charge Cycle",
+      "evidence": [
+        "app/Features/Finance/Services/ChargeCycleRunner.php:68"
+      ]
+    },
+    {
+      "id": "UC15",
+      "name": "Manage Payments",
+      "evidence": [
+        "app/Policies/PaymentPolicy.php"
+      ]
+    },
+    {
+      "id": "UC17",
+      "name": "Manage Tax Invoices",
+      "evidence": [
+        "app/Policies/TaxInvoicePolicy.php"
+      ]
+    },
+    {
+      "id": "UC19",
+      "name": "Manage Session Journals",
+      "evidence": [
+        "app/Policies/SessionJournalPolicy.php"
+      ]
+    },
+    {
+      "id": "UC20",
+      "name": "Manage Teaching Work Logs",
+      "evidence": [
+        "app/Policies/TeachingWorkLogPolicy.php"
+      ]
+    },
+    {
+      "id": "UC21",
+      "name": "Manage Rooms",
+      "evidence": [
+        "app/Policies/RoomPolicy.php"
+      ]
+    },
+    {
+      "id": "UC22",
+      "name": "Manage Holidays",
+      "evidence": [
+        "app/Policies/HolidayPolicy.php"
+      ]
+    },
+    {
+      "id": "UC23",
+      "name": "Manage Users and Roles",
+      "evidence": [
+        "app/Policies/UserPolicy.php",
+        "app/Policies/RolePolicy.php"
+      ]
+    },
+    {
+      "id": "UC24",
+      "name": "Review Activity Logs",
+      "evidence": [
+        "app/Filament/Resources/ActivityLogResource.php"
+      ]
+    }
+  ],
+  "associations": [
+    {
+      "actor": "RegisteredUser",
+      "usecase": "UC01"
+    },
+    {
+      "actor": "RegisteredUser",
+      "usecase": "UC02"
+    },
+    {
+      "actor": "RegisteredUser",
+      "usecase": "UC03"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC04"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC07"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC08"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC10"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC11"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC13"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC15"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC17"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC19"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC20"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC21"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC22"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC23"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC24"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC04"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC07"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC08"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC09"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC11"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC19"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC21"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC22"
+    },
+    {
+      "actor": "Teacher",
+      "usecase": "UC08"
+    },
+    {
+      "actor": "Teacher",
+      "usecase": "UC09"
+    },
+    {
+      "actor": "Teacher",
+      "usecase": "UC10"
+    },
+    {
+      "actor": "Teacher",
+      "usecase": "UC19"
+    },
+    {
+      "actor": "Teacher",
+      "usecase": "UC20"
+    },
+    {
+      "actor": "Assistant",
+      "usecase": "UC08"
+    },
+    {
+      "actor": "Assistant",
+      "usecase": "UC09"
+    },
+    {
+      "actor": "Assistant",
+      "usecase": "UC10"
+    },
+    {
+      "actor": "Assistant",
+      "usecase": "UC20"
+    },
+    {
+      "actor": "Accountant",
+      "usecase": "UC04"
+    },
+    {
+      "actor": "Accountant",
+      "usecase": "UC07"
+    },
+    {
+      "actor": "Accountant",
+      "usecase": "UC09"
+    },
+    {
+      "actor": "Accountant",
+      "usecase": "UC13"
+    },
+    {
+      "actor": "Accountant",
+      "usecase": "UC14"
+    },
+    {
+      "actor": "Accountant",
+      "usecase": "UC15"
+    },
+    {
+      "actor": "Accountant",
+      "usecase": "UC17"
+    }
+  ],
+  "includes": [],
+  "extends": [],
+  "generalizations": [],
+  "actorParents": {
+    "Administrator": "RegisteredUser",
+    "Manager": "RegisteredUser",
+    "Teacher": "RegisteredUser",
+    "Assistant": "RegisteredUser",
+    "Accountant": "RegisteredUser"
+  },
+  "excludedRoutes": [
+    {
+      "route": "/app/attendances",
+      "reason": "Raw table hidden from menu; Teacher and Assistant cannot write here, the business path is SessionAttendance (app/Policies/AttendancePolicy.php:10-18)"
+    }
+  ]
+}

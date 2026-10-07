@@ -1,0 +1,89 @@
+{
+ "title": "LMS ERP - Finance and Billing",
+ "source": "code",
+ "core": "Charges",
+ "entities": [
+  {
+   "name": "Charge Adjustments"
+  },
+  {
+   "name": "Charge Proposals"
+  },
+  {
+   "name": "Charge Sessions"
+  },
+  {
+   "name": "Charges"
+  },
+  {
+   "name": "Payments"
+  },
+  {
+   "name": "Receipts"
+  },
+  {
+   "name": "Refunds"
+  },
+  {
+   "name": "Tax Invoices"
+  }
+ ],
+ "relationships": [
+  {
+   "from": "Charges",
+   "to": "Charge Adjustments",
+   "verb": "adjust",
+   "card": "}o--o{",
+   "evidence": "app/Models/Charge.php:198"
+  },
+  {
+   "from": "Charge Proposals",
+   "to": "Charges",
+   "verb": "bill",
+   "card": "}o--o{",
+   "evidence": "app/Models/ChargeProposal.php:90"
+  },
+  {
+   "from": "Charges",
+   "to": "Charge Sessions",
+   "verb": "cover",
+   "card": "}o--o{",
+   "evidence": "app/Models/Charge.php:222"
+  },
+  {
+   "from": "Charges",
+   "to": "Payments",
+   "verb": "pay",
+   "card": "}o--o{",
+   "evidence": "app/Models/Charge.php:193"
+  },
+  {
+   "from": "Charges",
+   "to": "Refunds",
+   "verb": "refund",
+   "card": "}o--o{",
+   "evidence": "app/Models/Charge.php:203"
+  },
+  {
+   "from": "Charges",
+   "to": "Tax Invoices",
+   "verb": "invoice",
+   "card": "}o--o{",
+   "evidence": "app/Models/Charge.php:271"
+  },
+  {
+   "from": "Payments",
+   "to": "Receipts",
+   "verb": "receive",
+   "card": "}o--o{",
+   "evidence": "app/Models/Payment.php:141"
+  },
+  {
+   "from": "Refunds",
+   "to": "Payments",
+   "verb": "pay",
+   "card": "}o--o{",
+   "evidence": "app/Models/Refund.php:67"
+  }
+ ]
+}

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kế hoạch &amp; nền móng — Dịch vụ vẽ SRS/SDS/UML từ repo</title>
+<style>
+  :root{
+    --bg:#f7f7f5; --panel:#fff; --ink:#1c1c1e; --muted:#6b6b70;
+    --line:#e3e3df; --accent:#1f5fd0; --ok:#1a7f45; --warn:#b26a00; --bad:#b3261e;
+    --code:#f2f2ef;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{display:grid;grid-template-columns:264px minmax(0,1fr);gap:0;max-width:1680px;margin:0 auto}
+  nav{
+    position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;
+    padding:28px 18px 40px;border-right:1px solid var(--line);background:var(--panel);
+  }
+  nav h2{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px;font-weight:600}
+  nav h2:first-child{margin-top:0}
+  nav a{display:block;padding:5px 9px;border-radius:6px;color:var(--ink);text-decoration:none;font-size:14px}
+  nav a:hover{background:var(--code);color:var(--accent)}
+  main{padding:44px 48px 120px;min-width:0}
+  header.hero{border-bottom:1px solid var(--line);padding-bottom:26px;margin-bottom:34px}
+  h1{font-size:31px;line-height:1.25;margin:0 0 10px;letter-spacing:-.015em}
+  .sub{color:var(--muted);font-size:15px;margin:0}
+  .stamp{font-size:13px;color:var(--muted);margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+  .stamp span{background:var(--code);padding:3px 10px;border-radius:999px}
+  h2.sec{font-size:22px;margin:52px 0 6px;padding-top:20px;border-top:1px solid var(--line);letter-spacing:-.01em}
+  h2.sec:first-of-type{border-top:none;padding-top:0;margin-top:8px}
+  h3{font-size:17px;margin:30px 0 10px}
+  h4{font-size:15px;margin:22px 0 8px;color:var(--muted);font-weight:600}
+  p{margin:10px 0}
+  .lead{font-size:16.5px;color:#3a3a3d}
+  ul,ol{margin:10px 0;padding-left:22px}
+  li{margin:5px 0}
+  code{background:var(--code);padding:1.5px 6px;border-radius:4px;font-size:13.5px;
+       font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,monospace}
+  pre{background:#1c1c1e;color:#e8e8e6;padding:15px 17px;border-radius:9px;overflow-x:auto;font-size:13px;line-height:1.55}
+  pre code{background:none;color:inherit;padding:0}
+  blockquote{margin:16px 0;padding:11px 17px;border-left:3px solid var(--accent);background:#eef3fc;border-radius:0 7px 7px 0;color:#26364f}
+  blockquote p{margin:4px 0}
+  .tw{overflow-x:auto;margin:16px 0;-webkit-overflow-scrolling:touch}
+  .tw table{margin:0}
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14.2px}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th code,td code{overflow-wrap:anywhere;word-break:break-word}
+  p code,li code,blockquote code{overflow-wrap:anywhere}
+  th{background:var(--code);font-weight:600;font-size:13px;letter-spacing:.01em}
+  tbody tr:hover{background:#fbfbf9}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:13px;margin:20px 0}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:15px 17px}
+  .card .k{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .card .v{font-size:25px;font-weight:650;margin-top:5px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .card .n{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;white-space:nowrap}
+  .pill.ok{background:#e4f4ea;color:var(--ok)}
+  .pill.warn{background:#fdf1dc;color:var(--warn)}
+  .pill.bad{background:#fbe6e4;color:var(--bad)}
+  .pill.dim{background:var(--code);color:var(--muted)}
+  figure{margin:22px 0;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:14px}
+  figure img{display:block;width:100%;height:auto;border-radius:6px;background:#fff}
+  figcaption{font-size:13.2px;color:var(--muted);margin-top:11px;line-height:1.55}
+  figcaption b{color:var(--ink)}
+  .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(430px,1fr));gap:18px;margin:20px 0}
+  .gallery figure{margin:0}
+  details{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:0;margin:12px 0;overflow:hidden}
+  details>summary{cursor:pointer;padding:13px 17px;font-weight:600;font-size:14.5px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  details>summary::-webkit-details-marker{display:none}
+  details>summary::after{content:"▾";color:var(--muted);flex:none}
+  details[open]>summary{border-bottom:1px solid var(--line)}
+  details>summary::after{transform:rotate(0)}
+  details[open]>summary::after{content:"▴"}
+  details .body{padding:4px 17px 15px}
+  .note{font-size:13.5px;color:var(--muted);border-left:2px solid var(--line);padding-left:13px;margin:14px 0}
+  .kbd{font-size:12.5px;background:var(--code);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px}
+  footer{margin-top:70px;padding-top:22px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  @media (max-width:1080px){
+    .wrap{grid-template-columns:1fr}
+    nav{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}
+    main{padding:30px 20px 90px}
+    .gallery{grid-template-columns:1fr}
+  }
+  @media print{
+    nav{display:none}.wrap{display:block}main{padding:0}
+    details{page-break-inside:avoid}details>summary::after{content:""}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <div style="margin-bottom: 22px;">
+    <a href="../index.html" style="font-weight: 700; color: var(--accent); font-size: 13px; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+      &larr; Về trang chủ VeriDraw (veridraw.me)
+    </a>
+  </div>
+
+  <h2>Mục lục sơ đồ</h2>
+  <a href="#context">Context diagram (1)</a>
+  <a href="#usecase">Use case (12)</a>
+  <a href="#activity">Activity (4)</a>
+  <a href="#seqclass">Sequence (3)</a>
+  <a href="#erd">ERD (3)</a>
+  <a href="#state">State machine (3)</a>
+  <a href="#kientruc">Kiến trúc (3)</a>
+</nav>
+
+<main>
+
+<header class="hero">
+  <div style="margin-bottom: 14px;">
+    <a href="../index.html" style="font-size: 13px; font-weight: 600; color: var(--accent); text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+      &larr; Quay lại trang chủ VeriDraw (veridraw.me)
+    </a>
+  </div>
+  <h1>Bộ Sưu Tập 29 Sơ Đồ Mẫu Chuẩn Ký Hiệu</h1>
+  <p class="sub">Trích xuất trực tiếp từ mã nguồn thực tế hệ thống LMSERP-OneWorld (Laravel 12 + Filament v3). Toàn bộ sơ đồ đã qua kiểm định hình học 0 lỗi và xuất sẵn file <code>.drawio</code> + PNG sắc nét.</p>
+  <div class="stamp">
+    <span>Case study: LMSERP-OneWorld</span>
+    <span>1.054 file · 153.417 LOC</span>
+    <span>Kiểm định hình học: 0 lỗi</span>
+    <span>OMG UML 2.5 Standard</span>
+  </div>
+</header>
+
+<div class="cards">
+  <div class="card"><div class="k">Sơ đồ đã dựng</div><div class="v">29</div><div class="n">PNG + file .drawio</div></div>
+  <div class="card"><div class="k">Use Case</div><div class="v">12</div><div class="n">Học vụ + Hệ thống + Vai</div></div>
+  <div class="card"><div class="k">Activity</div><div class="v">4</div><div class="n">Swimlanes, 0 giao cắt</div></div>
+  <div class="card"><div class="k">Sequence</div><div class="v">3</div><div class="n">Lifelines &amp; Alt blocks</div></div>
+  <div class="card"><div class="k">ERD Database</div><div class="v">3</div><div class="n">Crow's Foot, 83 quan hệ</div></div>
+  <div class="card"><div class="k">State Machine</div><div class="v">3</div><div class="n">Vòng đời Enum</div></div>
+  <div class="card"><div class="k">Kiến Trúc &amp; Package</div><div class="v">3</div><div class="n">Architecture &amp; Component</div></div>
+</div>
+
+<h2 class="sec" id="sodo">Sơ đồ (29)</h2>
+
+<h2 class="sec" id="context">Context diagram <span class="pill dim">1</span></h2>
+<p>DFD mức 0: cả hệ thống là một hình tròn, external entity là chữ nhật. 7 entity, 68 mũi tên
+một chiều, 0 lỗi qua cả ba cổng kiểm.</p>
+
+<figure>
+  <img src="uml/context/system.png" alt="Context diagram LMSERP OneWorld">
+  <figcaption><b>Context diagram</b> — <code>docs/uml/context/system.png</code>. Mỗi mũi tên là một
+  cụm danh từ dữ liệu một dòng, không nhãn kỹ thuật, không gộp luồng.</figcaption>
+</figure>
+
+<h2 class="sec" id="usecase">Use case diagram <span class="pill dim">12</span></h2>
+
+<p>Bộ này đã qua <b>một lần tách miền (05/10)</b>. Sơ đồ tổng quan cũ
+<code>lmserp.drawio</code> từng có 12 lỗi (8 <code>[path]</code> + 4 <code>[uml actor-gen]</code>)
+vì nhồi 24 UC và 6 actor vào một hình. Cách sửa đúng là <b>tách diagram</b> theo engine rule
+(<i>"nếu không đạt thì tách diagram, đừng nới <code>[path]</code>"</i>), không phải nới ngưỡng.</p>
+
+<div class="tw"><table>
+  <thead><tr><th>Sơ đồ</th><th class="num">UC</th><th class="num">Actor</th><th>Kết quả</th></tr></thead>
+  <tbody>
+    <tr><td><code>lmserp-academic</code></td><td class="num">7</td><td class="num">6</td><td><span class="pill ok">PASS 0 lỗi / 27 cảnh báo</span></td></tr>
+    <tr><td><code>lmserp-system</code></td><td class="num">7</td><td class="num">5</td><td><span class="pill ok">PASS 0 lỗi / 10 cảnh báo</span></td></tr>
+    <tr><td><code>finance</code> <span class="pill bad">tách theo vai</span></td><td class="num">12</td><td class="num">4</td><td><span class="pill bad">2 lỗi</span> — <code>[layout fill]</code> (nửa right của subject trống) + <code>[layout actor-gap]</code> (actor cách viền 275 px). Đã tách thành 3 sơ đồ theo vai</td></tr>
+    <tr><td><code>operations</code></td><td class="num">11</td><td class="num">—</td><td><span class="pill ok">PASS 0 lỗi / 83 cảnh báo</span></td></tr>
+    <tr><td>8 sơ đồ theo vai</td><td class="num">—</td><td class="num">1</td><td><b>8/8 PASS 0 lỗi</b>: 6 sạch tuyệt đối 0 cảnh báo (<code>role-accountant</code>, <code>role-administrator</code>, <code>role-assistant</code>, <code>role-teacher</code>, <code>role-finance-accountant</code>, <code>role-finance-administrator</code>); 2 có 1 cảnh báo (<code>role-manager</code>, <code>role-finance-manager</code>). <span class="pill bad">Bản cũ khai “5/5 PASS 0 lỗi 0 cảnh báo” là SAI</span> — <code>role-accountant</code> và <code>role-administrator</code> từng lỗi <code>[uml usecase-name]</code> “Decide Charge Proposals”</td></tr>
+    <tr><td><code>lmserp</code> <span class="pill warn">deprecated</span></td><td class="num">24</td><td class="num">6</td><td><span class="pill bad">12 lỗi</span> — đã bị 3 sơ đồ miền thay thế. <b>Chưa xoá</b>, không được <code>index.html</code> trưng dụng</td></tr>
+    <tr><td><code>activity/_cp.drawio</code> <span class="pill warn">rác</span></td><td class="num">—</td><td class="num">—</td><td><span class="pill bad">3 lỗi</span> — file nháp còn sót, không được <code>index.html</code> trưng dụng</td></tr>
+  </tbody>
+</table></div>
+
+<div class="gallery">
+  <figure>
+    <img src="uml/usecase/lmserp-academic.png" alt="Use case — miền học vụ">
+    <figcaption><b>Miền học vụ</b> — 7 UC, 6 actor, 17 association, 7 generalization.</figcaption>
+  </figure>
+  <figure>
+    <img src="uml/usecase/lmserp-system.png" alt="Use case — miền hệ thống">
+    <figcaption><b>Miền hệ thống</b> — 7 UC, 5 actor, 13 association, 4 generalization.</figcaption>
+  </figure>
+  <figure>
+    <img src="uml/usecase/role-finance-accountant.png" alt="Use case — miền tài chính, vai Kế toán">
+    <figcaption><b>Miền tài chính — vai Kế toán</b> — 0 lỗi. Sơ đồ gộp 12 UC / 4 actor bị engine
+    chấm 2 lỗi (<code>[layout fill]</code>: nửa right của subject trống;
+    <code>[layout actor-gap]</code>: actor cách viền 275&nbsp;px &gt; 200&nbsp;px), nên đã tách
+    theo vai — đúng luật của engine: <i>“nếu không đạt thì tách diagram, đừng nới
+    <code>[path]</code>”</i>.</figcaption>
+  </figure>
+  <figure>
+    <img src="uml/usecase/role-finance-administrator.png" alt="Use case — miền tài chính, vai Quản trị">
+    <figcaption><b>Miền tài chính — vai Quản trị</b> — 0 lỗi.</figcaption>
+  </figure>
+  <figure>
+    <img src="uml/usecase/role-finance-manager.png" alt="Use case — miền tài chính, vai Quản lý">
+    <figcaption><b>Miền tài chính — vai Quản lý</b> — 0 lỗi, 1 cảnh báo.</figcaption>
+  </figure>
+  <figure>
+    <img src="uml/usecase/operations.png" alt="Use case — vận hành">
+    <figcaption><b>Operations</b> — 11 UC.</figcaption>
+  </figure>
+</div>
+
+<details>
+  <summary>8 sơ đồ use case theo vai — 8/8 PASS 0 lỗi (6 sạch tuyệt đối, 2 có 1 cảnh báo)</summary>
+  <div class="body">
+    <div class="gallery">
+      <figure><img src="uml/usecase/role-accountant.png" alt="role-accountant"><figcaption><b>Accountant</b></figcaption></figure>
+      <figure><img src="uml/usecase/role-administrator.png" alt="role-administrator"><figcaption><b>Administrator</b></figcaption></figure>
+      <figure><img src="uml/usecase/role-assistant.png" alt="role-assistant"><figcaption><b>Assistant</b></figcaption></figure>
+      <figure><img src="uml/usecase/role-manager.png" alt="role-manager"><figcaption><b>Manager</b></figcaption></figure>
+      <figure><img src="uml/usecase/role-teacher.png" alt="role-teacher"><figcaption><b>Teacher</b></figcaption></figure>
+    </div>
+  </div>
+</details>
+
+<h3>Hai quyết định nghiệp vụ đã chốt (Q1 &amp; Q2)</h3>
+
+<blockquote>
+  <p><b>Q1 — tách <code>Record Payment</code> và <code>Record Deposit</code> thành HAI use case</b>
+  (chốt 05/10).</p>
+  <p><code>Record Payment</code> ở <code>PaymentService.php:47</code>, <b>không có actor</b> — chỉ
+  được gọi nội bộ tại <code>:281</code>. <code>Record Deposit</code> ở <code>:134</code>,
+  <b>có</b> actor qua <code>ListCharges.php:440</code> MODE_DEPOSIT.</p>
+  <p>Quan hệ là <b>«extend»</b> (nhánh <code>if</code> có điều kiện ở <code>:280</code>/<code>:284</code>),
+  <b>không phải «include»</b>. Đổi xong thì <code>role-accountant</code> từ 1 cảnh báo xuống 0.</p>
+</blockquote>
+
+<blockquote>
+  <p><b>Q2 — khuôn trường mục tiêu là FPT / UIT (kiểu APU)</b> (chốt 05/10).</p>
+</blockquote>
+
+<h3>Lỗi đã gặp và cách sửa</h3>
+<div class="tw"><table>
+  <thead><tr><th>Lỗi</th><th>Nguyên nhân thật</th><th>Cách sửa</th></tr></thead>
+  <tbody>
+    <tr><td><code>[uml actor-gen]</code> "đi vòng 4 điểm gấp, dài 1700 px" (giới hạn: 900 px, 2 bend)</td>
+        <td>Khai <code>side</code> tường minh mà lệch nhau (actor cha <code>right</code>, con <code>left</code>)</td>
+        <td>Bỏ mọi key <code>side</code> để engine tự xếp → cả 2 diagram về 0 lỗi</td></tr>
+    <tr><td><code>[uml usecase-name]</code> trên <code>Decide Charge Proposals</code></td>
+        <td>"Decide" không phải động từ chủ động (<code>checkVerbPhrase</code>)</td>
+        <td>Đổi tên thành <code>Review Charge Proposals</code> ở cả 2 file model</td></tr>
+    <tr><td><code>lmserp.drawio</code> 12 lỗi</td><td>24 UC + 6 actor trong một hình</td>
+        <td><b>Tách</b> thành 3 diagram miền (đã bỏ <code>side</code>), cả 3 về 0 lỗi</td></tr>
+  </tbody>
+</table>
+  <figure>
+    <img src="uml/usecase/service-usecase.png" alt="Use case — Diagram Service (dịch vụ của chính mình)">
+    <figcaption><b>Diagram Service</b> (dịch vụ của chính mình, không phải LMSERP) — 2 actor
+    (Student, Domain Reviewer), 10 UC, 5 association, 4 «include» — 0 lỗi / 0 cảnh báo.
+    Nguồn: <code>docs/uml/svc/usecase.model.json</code>.</figcaption>
+  </figure>
+</div>
+
+<h2 class="sec" id="activity">Activity diagram <span class="pill dim">4</span></h2>
+<p>Ba use case chính: <code>Take Attendance</code>, <code>Run Monthly Charge Cycle</code>,
+<code>Collect Payment</code>. Nhãn là ngôn ngữ nghiệp vụ, không phải tên hàm.</p>
+
+<div class="gallery">
+  <figure>
+    <img src="uml/activity/take-attendance.png" alt="Activity — Take Attendance">
+    <figcaption><b>Take Attendance</b> — 0 lỗi / 0 cảnh báo.</figcaption>
+  </figure>
+  <figure>
+    <img src="uml/activity/charge-cycle.png" alt="Activity — Run Monthly Charge Cycle">
+    <figcaption><b>Run Monthly Charge Cycle</b> — 0 lỗi / 3 cảnh báo / 2 chỗ tự cắt (tại 960 và 1675).</figcaption>
+  </figure>
+  <figure>
+    <img src="uml/activity/collect-payment.png" alt="Activity — Collect Payment">
+    <figcaption><b>Collect Payment</b> — 0 lỗi / 3 cảnh báo. Bản vẽ lại 05/10 theo Q1: <b>«extend»,
+    không gộp</b>. 3 lane: Accountant · Web App · Payment Service; 10 action, 4 decision, 1 merge,
+    3 flow final.</figcaption>
+  </figure>
+</div>
+
+<details>
+  <summary>Bốn lỗi cấu trúc đã sửa ở <code>collect-payment</code></summary>
+  <div class="body">
+    <ol>
+      <li>Dùng <b>action</b> cho chỗ tách luồng — phải là <b>decision</b> (hình thoi).</li>
+      <li>Nhãn nhánh không đúng khuôn <code>[Yes]</code> / <code>[No]</code>.</li>
+      <li>Nhánh chưa mang nhãn use case đích (<code>→Record Payment UC</code> /
+          <code>→Record Deposit UC</code>).</li>
+      <li>Thiếu <b>flow final</b> ở nhánh không quay lại.</li>
+    </ol>
+    <p class="note">Còn lại chưa vẽ: nhánh <code>:287 AmbiguousBranchContext</code>.</p>
+  
+  <figure>
+    <img src="uml/activity/service-delivery.png" alt="Activity — Deliver one diagram set">
+    <figcaption><b>Deliver one diagram set</b> — 3 lane (Student, System, Domain Reviewer),
+    8 action, 2 decision, 13 cạnh — 0 lỗi / 0 cảnh báo. Vẽ <code>--level system</code>.
+    Nguồn: <code>docs/uml/svc/activity.model.json</code>.</figcaption>
+  </figure>
+</div>
+</details>
+
+<h2 class="sec" id="seqclass">Sequence diagram <span class="pill dim">3</span></h2>
+<p>Ba sơ đồ tuần tự cho đúng 3 use case trên, dựng từ activity cùng tên.</p>
+
+<div class="gallery">
+  <figure><img src="uml/seqclass/take-attendance.sequence.png" alt="Sequence — Take Attendance">
+    <figcaption><b>Take Attendance</b> — sequence</figcaption></figure>
+  <figure><img src="uml/seqclass/charge-cycle.sequence.png" alt="Sequence — Charge Cycle">
+    <figcaption><b>Run Monthly Charge Cycle</b> — sequence</figcaption></figure>
+  <figure><img src="uml/seqclass/collect-payment.sequence.png" alt="Sequence — Collect Payment">
+    <figcaption><b>Collect Payment</b> — sequence</figcaption></figure>
+</div>
+
+<h2 class="sec" id="erd">Conceptual ERD <span class="pill dim">3</span></h2>
+<p>ERD ở mức <b>khái niệm</b> — không attribute, không PK/FK, không kiểu dữ liệu. Entity số nhiều,
+quan hệ là động từ hiện tại đơn, có crow's foot.</p>
+
+<div class="gallery">
+  <figure><img src="uml/erd/academic.png" alt="ERD — Academic"><figcaption><b>Academic</b></figcaption></figure>
+  <figure><img src="uml/erd/finance.png" alt="ERD — Finance"><figcaption><b>Finance</b></figcaption></figure>
+  <figure><img src="uml/erd/registry.png" alt="ERD — Registry"><figcaption><b>Registry</b></figcaption></figure>
+</div>
+
+<h2 class="sec" id="state">State machine diagram <span class="pill dim">3</span></h2>
+<p>Ba vòng đời trạng thái rút từ enum thật trong code. Mũi tên luôn ghi <b>Actor + hành động</b>;
+guard đặt trên transition rời state nguồn.</p>
+
+<div class="gallery">
+  <figure><img src="uml/state/chargestatus.png" alt="State — ChargeStatus"><figcaption><b>ChargeStatus</b></figcaption></figure>
+  <figure><img src="uml/state/chargeproposalstatus.png" alt="State — ChargeProposalStatus"><figcaption><b>ChargeProposalStatus</b></figcaption></figure>
+  <figure><img src="uml/state/sessionstatus.png" alt="State — SessionStatus"><figcaption><b>SessionStatus</b></figcaption></figure>
+</div>
+
+<p class="note">Repo thật có <b>10 enum trạng thái</b>; mới vẽ 3, còn 7 để sau theo <code>plan.md</code>.</p>
+
+<h2 class="sec" id="kientruc">Kiến trúc, package &amp; component <span class="pill dim">3</span></h2>
+
+<div class="gallery">
+  <figure><img src="uml/architecture/system.png" alt="Architecture diagram">
+    <figcaption><b>Architecture</b> — cột FE/BE/DB, cặp HttpRequest/HttpResponse, mọi cạnh chạm DB
+    ghi đúng TCP/IP.</figcaption></figure>
+  <figure><img src="uml/package/backend.png" alt="Package diagram">
+    <figcaption><b>Package (backend)</b> — package chỉ hiện tên ngắn; mọi dependency mang nhãn
+    «use» hoặc «import».</figcaption></figure>
+  <figure><img src="uml/component/system.png" alt="Component diagram">
+    <figcaption><b>Component</b> — lollipop/socket, assembly connector, port, dependency.</figcaption></figure>
+</div>
+
+<h2 class="sec" id="quytrinh">Quy trình chạy — thứ tự bắt buộc</h2>
+
+<pre><code>flows → (Tường xác nhận) → use case → activity → sequence/class</code></pre>
+
+<p>Mỗi bước phải qua cổng kiểm trước khi sang bước sau. Quy tắc engine giữ nguyên:
+<b>nếu không đạt thì tách diagram, đừng nới <code>[path]</code></b>.</p>
+
+<h4>Các cổng kiểm đã dùng</h4>
+<div class="tw"><table>
+  <thead><tr><th>Việc</th><th>Lệnh</th><th>Lưu ý</th></tr></thead>
+  <tbody>
+    <tr><td>Kiểm use case</td><td><code>usecase.mjs check &lt;f.drawio&gt;</code></td><td>chỉ nhận <code>.drawio</code>; đưa <code>.model.json</code> vào sẽ báo <code>XML hỏng: char '{'</code></td></tr>
+    <tr><td>Sinh hình</td><td><code>usecase.mjs gen &lt;f.model.json&gt;</code></td><td>exit 0 <b>không</b> đồng nghĩa PASS — phải đọc dòng <code>OK:</code> / <code>FAIL:</code></td></tr>
+    <tr><td>Xuất PNG</td><td><code>drawio.mjs export &lt;f.drawio&gt; --format png --out &lt;f.png&gt;</code></td><td>dùng chung cho mọi skill hình</td></tr>
+    <tr><td>Kiểm hình học</td><td><code>verify_geometry.py</code></td><td>bộ đo độc lập, phải chạy sau <code>gen</code></td></tr>
+    <tr><td>Cổng tiếng Việt</td><td><code>python3 -c "import re;print(re.findall(r'[一-鿿]+',open(F).read()))"</code></td><td>phải in <code>[]</code> — không có ký tự CJK lọt vào file tiếng Việt</td></tr>
+  </tbody>
+</table></div>
+
+<h2 class="sec" id="tailap">Phụ lục — cách tái lập số đo</h2>
+
+<pre><code># danh mục model
+~/.dsh/bin/dsh-9r-api GET /api/models | python3 -m json.tool | head -50
+
+# throughput N đồng thời  (bản lưu trong repo — KHÔNG nhúng key)
+export DSH_9R_KEY=sk-...   # lấy từ cấu hình ~/.dsh, không commit
+bash docs/evidence/bench.sh 100 oc/mimo-v2.5-free
+
+# mô phỏng queue
+python3 docs/evidence/simqueue2.py
+
+# engine test baseline
+for s in use-case-diagram context-diagram activity-diagram kickoff-uml; do
+  node --test ~/.dsh/skills/$s/scripts/*.test.mjs &gt;/dev/null 2&gt;&amp;1 \
+    &amp;&amp; echo "$s OK" || echo "$s FAIL"
+done</code></pre>
+
+<footer>
+  <p><b>Nguồn:</b> <code>docs/baseline.md</code> · <code>docs/notes/strategic-pivot.md</code> ·
+  <code>docs/uml/plan.md</code> · <code>docs/uml/questions.md</code> ·
+  <code>research/bao-cao-thi-truong-ve-srs-sds-uml.md</code> ·
+  <code>docs/uml/usecase/README.md</code> · <code>docs/uml/activity/README.md</code> ·
+  <code>docs/notes/verification-round-4.md</code> (nhật ký tự xác minh)</p>
+  <p>Trang này tự chứa (CSS nhúng), chỉ trỏ ảnh ra ngoài theo đường dẫn tương đối. Mở trực tiếp
+  từ <code>docs/index.html</code> — không cần server, không cần internet.
+  <b>Trang tĩnh, không có JavaScript</b> — 0 thẻ <code>&lt;script&gt;</code>, 0 <code>onclick</code>,
+  0 <code>&lt;form&gt;</code>, 0 request ra mạng. Đây là tài liệu <i>hiển thị</i>, không phải ứng dụng <i>chạy</i>.</p>
+  <p>Mọi số ghi "đo" là chạy thật trên máy này ngày 05–06/10/2026. Số ghi "ước" là suy ra từ số đo.</p>
+</footer>
+
+</main>
+</div>
+</body>
+</html>

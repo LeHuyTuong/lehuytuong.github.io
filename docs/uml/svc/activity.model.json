@@ -1,0 +1,148 @@
+{
+  "title": "Deliver one diagram set",
+  "lanes": [
+    "Student",
+    "System",
+    "Domain Reviewer"
+  ],
+  "nodes": [
+    {
+      "id": "start",
+      "kind": "start",
+      "lane": "Student"
+    },
+    {
+      "id": "receiveRepo",
+      "kind": "action",
+      "lane": "Student",
+      "text": "Provide repository"
+    },
+    {
+      "id": "dScope",
+      "kind": "decision",
+      "lane": "System",
+      "text": "Scope signed?"
+    },
+    {
+      "id": "stopRefuse",
+      "kind": "stop",
+      "lane": "Student"
+    },
+    {
+      "id": "readCode",
+      "kind": "action",
+      "lane": "System",
+      "text": "Read customer code"
+    },
+    {
+      "id": "draftDiagram",
+      "kind": "action",
+      "lane": "System",
+      "text": "Generate diagram set"
+    },
+    {
+      "id": "askRules",
+      "kind": "action",
+      "lane": "Domain Reviewer",
+      "text": "Confirm business rules"
+    },
+    {
+      "id": "dRules",
+      "kind": "decision",
+      "lane": "Domain Reviewer",
+      "text": "Rules confirmed?"
+    },
+    {
+      "id": "exportFiles",
+      "kind": "action",
+      "lane": "System",
+      "text": "Export editable files"
+    },
+    {
+      "id": "deliver",
+      "kind": "action",
+      "lane": "Student",
+      "text": "Accept delivery"
+    },
+    {
+      "id": "payBalance",
+      "kind": "action",
+      "lane": "Student",
+      "text": "Pay balance"
+    },
+    {
+      "id": "stop",
+      "kind": "stop",
+      "lane": "Student"
+    },
+    {
+      "id": "askClarify",
+      "kind": "action",
+      "lane": "System",
+      "text": "Send clarification request"
+    },
+    {
+      "id": "stopPause",
+      "kind": "stop",
+      "lane": "System"
+    }
+  ],
+  "edges": [
+    {
+      "from": "start",
+      "to": "receiveRepo"
+    },
+    {
+      "from": "receiveRepo",
+      "to": "dScope"
+    },
+    {
+      "from": "dScope",
+      "to": "stopRefuse",
+      "label": "No"
+    },
+    {
+      "from": "dScope",
+      "to": "readCode",
+      "label": "Yes"
+    },
+    {
+      "from": "readCode",
+      "to": "draftDiagram"
+    },
+    {
+      "from": "draftDiagram",
+      "to": "askRules"
+    },
+    {
+      "from": "askRules",
+      "to": "dRules"
+    },
+    {
+      "from": "dRules",
+      "to": "askClarify",
+      "label": "No"
+    },
+    {
+      "from": "dRules",
+      "to": "exportFiles",
+      "label": "Yes"
+    },
+    {
+      "from": "exportFiles",
+      "to": "deliver"
+    },
+    {
+      "from": "deliver",
+      "to": "payBalance"
+    },
+    {
+      "from": "payBalance",
+      "to": "stop"
+    },
+    {
+      "from": "askClarify",
+      "to": "stopPause"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "title": "Charge lifecycle",
+  "level": "system",
+  "owner": "Charge",
+  "actors": [
+    "Scheduler",
+    "Accountant",
+    "Web App",
+    "Payment Service",
+    "Credit Pool"
+  ],
+  "nodes": [
+    {
+      "id": "start",
+      "kind": "start"
+    },
+    {
+      "id": "pending",
+      "kind": "state",
+      "text": "Pending"
+    },
+    {
+      "id": "partial",
+      "kind": "state",
+      "text": "Partial"
+    },
+    {
+      "id": "paid",
+      "kind": "state",
+      "text": "Paid"
+    },
+    {
+      "id": "end",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "start",
+      "to": "pending",
+      "label": "Scheduler creates the cycle charge"
+    },
+    {
+      "from": "pending",
+      "to": "partial",
+      "label": "[part payment] Accountant collects cash"
+    },
+    {
+      "from": "pending",
+      "to": "paid",
+      "label": "[total is 0] Scheduler settles the cycle"
+    },
+    {
+      "from": "partial",
+      "to": "partial",
+      "label": "[part payment] Web App collects"
+    },
+    {
+      "from": "partial",
+      "to": "paid",
+      "label": "[paid in full] Web App collects the rest"
+    },
+    {
+      "from": "pending",
+      "to": "pending",
+      "label": "[credit used] Credit Pool applies"
+    },
+    {
+      "from": "partial",
+      "to": "partial",
+      "label": "[part payment] Web App collects"
+    },
+    {
+      "from": "paid",
+      "to": "end",
+      "label": "Payment Service closes the charge"
+    }
+  ]
+}

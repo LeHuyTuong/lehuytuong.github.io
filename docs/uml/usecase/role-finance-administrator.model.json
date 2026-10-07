@@ -1,0 +1,89 @@
+{
+  "subject": {
+    "name": "LMSERP OneWorld"
+  },
+  "actors": [
+    {
+      "id": "Administrator",
+      "name": "Administrator"
+    }
+  ],
+  "usecases": [
+    {
+      "id": "UC07",
+      "name": "Manage Enrollments",
+      "evidence": [
+        "app/Policies/EnrollmentPolicy.php"
+      ]
+    },
+    {
+      "id": "UC11",
+      "name": "Manage Charge Proposals",
+      "evidence": [
+        "app/Policies/ChargeProposalPolicy.php"
+      ]
+    },
+    {
+      "id": "UC12",
+      "name": "Review Charge Proposals",
+      "evidence": [
+        "app/Features/Finance/Services/ChargeProposalService.php:100"
+      ]
+    },
+    {
+      "id": "UC13",
+      "name": "Manage Charges",
+      "evidence": [
+        "app/Policies/ChargePolicy.php"
+      ]
+    },
+    {
+      "id": "UC15",
+      "name": "Manage Payments",
+      "evidence": [
+        "app/Policies/PaymentPolicy.php"
+      ]
+    },
+    {
+      "id": "UC17",
+      "name": "Manage Tax Invoices",
+      "evidence": [
+        "app/Policies/TaxInvoicePolicy.php"
+      ]
+    }
+  ],
+  "associations": [
+    {
+      "actor": "Administrator",
+      "usecase": "UC07"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC11"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC13"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC15"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC17"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC12"
+    }
+  ],
+  "includes": [
+    {
+      "base": "UC12",
+      "part": "UC13"
+    }
+  ],
+  "extends": [],
+  "generalizations": []
+}

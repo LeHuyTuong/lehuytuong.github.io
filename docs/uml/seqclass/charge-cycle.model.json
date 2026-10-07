@@ -1,0 +1,276 @@
+{
+  "feature": "Charge Cycle",
+  "activity": "/Volumes/SSD/Dev/active/startup-srs/docs/uml/activity/charge-cycle.drawio",
+  "level": "subsystem",
+  "style": "REST",
+  "actor": "Scheduler",
+  "boundary": "Web App",
+  "external": [
+    "Charge Cycle Runner",
+    "Charge Proposal Service",
+    "Charge Auto Approval",
+    "Charge Service",
+    "Cycle Attendance Counter",
+    "Absence Tracker",
+    "Activity Log Service",
+    "Alert Recipients"
+  ],
+  "database": "MySQL",
+  "classes": [],
+  "steps": [
+    {
+      "call": "«REST» run(dryRun, enrollmentId, actor)",
+      "from": "Scheduler",
+      "to": "Charge Cycle Runner",
+      "step": "Scan due enrollments"
+    },
+    {
+      "call": "«SQL» SELECT enrollments WHERE status = ACTIVE AND is_billable = true",
+      "from": "Charge Cycle Runner",
+      "to": "MySQL",
+      "step": "Scan due enrollments"
+    },
+    {
+      "reply": "chunk of billable enrollments",
+      "from": "MySQL",
+      "to": "Charge Cycle Runner"
+    },
+    {
+      "call": "«in-process» previewCycle(enrollment)",
+      "from": "Charge Cycle Runner",
+      "to": "Charge Service",
+      "step": "Preview cycle"
+    },
+    {
+      "alt": [
+        {
+          "guard": "Cycle to bill?",
+          "steps": [
+            {
+              "call": "«in-process» isLongAbsent(enrollment) AND isCycleDue(enrollment)",
+              "from": "Charge Cycle Runner",
+              "to": "Absence Tracker"
+            },
+            {
+              "reply": "long absence reached the center threshold and a new cycle is due",
+              "from": "Absence Tracker",
+              "to": "Charge Cycle Runner"
+            },
+            {
+              "alt": [
+                {
+                  "guard": "Long absence due?",
+                  "steps": [
+                    {
+                      "call": "«in-process» autoPause(enrollment)",
+                      "from": "Charge Cycle Runner",
+                      "to": "Charge Cycle Runner",
+                      "step": "Auto pause enrollment as PAUSED"
+                    },
+                    {
+                      "call": "«SQL» UPDATE enrollments SET status = PAUSED",
+                      "from": "Charge Cycle Runner",
+                      "to": "MySQL",
+                      "step": "Auto pause enrollment as PAUSED"
+                    },
+                    {
+                      "call": "«in-process» log(actor: null, finance.enrollment.auto_paused)",
+                      "from": "Charge Cycle Runner",
+                      "to": "Activity Log Service",
+                      "step": "Log auto pause and notify center"
+                    },
+                    {
+                      "call": "«in-process» notify(AutoPausedEnrollmentAlert)",
+                      "from": "Charge Cycle Runner",
+                      "to": "Alert Recipients",
+                      "step": "Log auto pause and notify center"
+                    }
+                  ]
+                },
+                {
+                  "guard": "not Long absence due?",
+                  "steps": [
+                    {
+                      "call": "«in-process» propose(enrollment)",
+                      "from": "Charge Cycle Runner",
+                      "to": "Charge Proposal Service",
+                      "step": "Find proposal of cycle"
+                    },
+                    {
+                      "reply": "proposal of the cycle, or null when nothing to bill",
+                      "from": "Charge Proposal Service",
+                      "to": "Charge Cycle Runner",
+                      "step": "Find proposal of cycle"
+                    },
+                    {
+                      "alt": [
+                        {
+                          "guard": "Already decided?",
+                          "steps": [
+                            {
+                              "reply": "proposal null or a cycle the accountant already decided",
+                              "from": "Charge Cycle Runner",
+                              "to": "Charge Cycle Runner",
+                              "step": "Find proposal of cycle"
+                            }
+                          ]
+                        },
+                        {
+                          "guard": "not Already decided?",
+                          "steps": [
+                            {
+                              "call": "«in-process» count(enrollment, sessions)",
+                              "from": "Charge Cycle Runner",
+                              "to": "Cycle Attendance Counter",
+                              "step": "Count cycle attendance"
+                            },
+                            {
+                              "reply": "absences and unmarked counts",
+                              "from": "Cycle Attendance Counter",
+                              "to": "Charge Cycle Runner",
+                              "step": "Count cycle attendance"
+                            },
+                            {
+                              "call": "«in-process» saveProposal(proposal, status: PENDING)",
+                              "from": "Charge Cycle Runner",
+                              "to": "Charge Proposal Service",
+                              "step": "Create proposal as PENDING"
+                            },
+                            {
+                              "call": "«in-process» shouldApprove(proposal)",
+                              "from": "Charge Cycle Runner",
+                              "to": "Charge Auto Approval",
+                              "step": "Read auto approval settings"
+                            },
+                            {
+                              "alt": [
+                                {
+                                  "guard": "not Absences over limit",
+                                  "steps": [
+                                    {
+                                      "call": "«in-process» approve(proposal, actor: null, auto: true)",
+                                      "from": "Charge Cycle Runner",
+                                      "to": "Charge Proposal Service",
+                                      "step": "Auto approve proposal as system"
+                                    },
+                                    {
+                                      "reply": "proposal approved as the system",
+                                      "from": "Charge Proposal Service",
+                                      "to": "Charge Cycle Runner",
+                                      "step": "Auto approve proposal as system"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "guard": "Absences over limit",
+                                  "steps": [
+                                    {
+                                      "alt": [
+                                        {
+                                          "guard": "Accountant approves?",
+                                          "steps": [
+                                            {
+                                              "call": "«in-process» approve(proposal, actor, auto: false)",
+                                              "from": "Charge Cycle Runner",
+                                              "to": "Charge Proposal Service",
+                                              "step": "Accountant approves proposal"
+                                            },
+                                            {
+                                              "reply": "proposal approved by the accountant",
+                                              "from": "Charge Proposal Service",
+                                              "to": "Charge Cycle Runner",
+                                              "step": "Accountant approves proposal"
+                                            },
+                                            {
+                                              "call": "«in-process» generateCycle(enrollment)",
+                                              "from": "Charge Cycle Runner",
+                                              "to": "Charge Service",
+                                              "step": "Generate charge"
+                                            },
+                                            {
+                                              "alt": [
+                                                {
+                                                  "guard": "Charge created?",
+                                                  "steps": [
+                                                    {
+                                                      "reply": "charge written",
+                                                      "from": "Charge Service",
+                                                      "to": "Charge Cycle Runner",
+                                                      "step": "Generate charge"
+                                                    },
+                                                    {
+                                                      "call": "«in-process» log(approval, charge)",
+                                                      "from": "Charge Cycle Runner",
+                                                      "to": "Activity Log Service",
+                                                      "step": "Log approval and charge"
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "guard": "not Charge created?",
+                                                  "steps": [
+                                                    {
+                                                      "reply": "ChargeProposalStale — conditions changed, the cycle stays in the queue",
+                                                      "from": "Charge Service",
+                                                      "to": "Charge Cycle Runner",
+                                                      "step": "Generate charge"
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "guard": "not Accountant approves?",
+                                          "steps": [
+                                            {
+                                              "call": "«in-process» dismiss(proposal, reason, pauseEnrollment)",
+                                              "from": "Web App",
+                                              "to": "Charge Proposal Service",
+                                              "step": "Dismiss proposal"
+                                            },
+                                            {
+                                              "call": "«in-process» log(dismissal)",
+                                              "from": "Charge Proposal Service",
+                                              "to": "Activity Log Service",
+                                              "step": "Log dismissal"
+                                            },
+                                            {
+                                              "reply": "proposal dismissed",
+                                              "from": "Charge Proposal Service",
+                                              "to": "Web App"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "guard": "not Cycle to bill?",
+          "steps": [
+            {
+              "reply": "preview null — the cycle cannot be billed yet",
+              "from": "Charge Service",
+              "to": "Charge Cycle Runner",
+              "step": "Preview cycle"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

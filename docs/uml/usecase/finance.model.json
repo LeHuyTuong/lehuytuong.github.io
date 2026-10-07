@@ -1,0 +1,209 @@
+{
+  "subject": {
+    "name": "LMSERP OneWorld"
+  },
+  "actors": [
+    {
+      "id": "RegisteredUser",
+      "name": "Registered User"
+    },
+    {
+      "id": "Administrator",
+      "name": "Administrator"
+    },
+    {
+      "id": "Manager",
+      "name": "Manager"
+    },
+    {
+      "id": "Accountant",
+      "name": "Accountant"
+    }
+  ],
+  "usecases": [
+    {
+      "id": "UC07",
+      "name": "Manage Enrollments",
+      "evidence": [
+        "app/Policies/EnrollmentPolicy.php"
+      ]
+    },
+    {
+      "id": "UC09",
+      "name": "View Attendance",
+      "evidence": [
+        "app/Policies/AttendancePolicy.php:45-63"
+      ]
+    },
+    {
+      "id": "UC11",
+      "name": "Manage Charge Proposals",
+      "evidence": [
+        "app/Policies/ChargeProposalPolicy.php"
+      ]
+    },
+    {
+      "id": "UC12",
+      "name": "Review Charge Proposals",
+      "evidence": [
+        "app/Features/Finance/Services/ChargeProposalService.php:100"
+      ]
+    },
+    {
+      "id": "UC13",
+      "name": "Manage Charges",
+      "evidence": [
+        "app/Policies/ChargePolicy.php"
+      ]
+    },
+    {
+      "id": "UC14",
+      "name": "Run Monthly Charge Cycle",
+      "evidence": [
+        "app/Features/Finance/Services/ChargeCycleRunner.php:68"
+      ]
+    },
+    {
+      "id": "UC15",
+      "name": "Manage Payments",
+      "evidence": [
+        "app/Policies/PaymentPolicy.php"
+      ]
+    },
+    {
+      "id": "UC16",
+      "name": "Collect Payment",
+      "evidence": [
+        "app/Features/Finance/Services/PaymentService.php:231"
+      ]
+    },
+    {
+      "id": "UC19",
+      "name": "Record Payment",
+      "evidence": [
+        "app/Features/Finance/Services/PaymentService.php:47"
+      ]
+    },
+    {
+      "id": "UC20",
+      "name": "Record Deposit",
+      "evidence": [
+        "app/Features/Finance/Services/PaymentService.php:134"
+      ]
+    },
+    {
+      "id": "UC17",
+      "name": "Manage Tax Invoices",
+      "evidence": [
+        "app/Policies/TaxInvoicePolicy.php"
+      ]
+    },
+    {
+      "id": "UC18",
+      "name": "Issue Tax Invoice",
+      "evidence": [
+        "app/Features/Finance/Services/TaxInvoiceService.php:55"
+      ]
+    }
+  ],
+  "associations": [
+    {
+      "actor": "Administrator",
+      "usecase": "UC07"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC11"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC13"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC15"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC17"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC07"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC09"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC11"
+    },
+    {
+      "actor": "Accountant",
+      "usecase": "UC07"
+    },
+    {
+      "actor": "Accountant",
+      "usecase": "UC09"
+    },
+    {
+      "actor": "Accountant",
+      "usecase": "UC13"
+    },
+    {
+      "actor": "Accountant",
+      "usecase": "UC14"
+    },
+    {
+      "actor": "Accountant",
+      "usecase": "UC15"
+    },
+    {
+      "actor": "Accountant",
+      "usecase": "UC16"
+    },
+    {
+      "actor": "Accountant",
+      "usecase": "UC17"
+    },
+    {
+      "actor": "Accountant",
+      "usecase": "UC18"
+    },
+    {
+      "actor": "Accountant",
+      "usecase": "UC20"
+    },
+    {
+      "actor": "Administrator",
+      "usecase": "UC12"
+    },
+    {
+      "actor": "Accountant",
+      "usecase": "UC12"
+    }
+  ],
+  "includes": [
+    {
+      "base": "UC12",
+      "part": "UC13"
+    }
+  ],
+  "extends": [
+    {
+      "extending": "UC19",
+      "base": "UC16"
+    },
+    {
+      "extending": "UC20",
+      "base": "UC16"
+    }
+  ],
+  "generalizations": [],
+  "actorParents": {
+    "Administrator": "RegisteredUser",
+    "Manager": "RegisteredUser",
+    "Accountant": "RegisteredUser"
+  }
+}

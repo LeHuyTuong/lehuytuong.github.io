@@ -1,0 +1,290 @@
+{
+  "system": "LMSERP OneWorld",
+  "entities": [
+    {
+      "name": "Administrator",
+      "kind": "person",
+      "side": "left",
+      "evidence": "app/Enums/Role.php:10 (admin)"
+    },
+    {
+      "name": "Manager",
+      "kind": "person",
+      "side": "left",
+      "evidence": "app/Enums/Role.php:11 (manager)"
+    },
+    {
+      "name": "Teacher",
+      "kind": "person",
+      "side": "left",
+      "evidence": "app/Enums/Role.php:12 (gv)"
+    },
+    {
+      "name": "Assistant",
+      "kind": "person",
+      "side": "left",
+      "evidence": "app/Enums/Role.php:13 (tg)"
+    },
+    {
+      "name": "Accountant",
+      "kind": "person",
+      "side": "left",
+      "evidence": "app/Enums/Role.php:14 (ketoan)"
+    },
+    {
+      "name": "Google Drive API",
+      "kind": "external",
+      "side": "top",
+      "evidence": "app/Services/GoogleDriveService.php:13,17,80,130"
+    },
+    {
+      "name": "GitHub API",
+      "kind": "external",
+      "side": "top",
+      "evidence": "app/Console/Commands/PullDeployCommand.php:107,129,152"
+    }
+  ],
+  "flows": [
+    {
+      "from": "Administrator",
+      "to": "system",
+      "labels": [
+        "User account data",
+        "Role assignment",
+        "Student records",
+        "Enrollment records",
+        "Classroom records",
+        "Holiday calendar",
+        "Attendance records",
+        "Teaching work log",
+        "Payment records",
+        "Tax invoice records",
+        "Activity log entries",
+        "Google Drive credentials"
+      ],
+      "evidence": "app/Policies/UserPolicy.php; app/Policies/RolePolicy.php; app/Policies/StudentPolicy.php"
+    },
+    {
+      "from": "system",
+      "to": "Administrator",
+      "labels": [
+        "User directory",
+        "Student directory",
+        "Enrollment list",
+        "Classroom directory",
+        "Holiday calendar",
+        "Attendance records",
+        "Teaching work log",
+        "Payment directory",
+        "Tax invoice list",
+        "Activity log entries",
+        "Google Drive file link",
+        "Deploy run status"
+      ],
+      "evidence": "app/Filament/Resources/ActivityLogResource.php; app/Console/Commands/PullDeployCommand.php:107-152"
+    },
+    {
+      "from": "Manager",
+      "to": "system",
+      "labels": [
+        "Student records",
+        "Enrollment records",
+        "Classroom records",
+        "Holiday calendar",
+        "Charge proposal decision"
+      ],
+      "evidence": "app/Policies/ChargeProposalPolicy.php"
+    },
+    {
+      "from": "system",
+      "to": "Manager",
+      "labels": [
+        "Student directory",
+        "Enrollment list",
+        "Classroom directory",
+        "Holiday calendar",
+        "Charge proposal list",
+        "Attendance records",
+        "Teaching work log",
+        "Session journal entries"
+      ],
+      "evidence": "app/Policies/StudentPolicy.php; app/Policies/SessionJournalPolicy.php"
+    },
+    {
+      "from": "Teacher",
+      "to": "system",
+      "labels": [
+        "Attendance marking",
+        "Teaching work log"
+      ],
+      "evidence": "app/Services/Attendance/AttendancePermission.php:71-95"
+    },
+    {
+      "from": "system",
+      "to": "Teacher",
+      "labels": [
+        "Class roster",
+        "Session journal entries",
+        "Teaching work log",
+        "Marked attendance sheet"
+      ],
+      "evidence": "app/Policies/TeachingWorkLogPolicy.php"
+    },
+    {
+      "from": "Assistant",
+      "to": "system",
+      "labels": [
+        "Attendance marking",
+        "Teaching work log"
+      ],
+      "evidence": "app/Policies/AttendancePolicy.php:25,40"
+    },
+    {
+      "from": "system",
+      "to": "Assistant",
+      "labels": [
+        "Class roster",
+        "Marked attendance sheet"
+      ],
+      "evidence": "app/Policies/AttendancePolicy.php:45-63"
+    },
+    {
+      "from": "Accountant",
+      "to": "system",
+      "labels": [
+        "Payment record",
+        "Payment receipt",
+        "Charge proposal decision",
+        "Credit deposit"
+      ],
+      "evidence": "app/Features/Finance/Services/PaymentService.php:47-118,231-"
+    },
+    {
+      "from": "system",
+      "to": "Accountant",
+      "labels": [
+        "Charge cycle directory",
+        "Remaining amount",
+        "Payment list",
+        "Payment receipt",
+        "Tax invoice list",
+        "Credit pool balance",
+        "Student directory"
+      ],
+      "evidence": "app/Features/Finance/Services/PaymentService.php:70,96-99; app/Features/Finance/Services/CreditPoolService.php:157"
+    },
+    {
+      "from": "system",
+      "to": "Google Drive API",
+      "labels": [
+        "Curriculum media file",
+        "Qualification media file",
+        "Uploaded file id",
+        "Folder structure",
+        "Stored file identifier"
+      ],
+      "evidence": "app/Services/GoogleDriveService.php:47-80; app/Jobs/UploadToDriveJob.php:61"
+    },
+    {
+      "from": "Google Drive API",
+      "to": "system",
+      "labels": [
+        "Granted file access",
+        "File preview link",
+        "Stored media metadata"
+      ],
+      "evidence": "app/Services/GoogleDriveService.php:13,17,177-196"
+    },
+    {
+      "from": "system",
+      "to": "GitHub API",
+      "labels": [
+        "Pull request for pending deploy"
+      ],
+      "evidence": "app/Console/Commands/PullDeployCommand.php:107,129,152"
+    },
+    {
+      "from": "GitHub API",
+      "to": "system",
+      "labels": [
+        "Merge result"
+      ],
+      "evidence": "app/Console/Commands/PullDeployCommand.php:107-152"
+    }
+  ],
+  "excludedExternals": [
+    {
+      "name": "Font CDN (fonts.bunny.net)",
+      "reason": "static asset loaded by the browser, not a data flow of the system"
+    },
+    {
+      "name": "Bootstrap CDN / jsDelivr / jsZip / FilePond / Pusher Echo client",
+      "reason": "frontend javascript vendor bundles loaded by the browser only"
+    },
+    {
+      "name": "SMTP Mail server",
+      "reason": "MAIL_MAILER=log in .env.example:54 — mail is written to the log, no server is contacted"
+    },
+    {
+      "name": "Redis",
+      "reason": "own infrastructure of the system, it belongs inside the process boundary"
+    },
+    {
+      "name": "SQLite database",
+      "reason": "own datastore of the system, it belongs inside the process boundary"
+    },
+    {
+      "name": "oneworld-dev.carbonx.io.vn, *.localhost",
+      "reason": "appear only in tmp/ QA probe scripts, not in application code"
+    },
+    {
+      "name": "Social login provider",
+      "reason": "no Socialite or Google sign-in client found in app/ or config/"
+    },
+    {
+      "name": "SendGrid Email API",
+      "reason": "Monolog handler shipped in vendor/monolog; no application code selects it and MAIL_MAILER=log (.env.example:54)",
+      "id": "sendgrid"
+    },
+    {
+      "name": "Ifttt Service",
+      "reason": "Monolog handler in vendor/monolog only; not referenced by app/, config/ or database/"
+    },
+    {
+      "name": "Mandrill Service",
+      "reason": "Monolog handler in vendor/monolog only; not referenced by app/, config/ or database/"
+    },
+    {
+      "name": "Telegram Bot Service",
+      "reason": "Monolog handler in vendor/monolog only; not referenced by app/, config/ or database/"
+    },
+    {
+      "name": "Curl Factory Service",
+      "reason": "Guzzle HTTP transport internals in vendor/guzzlehttp; not an external business system"
+    },
+    {
+      "name": "Factory Service",
+      "reason": "Illuminate HTTP client factory in vendor/laravel; the app calls Http:: directly for GitHub only"
+    },
+    {
+      "name": "File Storage Service",
+      "reason": "Faker image provider in vendor/fakerphp used by database factories to seed sample media"
+    },
+    {
+      "name": "Mapbox API",
+      "reason": "referenced only inside frontend vendor bundles (public/js/...) and MIME-type lookup tables in vendor/",
+      "id": "mapbox"
+    },
+    {
+      "name": "Google Sign-In",
+      "reason": "match is oauth2.googleapis.com/token (app/Services/GoogleDriveService.php:17,203), the Google OAuth token endpoint of the Drive integration already drawn as Google Drive API — not a user sign-in provider",
+      "id": "google-oauth"
+    },
+    {
+      "id": "mailgun",
+      "name": "Mailgun Email API",
+      "reason": "config/mail.php:32 and config/services.php:11 are Laravel template comments plus an unused env placeholder; MAIL_MAILER=log (.env.example:54) means no mail server is contacted"
+    }
+  ],
+  "notes": []
+}

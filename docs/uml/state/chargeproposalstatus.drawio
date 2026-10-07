@@ -1,0 +1,20 @@
+<mxfile host="drawio" agent="dsh diagram-builder" version="31.4.5">
+  <diagram id="Charge-proposal-lifecycle" name="Charge proposal lifecycle">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <object label="" dshActors="Scheduler,Finance Service" dshLevel="system" dshOwner="Charge Proposal" id="1"><mxCell parent="0"/></object>
+        <mxCell id="start" value="" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1"><mxGeometry x="419" y="32" width="30" height="30" as="geometry"/></mxCell>
+        <mxCell id="pending" value="Pending" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="354" y="161" width="160" height="50" as="geometry"/></mxCell>
+        <mxCell id="approved" value="Approved" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="547" y="320" width="160" height="50" as="geometry"/></mxCell>
+        <mxCell id="dismissed" value="Dismissed" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1"><mxGeometry x="327" y="320" width="160" height="50" as="geometry"/></mxCell>
+        <mxCell id="end" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1"><mxGeometry x="397" y="479" width="30" height="30" as="geometry"/></mxCell>
+        <mxCell id="e0" value="Scheduler proposes the cycle charge" style="rounded=0;html=1;endArrow=classic;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="start" target="pending"><mxGeometry x="0" relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e1" value="[conditions unchanged] Finance Service approves" style="rounded=0;html=1;endArrow=classic;exitX=0.66;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="pending" target="approved"><mxGeometry x="0.64" relative="1" as="geometry"><Array as="points"><mxPoint x="460" y="236"/><mxPoint x="627" y="236"/></Array></mxGeometry></mxCell>
+        <mxCell id="e2" value="[accountant reads the reason] Finance Service dismisses" style="rounded=0;html=1;endArrow=classic;exitX=0.33;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="pending" target="dismissed"><mxGeometry x="0.6" relative="1" as="geometry"></mxGeometry></mxCell>
+        <mxCell id="e3" value="Finance Service links the new charge" style="rounded=0;html=1;endArrow=classic;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="approved" target="end"><mxGeometry x="-0.69" relative="1" as="geometry"><Array as="points"><mxPoint x="627" y="454"/><mxPoint x="445" y="454"/><mxPoint x="445" y="494"/></Array></mxGeometry></mxCell>
+        <mxCell id="e4" value="Scheduler pauses the enrollment when asked" style="rounded=0;html=1;endArrow=classic;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="dismissed" target="end"><mxGeometry x="-0.6" relative="1" as="geometry"><Array as="points"><mxPoint x="407" y="461"/><mxPoint x="412" y="461"/></Array></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

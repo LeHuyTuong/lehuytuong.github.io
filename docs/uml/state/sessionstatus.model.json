@@ -1,0 +1,62 @@
+{
+  "title": "Class session lifecycle",
+  "level": "system",
+  "owner": "Class Session",
+  "actors": [
+    "Scheduler",
+    "Web App",
+    "Teacher"
+  ],
+  "nodes": [
+    {
+      "id": "start",
+      "kind": "start"
+    },
+    {
+      "id": "scheduled",
+      "kind": "state",
+      "text": "Scheduled"
+    },
+    {
+      "id": "completed",
+      "kind": "state",
+      "text": "Completed"
+    },
+    {
+      "id": "cancelled",
+      "kind": "state",
+      "text": "Cancelled"
+    },
+    {
+      "id": "end",
+      "kind": "end"
+    }
+  ],
+  "edges": [
+    {
+      "from": "start",
+      "to": "scheduled",
+      "label": "Scheduler generates the timetable"
+    },
+    {
+      "from": "scheduled",
+      "to": "completed",
+      "label": "[session date has passed] Scheduler completes the past sessions"
+    },
+    {
+      "from": "scheduled",
+      "to": "cancelled",
+      "label": "[holiday added, no attendance yet] Web App cancels the session"
+    },
+    {
+      "from": "completed",
+      "to": "end",
+      "label": "Scheduler keeps the attendance record"
+    },
+    {
+      "from": "cancelled",
+      "to": "end",
+      "label": "Teacher is blocked from marking"
+    }
+  ]
+}

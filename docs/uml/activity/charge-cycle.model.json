@@ -1,0 +1,329 @@
+{
+  "title": "Run Monthly Charge Cycle",
+  "level": "subsystem",
+  "lanes": [
+    "Scheduler",
+    "Auto Approval",
+    "Finance Service",
+    "Proposal Service"
+  ],
+  "nodes": [
+    {
+      "id": "s0",
+      "kind": "start",
+      "lane": "Scheduler"
+    },
+    {
+      "id": "scan",
+      "kind": "action",
+      "lane": "Scheduler",
+      "text": "Scan due enrollments"
+    },
+    {
+      "id": "preview",
+      "kind": "action",
+      "lane": "Proposal Service",
+      "text": "Preview cycle"
+    },
+    {
+      "id": "dNothing",
+      "kind": "decision",
+      "lane": "Proposal Service",
+      "text": "Cycle to bill?"
+    },
+    {
+      "id": "dLongAbsent",
+      "kind": "decision",
+      "lane": "Proposal Service",
+      "text": "Long absence due?"
+    },
+    {
+      "id": "pauseEnr",
+      "kind": "action",
+      "lane": "Proposal Service",
+      "text": "Auto pause enrollment as PAUSED"
+    },
+    {
+      "id": "logPause",
+      "kind": "action",
+      "lane": "Proposal Service",
+      "text": "Log auto pause and notify center"
+    },
+    {
+      "id": "ffPaused",
+      "kind": "flowfinal",
+      "lane": "Proposal Service"
+    },
+    {
+      "id": "findExisting",
+      "kind": "action",
+      "lane": "Proposal Service",
+      "text": "Find proposal of cycle"
+    },
+    {
+      "id": "dDecided",
+      "kind": "decision",
+      "lane": "Proposal Service",
+      "text": "Already decided?"
+    },
+    {
+      "id": "ffSkip",
+      "kind": "flowfinal",
+      "lane": "Scheduler"
+    },
+    {
+      "id": "countAtt",
+      "kind": "action",
+      "lane": "Proposal Service",
+      "text": "Count cycle attendance"
+    },
+    {
+      "id": "createProp",
+      "kind": "action",
+      "lane": "Proposal Service",
+      "text": "Create proposal as PENDING"
+    },
+    {
+      "id": "readCfg",
+      "kind": "action",
+      "lane": "Auto Approval",
+      "text": "Read auto approval settings"
+    },
+    {
+      "id": "dEnabled",
+      "kind": "decision",
+      "lane": "Auto Approval",
+      "text": "Auto approve on?"
+    },
+    {
+      "id": "dUnmarked",
+      "kind": "decision",
+      "lane": "Auto Approval",
+      "text": "Unmarked allowed?"
+    },
+    {
+      "id": "dAbsence",
+      "kind": "decision",
+      "lane": "Auto Approval",
+      "text": "Absences over limit?"
+    },
+    {
+      "id": "mManual",
+      "kind": "merge",
+      "lane": "Auto Approval"
+    },
+    {
+      "id": "dDecision",
+      "kind": "decision",
+      "lane": "Proposal Service",
+      "text": "Accountant approves?"
+    },
+    {
+      "id": "approve",
+      "kind": "action",
+      "lane": "Proposal Service",
+      "text": "Accountant approves proposal"
+    },
+    {
+      "id": "autoApprove",
+      "kind": "action",
+      "lane": "Proposal Service",
+      "text": "Auto approve proposal as system"
+    },
+    {
+      "id": "mApproved",
+      "kind": "merge",
+      "lane": "Proposal Service"
+    },
+    {
+      "id": "generate",
+      "kind": "action",
+      "lane": "Finance Service",
+      "text": "Generate charge"
+    },
+    {
+      "id": "dConditions",
+      "kind": "decision",
+      "lane": "Finance Service",
+      "text": "Charge created?"
+    },
+    {
+      "id": "ffStale",
+      "kind": "flowfinal",
+      "lane": "Finance Service"
+    },
+    {
+      "id": "dismiss",
+      "kind": "action",
+      "lane": "Proposal Service",
+      "text": "Dismiss proposal"
+    },
+    {
+      "id": "logDismiss",
+      "kind": "action",
+      "lane": "Proposal Service",
+      "text": "Log dismissal"
+    },
+    {
+      "id": "logApprove",
+      "kind": "action",
+      "lane": "Proposal Service",
+      "text": "Log approval and charge"
+    },
+    {
+      "id": "stop",
+      "kind": "stop",
+      "lane": "Proposal Service"
+    }
+  ],
+  "edges": [
+    {
+      "from": "s0",
+      "to": "scan"
+    },
+    {
+      "from": "scan",
+      "to": "preview"
+    },
+    {
+      "from": "preview",
+      "to": "dNothing"
+    },
+    {
+      "from": "dNothing",
+      "to": "dLongAbsent",
+      "label": "Yes"
+    },
+    {
+      "from": "dNothing",
+      "to": "ffSkip",
+      "label": "No"
+    },
+    {
+      "from": "dLongAbsent",
+      "to": "pauseEnr",
+      "label": "Yes"
+    },
+    {
+      "from": "dLongAbsent",
+      "to": "findExisting",
+      "label": "No"
+    },
+    {
+      "from": "pauseEnr",
+      "to": "logPause"
+    },
+    {
+      "from": "logPause",
+      "to": "ffPaused"
+    },
+    {
+      "from": "findExisting",
+      "to": "dDecided"
+    },
+    {
+      "from": "dDecided",
+      "to": "ffSkip",
+      "label": "Yes"
+    },
+    {
+      "from": "dDecided",
+      "to": "countAtt",
+      "label": "No"
+    },
+    {
+      "from": "countAtt",
+      "to": "createProp"
+    },
+    {
+      "from": "createProp",
+      "to": "readCfg"
+    },
+    {
+      "from": "readCfg",
+      "to": "dEnabled"
+    },
+    {
+      "from": "dEnabled",
+      "to": "dUnmarked",
+      "label": "Yes"
+    },
+    {
+      "from": "dEnabled",
+      "to": "mManual",
+      "label": "No"
+    },
+    {
+      "from": "dUnmarked",
+      "to": "dAbsence",
+      "label": "Yes"
+    },
+    {
+      "from": "dUnmarked",
+      "to": "mManual",
+      "label": "No"
+    },
+    {
+      "from": "dAbsence",
+      "to": "mManual",
+      "label": "Yes"
+    },
+    {
+      "from": "dAbsence",
+      "to": "autoApprove",
+      "label": "No"
+    },
+    {
+      "from": "mManual",
+      "to": "dDecision"
+    },
+    {
+      "from": "dDecision",
+      "to": "approve",
+      "label": "Yes"
+    },
+    {
+      "from": "dDecision",
+      "to": "dismiss",
+      "label": "No"
+    },
+    {
+      "from": "approve",
+      "to": "mApproved"
+    },
+    {
+      "from": "generate",
+      "to": "dConditions"
+    },
+    {
+      "from": "dConditions",
+      "to": "logApprove",
+      "label": "Yes"
+    },
+    {
+      "from": "dConditions",
+      "to": "ffStale",
+      "label": "No"
+    },
+    {
+      "from": "logApprove",
+      "to": "stop"
+    },
+    {
+      "from": "dismiss",
+      "to": "logDismiss"
+    },
+    {
+      "from": "logDismiss",
+      "to": "stop"
+    },
+    {
+      "from": "autoApprove",
+      "to": "mApproved"
+    },
+    {
+      "from": "mApproved",
+      "to": "generate"
+    }
+  ]
+}

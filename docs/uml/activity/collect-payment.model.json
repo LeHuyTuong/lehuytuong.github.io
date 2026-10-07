@@ -1,0 +1,312 @@
+{
+  "title": "Collect Payment",
+  "level": "subsystem",
+  "lanes": [
+    "Accountant",
+    "Web App",
+    "Payment Service",
+    "Credit Pool"
+  ],
+  "nodes": [
+    {
+      "id": "s0",
+      "kind": "start",
+      "lane": "Accountant"
+    },
+    {
+      "id": "openForm",
+      "kind": "action",
+      "lane": "Accountant",
+      "text": "Open collect form"
+    },
+    {
+      "id": "enter",
+      "kind": "action",
+      "lane": "Web App",
+      "text": "Enter amount and date"
+    },
+    {
+      "id": "dAmount",
+      "kind": "decision",
+      "lane": "Web App",
+      "text": "Amount over zero?"
+    },
+    {
+      "id": "dDate",
+      "kind": "decision",
+      "lane": "Web App",
+      "text": "Date within limit?"
+    },
+    {
+      "id": "dCap",
+      "kind": "decision",
+      "lane": "Web App",
+      "text": "Within single cap?"
+    },
+    {
+      "id": "lock",
+      "kind": "action",
+      "lane": "Payment Service",
+      "text": "Lock charge and read remaining"
+    },
+    {
+      "id": "dVoided",
+      "kind": "decision",
+      "lane": "Web App",
+      "text": "Charge voided?"
+    },
+    {
+      "id": "dSettled",
+      "kind": "decision",
+      "lane": "Web App",
+      "text": "Charge already paid?"
+    },
+    {
+      "id": "dCover",
+      "kind": "decision",
+      "lane": "Payment Service",
+      "text": "Amount covers remaining?"
+    },
+    {
+      "id": "applyAll",
+      "kind": "action",
+      "lane": "Payment Service",
+      "text": "Apply whole amount to remaining"
+    },
+    {
+      "id": "splitRest",
+      "kind": "action",
+      "lane": "Payment Service",
+      "text": "Apply remaining and split the rest"
+    },
+    {
+      "id": "mApply",
+      "kind": "merge",
+      "lane": "Payment Service"
+    },
+    {
+      "id": "createPay",
+      "kind": "action",
+      "lane": "Payment Service",
+      "text": "Create payment row"
+    },
+    {
+      "id": "issueRcpt",
+      "kind": "action",
+      "lane": "Payment Service",
+      "text": "Issue receipt in transaction"
+    },
+    {
+      "id": "setPaid",
+      "kind": "action",
+      "lane": "Payment Service",
+      "text": "Set charge PAID or PARTIAL"
+    },
+    {
+      "id": "log",
+      "kind": "action",
+      "lane": "Payment Service",
+      "text": "Log payment in transaction"
+    },
+    {
+      "id": "dOverflow",
+      "kind": "decision",
+      "lane": "Payment Service",
+      "text": "Overflow remains?"
+    },
+    {
+      "id": "deposit",
+      "kind": "action",
+      "lane": "Credit Pool",
+      "text": "Record deposit to credit pool"
+    },
+    {
+      "id": "alloc",
+      "kind": "action",
+      "lane": "Credit Pool",
+      "text": "Allocate to open charges oldest first"
+    },
+    {
+      "id": "logAlloc",
+      "kind": "action",
+      "lane": "Credit Pool",
+      "text": "Log allocations"
+    },
+    {
+      "id": "mDone",
+      "kind": "merge",
+      "lane": "Web App"
+    },
+    {
+      "id": "showDone",
+      "kind": "action",
+      "lane": "Web App",
+      "text": "Show receipt to accountant"
+    },
+    {
+      "id": "stop",
+      "kind": "stop",
+      "lane": "Web App"
+    },
+    {
+      "id": "mReject",
+      "kind": "merge",
+      "lane": "Web App"
+    },
+    {
+      "id": "showError",
+      "kind": "action",
+      "lane": "Web App",
+      "text": "Show error and keep form"
+    },
+    {
+      "id": "ffReject",
+      "kind": "flowfinal",
+      "lane": "Web App"
+    }
+  ],
+  "edges": [
+    {
+      "from": "s0",
+      "to": "openForm"
+    },
+    {
+      "from": "openForm",
+      "to": "enter"
+    },
+    {
+      "from": "enter",
+      "to": "dAmount"
+    },
+    {
+      "from": "dAmount",
+      "to": "dDate",
+      "label": "Yes"
+    },
+    {
+      "from": "dAmount",
+      "to": "mReject",
+      "label": "No"
+    },
+    {
+      "from": "dDate",
+      "to": "dCap",
+      "label": "Yes"
+    },
+    {
+      "from": "dDate",
+      "to": "mReject",
+      "label": "No"
+    },
+    {
+      "from": "dCap",
+      "to": "lock",
+      "label": "Yes"
+    },
+    {
+      "from": "dCap",
+      "to": "mReject",
+      "label": "No"
+    },
+    {
+      "from": "lock",
+      "to": "dVoided"
+    },
+    {
+      "from": "dVoided",
+      "to": "dSettled",
+      "label": "No"
+    },
+    {
+      "from": "dVoided",
+      "to": "mReject",
+      "label": "Yes"
+    },
+    {
+      "from": "dSettled",
+      "to": "dCover",
+      "label": "No"
+    },
+    {
+      "from": "dSettled",
+      "to": "mReject",
+      "label": "Yes"
+    },
+    {
+      "from": "dCover",
+      "to": "applyAll",
+      "label": "Yes"
+    },
+    {
+      "from": "dCover",
+      "to": "splitRest",
+      "label": "No"
+    },
+    {
+      "from": "applyAll",
+      "to": "mApply"
+    },
+    {
+      "from": "splitRest",
+      "to": "mApply"
+    },
+    {
+      "from": "mApply",
+      "to": "createPay"
+    },
+    {
+      "from": "createPay",
+      "to": "issueRcpt"
+    },
+    {
+      "from": "issueRcpt",
+      "to": "setPaid"
+    },
+    {
+      "from": "setPaid",
+      "to": "log"
+    },
+    {
+      "from": "log",
+      "to": "dOverflow"
+    },
+    {
+      "from": "dOverflow",
+      "to": "deposit",
+      "label": "Yes"
+    },
+    {
+      "from": "deposit",
+      "to": "alloc"
+    },
+    {
+      "from": "alloc",
+      "to": "logAlloc"
+    },
+    {
+      "from": "showDone",
+      "to": "stop"
+    },
+    {
+      "from": "mReject",
+      "to": "showError"
+    },
+    {
+      "from": "showError",
+      "to": "ffReject"
+    },
+    {
+      "from": "dOverflow",
+      "to": "mDone",
+      "label": "No"
+    },
+    {
+      "from": "logAlloc",
+      "to": "mDone"
+    },
+    {
+      "from": "mDone",
+      "to": "showDone"
+    }
+  ]
+}

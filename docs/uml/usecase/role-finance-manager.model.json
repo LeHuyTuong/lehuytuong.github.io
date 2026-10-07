@@ -1,0 +1,51 @@
+{
+  "subject": {
+    "name": "LMSERP OneWorld"
+  },
+  "actors": [
+    {
+      "id": "Manager",
+      "name": "Manager"
+    }
+  ],
+  "usecases": [
+    {
+      "id": "UC07",
+      "name": "Manage Enrollments",
+      "evidence": [
+        "app/Policies/EnrollmentPolicy.php"
+      ]
+    },
+    {
+      "id": "UC09",
+      "name": "View Attendance",
+      "evidence": [
+        "app/Policies/AttendancePolicy.php:45-63"
+      ]
+    },
+    {
+      "id": "UC11",
+      "name": "Manage Charge Proposals",
+      "evidence": [
+        "app/Policies/ChargeProposalPolicy.php"
+      ]
+    }
+  ],
+  "associations": [
+    {
+      "actor": "Manager",
+      "usecase": "UC07"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC09"
+    },
+    {
+      "actor": "Manager",
+      "usecase": "UC11"
+    }
+  ],
+  "includes": [],
+  "extends": [],
+  "generalizations": []
+}

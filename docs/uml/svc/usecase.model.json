@@ -1,0 +1,101 @@
+{
+  "subject": {
+    "name": "Diagram Service"
+  },
+  "actors": [
+    {
+      "id": "Student",
+      "name": "Student",
+      "side": "left"
+    },
+    {
+      "id": "Reviewer",
+      "name": "Domain Reviewer",
+      "side": "right"
+    }
+  ],
+  "usecases": [
+    {
+      "id": "UC1",
+      "name": "Place Order"
+    },
+    {
+      "id": "UC2",
+      "name": "Sign Scope Agreement"
+    },
+    {
+      "id": "UC3",
+      "name": "Provide Repository"
+    },
+    {
+      "id": "UC4",
+      "name": "Read Customer Code"
+    },
+    {
+      "id": "UC5",
+      "name": "Generate Diagram Set"
+    },
+    {
+      "id": "UC6",
+      "name": "Confirm Business Rules"
+    },
+    {
+      "id": "UC7",
+      "name": "Accept Delivery"
+    },
+    {
+      "id": "UC8",
+      "name": "Export Editable Files"
+    },
+    {
+      "id": "UC9",
+      "name": "Pay Balance"
+    },
+    {
+      "id": "UC10",
+      "name": "Add More Diagrams"
+    }
+  ],
+  "associations": [
+    {
+      "actor": "Student",
+      "usecase": "UC1"
+    },
+    {
+      "actor": "Student",
+      "usecase": "UC3"
+    },
+    {
+      "actor": "Student",
+      "usecase": "UC7"
+    },
+    {
+      "actor": "Student",
+      "usecase": "UC9"
+    },
+    {
+      "actor": "Reviewer",
+      "usecase": "UC6"
+    }
+  ],
+  "includes": [
+    {
+      "base": "UC1",
+      "part": "UC2"
+    },
+    {
+      "base": "UC5",
+      "part": "UC4"
+    },
+    {
+      "base": "UC10",
+      "part": "UC5"
+    },
+    {
+      "base": "UC7",
+      "part": "UC8"
+    }
+  ],
+  "extends": [],
+  "generalizations": []
+}

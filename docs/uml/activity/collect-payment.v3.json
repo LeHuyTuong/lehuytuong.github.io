@@ -1,0 +1,221 @@
+{
+  "title": "Collect Payment",
+  "level": "subsystem",
+  "lanes": [
+    "Accountant",
+    "Web App",
+    "Payment Service"
+  ],
+  "nodes": [
+    {
+      "id": "s0",
+      "kind": "start",
+      "lane": "Accountant"
+    },
+    {
+      "id": "openForm",
+      "kind": "action",
+      "lane": "Accountant",
+      "text": "Open collect payment form"
+    },
+    {
+      "id": "enter",
+      "kind": "action",
+      "lane": "Web App",
+      "text": "Enter amount and date"
+    },
+    {
+      "id": "dAmount",
+      "kind": "decision",
+      "lane": "Web App",
+      "text": "Amount > 0?"
+    },
+    {
+      "id": "dDate",
+      "kind": "decision",
+      "lane": "Web App",
+      "text": "Date within window?"
+    },
+    {
+      "id": "lock",
+      "kind": "action",
+      "lane": "Payment Service",
+      "text": "Lock charge and read remaining"
+    },
+    {
+      "id": "dSettled",
+      "kind": "decision",
+      "lane": "Payment Service",
+      "text": "Settled already?"
+    },
+    {
+      "id": "endFailAmt",
+      "kind": "flowfinal",
+      "lane": "Web App"
+    },
+    {
+      "id": "endFailDate",
+      "kind": "flowfinal",
+      "lane": "Web App"
+    },
+    {
+      "id": "endFailSettled",
+      "kind": "flowfinal",
+      "lane": "Payment Service"
+    },
+    {
+      "id": "reject",
+      "kind": "action",
+      "lane": "Payment Service",
+      "text": "Reject (ChargeAlreadySettled)"
+    },
+    {
+      "id": "split",
+      "kind": "decision",
+      "lane": "Payment Service",
+      "text": "Amount split into applied and overflow?"
+    },
+    {
+      "id": "extendRP",
+      "kind": "action",
+      "lane": "Payment Service",
+      "text": "Apply payment (→Record Payment UC)"
+    },
+    {
+      "id": "extendRD",
+      "kind": "action",
+      "lane": "Payment Service",
+      "text": "Deposit overflow (→Record Deposit UC)"
+    },
+    {
+      "id": "m1",
+      "kind": "merge",
+      "lane": "Payment Service"
+    },
+    {
+      "id": "issueRcpt",
+      "kind": "action",
+      "lane": "Payment Service",
+      "text": "Issue receipt"
+    },
+    {
+      "id": "updateStatus",
+      "kind": "action",
+      "lane": "Payment Service",
+      "text": "Set Paid or Partial"
+    },
+    {
+      "id": "logAudit",
+      "kind": "action",
+      "lane": "Payment Service",
+      "text": "Log audit journal"
+    },
+    {
+      "id": "endOk",
+      "kind": "stop",
+      "lane": "Accountant"
+    },
+    {
+      "id": "dOverflow",
+      "kind": "decision",
+      "lane": "Payment Service",
+      "text": "Overflow remains?"
+    }
+  ],
+  "edges": [
+    {
+      "from": "s0",
+      "to": "openForm"
+    },
+    {
+      "from": "openForm",
+      "to": "enter"
+    },
+    {
+      "from": "enter",
+      "to": "dAmount"
+    },
+    {
+      "from": "dAmount",
+      "to": "dDate",
+      "label": "Yes"
+    },
+    {
+      "from": "dAmount",
+      "to": "endFailAmt",
+      "label": "No"
+    },
+    {
+      "from": "dDate",
+      "to": "lock",
+      "label": "Yes"
+    },
+    {
+      "from": "dDate",
+      "to": "endFailDate",
+      "label": "No"
+    },
+    {
+      "from": "lock",
+      "to": "dSettled"
+    },
+    {
+      "from": "dSettled",
+      "to": "reject",
+      "label": "Yes"
+    },
+    {
+      "from": "reject",
+      "to": "endFailSettled"
+    },
+    {
+      "from": "dSettled",
+      "to": "split",
+      "label": "No"
+    },
+    {
+      "from": "issueRcpt",
+      "to": "updateStatus"
+    },
+    {
+      "from": "updateStatus",
+      "to": "logAudit"
+    },
+    {
+      "from": "logAudit",
+      "to": "endOk"
+    },
+    {
+      "from": "split",
+      "to": "extendRP",
+      "label": "No"
+    },
+    {
+      "from": "extendRP",
+      "to": "m1"
+    },
+    {
+      "from": "split",
+      "to": "dOverflow",
+      "label": "Yes"
+    },
+    {
+      "from": "dOverflow",
+      "to": "extendRD",
+      "label": "Yes"
+    },
+    {
+      "from": "dOverflow",
+      "to": "m1",
+      "label": "No"
+    },
+    {
+      "from": "extendRD",
+      "to": "m1"
+    },
+    {
+      "from": "m1",
+      "to": "issueRcpt"
+    }
+  ]
+}
